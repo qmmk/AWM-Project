@@ -49,8 +49,9 @@ namespace Surveys.WebAPIService
             // AddScoped = created once per client request
             // Transient = new instance created every time
 
+            var appSettings = appSettingsSection.Get<AppSettings>();
             services.AddDbContext<DataContext>(options =>
-                  options.UseSqlServer(Configuration.GetConnectionString("SurveyConnectionString"), o =>
+                  options.UseSqlServer(appSettings.ConnectionString, o =>
                   {
                       o.EnableRetryOnFailure();
                   })
@@ -58,7 +59,6 @@ namespace Surveys.WebAPIService
 
             services.AddScoped<IServiceManager, ServiceManager>();
             
-            var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.JwtTokenSecret);
             services.AddAuthentication(x =>
             {

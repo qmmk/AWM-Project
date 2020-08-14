@@ -7,8 +7,6 @@ namespace Surveys.BusinessLogic.DataAccess
 {
     public class AppSettings
     {
-        public string BaseUrl { get; set; }
-        public string WebAPIServiceUrl { get; set; }
         public string JwtTokenSecret { get; set; }
         public string ConnectionString { get; set; }
     }
