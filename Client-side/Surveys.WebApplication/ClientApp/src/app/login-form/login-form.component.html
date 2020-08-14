@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <!--<link href="../assets/dist/css/login-form.css" rel="stylesheet">-->
+</head>
+<body class="text-center">
+  <form id="loginForm" class="form-signin" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <h1 class="h3 mb-3 font-weight-normal">Sign In to your account</h1>
+
+    <label for="inputName" class="sr-only">Username</label>
+    <input type="text" id="inputName" formControlName="inputName" class="form-control" placeholder="Username" required autofocus
+           [ngClass]="{ 'is-invalid': submitted && f.inputName.errors }" />
+    <div *ngIf="submitted && f.inputName.errors" class="invalid-feedback">
+      <div *ngIf="f.inputName.errors.required">Username is required</div>
+    </div>
+
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" formControlName="inputPassword" class="form-control" placeholder="Password" required
+           [ngClass]="{ 'is-invalid': submitted && f.inputPassword.errors }" />
+    <div *ngIf="submitted && f.inputPassword.errors" class="invalid-feedback">
+      <div *ngIf="f.inputPassword.errors.required">Password is required</div>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <br />
+    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+
+    <p class="mt-5 mb-3 text-muted">&copy;  AWM-Project 2020</p>
+  </form>
+</body>
+</html>
