@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Q6CMW7YDSEWzSoxtNLjj3R/g1vw0LJknFI4bUccri1AZ5W2N1SngR3PhlyOisf0la0S2U5zsoroGX67oFYslGQ==",
+  "dgSpecHash": "D1EW2drjKDmJJjISLZnb2E/geNA2zRm5AgFtlyq3z6gc0eFRrDTAqtX29khXWLJVNdMg39tP+AwHYBiEUtQzjA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
+  "projectFilePath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\marmal\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\marmal\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.6\\microsoft.aspnetcore.cryptography.internal.3.1.6.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xtqdCHRSyiFzW12rwY0GlsSuOwmem+VB7QLMGoXjyk7kTS9CDdkl2ehPrZxUAKcCzIziHQHfZv19JhysbK/RGQ==",
+  "dgSpecHash": "eg7JDCGD5xUHkWbfikrsSeoM6wDb70B4DRg2KdgjXpHDblNxrp2WQ2eqEDADC7TtsT47bgD97fOp/KCVRitaWw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
+  "projectFilePath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\marmal\\.nuget\\packages\\automapper\\10.0.0\\automapper.10.0.0.nupkg.sha512",
     "C:\\Users\\marmal\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.0.1\\automapper.extensions.microsoft.dependencyinjection.8.0.1.nupkg.sha512",

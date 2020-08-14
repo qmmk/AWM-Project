@@ -7894,11 +7894,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
+      "projectUniqueName": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
       "projectName": "Surveys.WebAPIService",
-      "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
+      "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.WebAPIService\\Surveys.WebAPIService.csproj",
       "packagesPath": "C:\\Users\\marmal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.WebAPIService\\obj\\",
+      "outputPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.WebAPIService\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -7921,8 +7921,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {
-              "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj"
+            "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {
+              "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj"
             }
           }
         }

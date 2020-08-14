@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {}
+    "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {
+    "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
+        "projectUniqueName": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
         "projectName": "Surveys.BusinessLogic",
-        "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
+        "projectPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\Surveys.BusinessLogic.csproj",
         "packagesPath": "C:\\Users\\marmal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project-Server\\Surveys.BusinessLogic\\obj\\",
+        "outputPath": "C:\\Users\\marmal\\Documents\\GitHub\\AWM-Project\\Server-side\\Surveys.BusinessLogic\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
