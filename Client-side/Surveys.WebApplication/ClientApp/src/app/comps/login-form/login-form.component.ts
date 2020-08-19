@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
-import { ConfigurationService } from '../services/configuration.service'
+import { AuthService } from '../../services/auth.service';
+import { ConfigurationService } from '../../services/configuration.service';
 
 @Component({
     selector: 'app-login-form',

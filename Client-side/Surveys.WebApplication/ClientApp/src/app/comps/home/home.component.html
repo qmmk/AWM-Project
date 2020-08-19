@@ -25,26 +25,38 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let survey of surveys">
-      <td>{{ survey.seid }}</td>
-      <td>{{ survey.title }}</td>
-      <td>{{ survey.tescr }}</td>
-      <td>{{ survey.customField01}}</td>
-      <td><button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid)">Detail</button></td>
-
-      <!--<td>
-        <div style="display: block">
-          <canvas baseChart
-                  [datasets]="chartData"
-                  [labels]="chartLabels"
-                  [options]="chartOptions"
-                  [legend]="chartLegend"
-                  [chartType]="chartType"
-                  [colors]="colors"
-                  (chartClick)="chartClicked($event)">
-          </canvas>
-        </div>
-      </td>-->
-    </tr>
+    <ng-container *ngFor="let survey of surveys;">
+      <tr *ngFor="let chart of charts; first as isFirst">
+        <div *ngIf="isFirst; then pariBlock else disBlock"></div>
+        <ng-template #pariBlock>
+          <td>{{ survey.seid }}</td>
+          <td>{{ survey.title }}</td>
+          <td>{{ survey.tescr }}</td>
+          <td style="width:60px">
+            <div *ngIf="survey.customField02 == 0; then closeBlock else openBlock"></div>
+            <ng-template #closeBlock><span class="circle" style="background-color:red"></span></ng-template>
+            <ng-template #openBlock><span class="circle" style="background-color:limegreen"></span></ng-template>
+          </td>
+          <td style="width:40px">
+            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid)" [disabled]="survey.customField02 == 0">Detail</button>
+          </td>
+        </ng-template>
+        <ng-template #disBlock>
+          <td colspan="4">
+            <div style="display: block" *ngIf="signalRService.data && survey.customField02 == 1 && showDetail[survey.seid]">
+              <canvas baseChart
+                      [datasets]="signalRService.data"
+                      [labels]="chartLabels"
+                      [options]="chartOptions"
+                      [legend]="chartLegend"
+                      [chartType]="chartType"
+                      [colors]="colors"
+                      (chartClick)="chartClicked($event)">
+              </canvas>
+            </div>
+          </td>
+        </ng-template>
+      </tr>
+    </ng-container>
   </tbody>
 </table>

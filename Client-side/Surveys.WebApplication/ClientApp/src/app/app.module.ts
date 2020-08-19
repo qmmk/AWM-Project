@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { LoginFormComponent} from './login-form/login-form.component';
+import { NavMenuComponent } from './comps/nav-menu/nav-menu.component';
+import { HomeComponent } from './comps/home/home.component';
+import { CounterComponent } from './comps/counter/counter.component';
+import { FetchDataComponent } from './comps/fetch-data/fetch-data.component';
+import { LoginFormComponent} from './comps/login-form/login-form.component';
 
 import { ConfigurationService } from './services/configuration.service';
 import { StorageService } from './services/storage.service';
@@ -34,6 +35,7 @@ import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
+    ChartsModule,
     RouterModule.forRoot([
       {
         path: '',

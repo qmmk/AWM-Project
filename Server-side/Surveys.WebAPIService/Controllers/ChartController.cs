@@ -26,7 +26,7 @@ namespace Surveys.WebAPIService.Controllers
 
         public IActionResult Get()
         {
-            var timerManager = new TimerManager(() => _hub.Clients.All.SendAsync("transferchartdata", _manager.GetChartData()));
+            var timerManager = new TimerManager(() => _hub.Clients.All.SendAsync("transferchartdata", _manager.GetChartData().Data));
 
             return Ok(new { Message = "Request Completed" });
         }

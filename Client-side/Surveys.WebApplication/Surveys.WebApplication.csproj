@@ -24,7 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\settings\settings.component.ts" />
+    <None Remove="ClientApp\src\app\comps\settings\settings.component.ts" />
+    <None Remove="ClientApp\src\app\models\ChartModel.ts" />
+    <None Remove="ClientApp\src\app\services\signalr.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\settings\settings.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\comps\settings\settings.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\ChartModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\signalr.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

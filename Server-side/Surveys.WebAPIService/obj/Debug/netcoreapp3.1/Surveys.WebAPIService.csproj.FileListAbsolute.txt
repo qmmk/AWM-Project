@@ -162,3 +162,4 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\o
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.pdb
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.genruntimeconfig.cache
+C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Net.WebSockets.WebSocketProtocol.dll

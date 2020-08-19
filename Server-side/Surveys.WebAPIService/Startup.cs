@@ -117,7 +117,7 @@ namespace Surveys.WebAPIService
                 options.AddPolicy("stdPolicy",
                     builder =>
                     {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        builder.WithOrigins("https://localhost:44301").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                     });
             });
 
