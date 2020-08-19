@@ -549,6 +549,26 @@ namespace Surveys.BusinessLogic.DataAccess
 
             return final;
         }
+
+        public ServiceResponse<List<ChartModel>> GetChartData()
+        {
+            var r = new Random();
+            var sr = new ServiceResponse<List<ChartModel>>();
+            var lcm = new List<ChartModel>()
+            {
+                new ChartModel { Data = new List<int> { r.Next(1, 40) }, Label = "Data1" },
+                new ChartModel { Data = new List<int> { r.Next(1, 40) }, Label = "Data2" },
+                new ChartModel { Data = new List<int> { r.Next(1, 40) }, Label = "Data3" },
+                new ChartModel { Data = new List<int> { r.Next(1, 40) }, Label = "Data4" }
+            };
+
+            sr.Data = lcm;
+            sr.Success = true;
+            sr.Message = "New votes";
+            sr.Error = DbErrorCode.SUCCESS.ToString();
+
+            return sr;
+        }
         #endregion
 
     }

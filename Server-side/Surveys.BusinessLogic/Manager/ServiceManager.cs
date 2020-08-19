@@ -81,6 +81,11 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.InsertOrUpdateSurveyDetail(lsd);
         }
+
+        public ServiceResponse<List<ChartModel>> GetChartData()
+        {
+            return _context.GetChartData();
+        }
         #endregion
     }
 }

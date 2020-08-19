@@ -120,6 +120,8 @@ namespace Surveys.WebAPIService
                         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                     });
             });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -144,6 +146,7 @@ namespace Surveys.WebAPIService
             {
                 // API REST --> [controller]/[action]
                 endpoints.MapControllers();
+                endpoints.MapHub<ChartHub>("/chart");
             });
         }
     }
