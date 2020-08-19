@@ -7,6 +7,9 @@ using Surveys.WebAPIService.Services;
 using Microsoft.Extensions.Options;
 using System.Configuration;
 using System.Text;
+using System.Security.Cryptography;
+using System;
+using Surveys.WebAPIService.Models;
 
 namespace Surveys.WebAPIService.Controllers
 {
@@ -36,6 +39,7 @@ namespace Surveys.WebAPIService.Controllers
         {
             // FIRST CHECK
             var res = _manager.Login(lrm.username, lrm.password);
+
             if(res.Data == null)
             {
                 return BadRequest("Username or password is incorrect");
@@ -44,26 +48,53 @@ namespace Surveys.WebAPIService.Controllers
             // NEW LOGIN CRED
             var user = UserService.Instance.Authenticate(res.Data, Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
 
-            // SAVE CRED RT
-            var result = _manager.InsertOrUpdateRefreshToken(user.RefreshToken);
+            if (user.RefreshToken == null || !user.RefreshToken.IsActive)
+            {
+                //REFRESH
+                var randomBytes = new byte[64];
+                using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+                {
+                    rngCryptoServiceProvider.GetBytes(randomBytes);
+                }
 
-            if (result.Success)
+                user.RefreshToken = new RefreshToken
+                {
+                    rToken = Convert.ToBase64String(randomBytes),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    CreatedBy = user.PID
+                };
+            }
+            var x = _manager.InsertOrUpdateRefreshToken(user.RefreshToken);
+            if (x.Success)
             {
                 // NEW USER CREDENTIALS (ACCESS & REFRESH TOKEN)
                 return Ok(user);
             } 
             else
             {
-                return BadRequest(result.Message);
+                return BadRequest(x.Message);
             }
         }
 
+        public class LoginRefreshToken
+        {
+            public string token { get; set; }
+        }
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FastLogin([FromHeader] string Authorization)
+        public ActionResult FastLogin([FromBody] LoginRefreshToken auth)
         {
-            //var res = _manager.FastLogin(rt);
-            return Ok();
+            var res = _manager.CheckRefreshToken(auth.token);
+            if (res.Data == null)
+            {
+                return BadRequest(res.Message);
+            } 
+            else
+            {
+                var user = UserService.Instance.Authenticate(res.Data, Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
+                return Ok(user);
+            }
+
         }
         #endregion
 

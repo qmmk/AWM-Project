@@ -3,8 +3,6 @@ import { SurveyEntity } from '../models/SurveyEntity';
 import { SurveyDetail } from '../models/SurveyDetail';
 import { SurveyService } from '../services/survey.service';
 import { ReplaySubject } from 'rxjs';
-//import Chart from 'chart.js';
-
 
 @Component({
   selector: 'app-home',

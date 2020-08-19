@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System.ComponentModel;
+using Surveys.BusinessLogic.Core;
+using static Surveys.BusinessLogic.Core.EnumTypes;
 
 namespace Surveys.BusinessLogic.DataAccess
 {
@@ -96,6 +98,7 @@ namespace Surveys.BusinessLogic.DataAccess
         public DbSet<SurveyEntity> SurveyEntity { get; set; }
         public DbSet<SurveyDetail> SurveyDetail { get; set; }
         public DbSet<Principal> Principal { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         #region Stored Procedure
 
@@ -112,31 +115,43 @@ namespace Surveys.BusinessLogic.DataAccess
                     PasswordVerificationResult r = hasher.VerifyHashedPassword(u, u.HashedPwd, pwd);
                     if (r.Equals(PasswordVerificationResult.Success))
                     {
+                        var t = GetRefreshToken(u.PID).Data;
+                        if(t != null)
+                        {
+                            u.RefreshToken = t;
+                        }
+
                         sr.Data = u;
-                        sr.Error = "200";
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
                         sr.Message = "Password verification was successful.";
                         sr.Success = true;
                     }
                     else if (r.Equals(PasswordVerificationResult.SuccessRehashNeeded))
                     {
                         sr.Data = u;
-                        sr.Error = "200";
+                        sr.Error = DbErrorCode.PARTIAL.ToString();
                         sr.Message = "Deprecated algorithm and should be rehashed and updated.";
                         sr.Success = true;
                     }
                     else if (r.Equals(PasswordVerificationResult.Failed))
                     {
                         sr.Data = null;
-                        sr.Error = "400";
+                        sr.Error = DbErrorCode.PWD_VERIFICATION_FAILED.ToString();
                         sr.Message = "Password verification failed.";
                         sr.Success = false;
                     }
+                } else
+                {
+                    sr.Data = null;
+                    sr.Error = DbErrorCode.WRONG_CRED.ToString();
+                    sr.Message = "Username or password is incorrect";
+                    sr.Success = false;
                 }
             }
             catch (Exception ex)
             {
                 sr.Data = null;
-                sr.Error = ex.StackTrace;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
@@ -176,14 +191,14 @@ namespace Surveys.BusinessLogic.DataAccess
                         RoleID = x.RoleID
                     }).ToList().FirstOrDefault();
 
-                    sr.Error = "200";
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
                     sr.Message = "Returned the user just created.";
                     sr.Success = true;
                 }
-                else if(result[1][0] == 1) 
+                else if(result[1][0] == 5) 
                 {
                     sr.Data = null;
-                    sr.Error = "400";
+                    sr.Error = DbErrorCode.USER_ALREADY_EXISTS.ToString();
                     sr.Message = "The user already exists.";
                     sr.Success = true;
                 }
@@ -193,7 +208,7 @@ namespace Surveys.BusinessLogic.DataAccess
             catch(Exception ex)
             {
                 sr.Data = null;
-                sr.Error = ex.StackTrace;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
@@ -221,15 +236,15 @@ namespace Surveys.BusinessLogic.DataAccess
                 if (result[0][0] == 0)
                 {
                     sr.Data = result[0][0];
-                    sr.Error = "200";
-                    sr.Message = "Returned the user just created.";
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = "Returned the refresh token.";
                     sr.Success = true;
                 }
                 else if (result[0][0] == 6)
                 {
                     sr.Data = result[0][0];
-                    sr.Error = "400";
-                    sr.Message = "The user not exists.";
+                    sr.Error = DbErrorCode.RT_NOT_EXISTS.ToString();
+                    sr.Message = "The refresh token not exists.";
                     sr.Success = false;
                 }
                 else { }
@@ -238,7 +253,110 @@ namespace Surveys.BusinessLogic.DataAccess
             catch (Exception ex)
             {
                 sr.Data = -1;
-                sr.Error = ex.StackTrace;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
+
+        public ServiceResponse<RefreshToken> GetRefreshToken(int createdBy)
+        {
+            ServiceResponse<RefreshToken> sr = new ServiceResponse<RefreshToken>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("Command", "GET"));
+            parameters.Add(new SqlParameter("rToken", null));
+            parameters.Add(new SqlParameter("Expires", null));
+            parameters.Add(new SqlParameter("CreatedBy", createdBy));
+            parameters.Add(new SqlParameter("Revoked", null));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                    ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(RefreshToken), typeof(Int32));
+
+                switch (result[1][0])
+                {
+                    case 0:
+                        sr.Data = (RefreshToken)result[0][0];
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Returned the refresh token.";
+                        sr.Success = true;
+                        return sr;
+                    case 10:
+                        sr.Data = null;
+                        sr.Error = DbErrorCode.RT_NOT_EXISTS.ToString();
+                        sr.Message = string.Format("Refresh token not found.");
+                        sr.Success = false;
+                        return sr;
+                    default:
+                        sr.Data = null;
+                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                        sr.Message = string.Format("Error occur during getting refresh token");
+                        sr.Success = false;
+                        return sr;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
+
+        public ServiceResponse<Principal> CheckRefreshToken(string rToken)
+        {
+            ServiceResponse<Principal> sr = new ServiceResponse<Principal>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("Command", "CHECK"));
+            parameters.Add(new SqlParameter("rToken", rToken));
+            parameters.Add(new SqlParameter("Expires", null));
+            parameters.Add(new SqlParameter("CreatedBy", null));
+            parameters.Add(new SqlParameter("Revoked", null));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                    ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(RefreshToken), typeof(Principal), typeof(Int32));
+
+                switch (result[2][0])
+                {
+                    case 0:
+                        sr.Data = (Principal)result[1][0];
+                        sr.Data.RefreshToken = (RefreshToken)result[0][0];
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Returned the refresh token.";
+                        sr.Success = true;
+                        return sr;
+                    case 9:
+                        sr.Data = null;
+                        sr.Error = DbErrorCode.RT_INVALID.ToString();
+                        sr.Message = string.Format("Refresh token not found.");
+                        sr.Success = false;
+                        return sr;
+                    default:
+                        sr.Data = null;
+                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                        sr.Message = string.Format("Error occur during checking refresh token.");
+                        sr.Success = false;
+                        return sr;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
@@ -271,7 +389,7 @@ namespace Surveys.BusinessLogic.DataAccess
                         CustomField03 = x.CustomField03
                     }).ToList();
 
-                    sr.Error = "200";
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
                     sr.Message = "Returned all survey entities";
                     sr.Success = true;
                 }
@@ -281,7 +399,7 @@ namespace Surveys.BusinessLogic.DataAccess
             catch (Exception ex)
             {
                 sr.Data = null;
-                sr.Error = ex.StackTrace;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
@@ -313,15 +431,16 @@ namespace Surveys.BusinessLogic.DataAccess
                     if (result[1][0] != 0)
                     {
                         sr.Data = null;
-                        sr.Error = "Error occur during insert or update " + se.SEID + "Survey Entity Id";
-                        sr.Message = "Transaction abort.";
+                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                        sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
                         sr.Success = false;
+                        return sr;
                     }
                 }
                 catch (Exception ex)
                 {
                     sr.Data = null;
-                    sr.Error = ex.StackTrace;
+                    sr.Error = DbErrorCode.EXCEPTION.ToString();
                     sr.Message = ex.Message;
                     sr.Success = false;
                 }
@@ -357,7 +476,7 @@ namespace Surveys.BusinessLogic.DataAccess
                         CustomField03 = x.CustomField03
                     }).ToList();
 
-                    sr.Error = "200";
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
                     sr.Message = "Returned all survey details";
                     sr.Success = true;
                 }
@@ -367,7 +486,7 @@ namespace Surveys.BusinessLogic.DataAccess
             catch (Exception ex)
             {
                 sr.Data = null;
-                sr.Error = ex.StackTrace;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
@@ -382,7 +501,7 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 ServiceResponse<string> sr = new ServiceResponse<string>();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("Command", "IU_SE"));
+                parameters.Add(new SqlParameter("Command", "IU_SD"));
                 parameters.Add(new SqlParameter("SEID", sd.SEID));
                 parameters.Add(new SqlParameter("SDID", sd.SDID));
                 parameters.Add(new SqlParameter("Title", null));
@@ -400,16 +519,16 @@ namespace Surveys.BusinessLogic.DataAccess
                     switch (result[1][0])
                     {
                         case 0: continue;
-                        case 5:
+                        case 8:
                             sr.Data = result[1][0].ToString();
-                            sr.Error = "Survey " + sd.SEID + " not exists";
-                            sr.Message = "Transaction abort.";
+                            sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                            sr.Message = string.Format("Survey {0} not exists", sd.SEID);
                             sr.Success = false;
                             return sr;
                         default:
                             sr.Data = result[1][0].ToString();
-                            sr.Error = "Error occur during insert or update " + sd.SEID + "Survey Entity Id";
-                            sr.Message = "Transaction abort.";
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
                             sr.Success = false;
                             return sr;
                     }
@@ -417,15 +536,15 @@ namespace Surveys.BusinessLogic.DataAccess
                 catch (Exception ex)
                 {
                     sr.Data = null;
-                    sr.Error = ex.StackTrace;
+                    sr.Error = DbErrorCode.EXCEPTION.ToString();
                     sr.Message = ex.Message;
                     sr.Success = false;
                 }
             }
 
-            final.Data = "0";
-            final.Error = "200";
-            final.Message = "Operation complete.";
+            final.Data = null;
+            final.Error = DbErrorCode.SUCCESS.ToString();
+            final.Message = "All survey detail inserted or update, operation complete.";
             final.Success = true;
 
             return final;

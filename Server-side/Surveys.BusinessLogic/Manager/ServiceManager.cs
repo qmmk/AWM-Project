@@ -57,6 +57,11 @@ namespace Surveys.BusinessLogic.Manager
             return _context.InsertOrUpdateRefreshToken(p);
         }
 
+        public ServiceResponse<Principal> CheckRefreshToken(string rToken)
+        {
+            return _context.CheckRefreshToken(rToken);
+        }
+
         public ServiceResponse<List<SurveyEntity>> GetAllSurveyEntities()
         {
             return _context.GetAllSurveyEntities();

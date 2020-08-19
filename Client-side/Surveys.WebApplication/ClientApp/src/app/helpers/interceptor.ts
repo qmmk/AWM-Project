@@ -1,29 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError, empty } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
-import { IdentityService } from '../services/identity.service';
+
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthService, private identityService: IdentityService) { }
+  request: any;
+  constructor(private authService: AuthService) { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(catchError(err => {
-      if (err.status === 401 || err.status === 403) {
-
-        // Error not auth, try with the refresh token ?
-
-
-        // Else --> auto logout if 401 response returned from api
-        this.authenticationService.logOut();
-        location.reload(true);
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(catchError(async err => {
+      if (err && err.status === 401) {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser.refreshToken.isActive) {
+          return await this.authService.fast(currentUser.refreshToken.rToken).toPromise().then(res => {
+            this.request = req.clone({
+              setHeaders: {
+                Authorization: `Bearer ${res.accessToken}`
+              }
+            });
+            //return next.handle(request);
+          });
+        }
+        else {
+          this.authService.logOut();
+          location.reload(true);
+        }
+      } else {
+        return throwError(err);
       }
-
-      throw (err);
-    }))
+    }), finalize(() => {
+      console.log("'*final request*'", this.request);
+      return next.handle(this.request);
+    })) as Observable<any>;
   }
 }
 

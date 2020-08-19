@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
 using Surveys.BusinessLogic.Manager;
@@ -39,6 +42,7 @@ namespace Surveys.WebAPIService
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettingsSection = Configuration.GetSection("AppSettings");
+            var appSettings = appSettingsSection.Get<AppSettings>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddControllers();
@@ -49,13 +53,22 @@ namespace Surveys.WebAPIService
             // AddScoped = created once per client request
             // Transient = new instance created every time
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            
             services.AddDbContext<DataContext>(options =>
                   options.UseSqlServer(appSettings.ConnectionString, o =>
                   {
                       o.EnableRetryOnFailure();
                   })
              );
+
+
+            //services.AddIdentityServer()
+            //    .AddAspNetIdentity<IdentityUser>()
+            //    .AddInMemoryApiResources(Configuration.GetApis())
+            //    .AddInMemoryIdentityResources(Configuration.GetIdentityResources())
+            //    .AddInMemoryClients(Configuration.GetClients())
+            //    .AddDeveloperSigningCredential();
+
 
             services.AddScoped<IServiceManager, ServiceManager>();
             
@@ -74,16 +87,29 @@ namespace Surveys.WebAPIService
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 //Access token rifiutato --> gestione lato client o server ?
+                // Evento per handler del refresh token
 
-                //x.Events = new JwtBearerEvents();
+                //x.Events = new JwtBearerEvents()
+                //{
+                //    OnMessageReceived = context =>
+                //    {
+                //        if(context.Request.Headers.ContentLength != 0)
+                //        {
+
+                //        }
+                //        return Task.CompletedTask;
+                //    }
+                //};
+
                 //x.Events.OnAuthenticationFailed = async context => await AuthenticationFailed(context);
                 //x.Events.OnForbidden = async context => await AuthorizationFailed(context);
                 //x.Events.OnTokenValidated = async context => await ValidationSucceced(context);
-            });
+            }); 
 
 
             services.AddCors(options =>

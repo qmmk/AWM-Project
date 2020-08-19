@@ -4,9 +4,6 @@ using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Surveys.BusinessLogic.DataAccess;
@@ -19,10 +16,12 @@ namespace Surveys.WebAPIService.Services
     public class UserService
     {
         #region Properties
+
         private static MapperConfiguration _mapperConfig;
         private static IMapper _mapper;
         private static readonly Lazy<UserService> _instance = new Lazy<UserService>(() => new UserService());
         public static UserService Instance { get { return _instance.Value; } }
+
         #endregion
 
         private UserService() 
@@ -47,7 +46,7 @@ namespace Surveys.WebAPIService.Services
                     new Claim(ClaimTypes.Name, user.PID.ToString()),
                     new Claim("HWID", Guid.NewGuid().ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature
@@ -56,24 +55,6 @@ namespace Surveys.WebAPIService.Services
 
             var accessToken = tokenHandler.CreateToken(tokenDescriptor);
             user.AccessToken = tokenHandler.WriteToken(accessToken);
-
-            
-            if (user.RefreshToken == null || !user.RefreshToken.IsActive) 
-            {
-                //REFRESH
-                var randomBytes = new byte[64];
-                using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
-                {
-                    rngCryptoServiceProvider.GetBytes(randomBytes);
-                }
-
-                user.RefreshToken = new RefreshToken
-                {
-                    rToken = Convert.ToBase64String(randomBytes),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    CreatedBy = user.PID
-                };
-            }
 
             return user;
         }

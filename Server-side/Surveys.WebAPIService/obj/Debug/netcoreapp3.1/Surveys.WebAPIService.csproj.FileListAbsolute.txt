@@ -81,11 +81,11 @@ C:\Users\marmal\Documents\GitHub\AWM-Project-Server\Surveys.WebAPIService\bin\De
 C:\Users\marmal\Documents\GitHub\AWM-Project-Server\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.csproj.CoreCompileInputs.cache
 C:\Users\marmal\Documents\GitHub\AWM-Project-Server\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\libman.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.exe
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.deps.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.runtimeconfig.json

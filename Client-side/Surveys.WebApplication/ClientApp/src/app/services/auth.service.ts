@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service'
 import { IdentityService } from './identity.service';
@@ -29,6 +29,20 @@ export class AuthService {
         }
         return user;
       }));
+  }
+
+  fast(token: string) {
+    return this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token })
+        .pipe(map(user => {
+            // login successful if there's a jwt token in the response
+            this.identityService.removeUser();
+
+            if (user && user.accessToken) {
+                this.identityService.setUser(user);
+            }
+
+          return user;
+        }));
   }
 
   logOut() {

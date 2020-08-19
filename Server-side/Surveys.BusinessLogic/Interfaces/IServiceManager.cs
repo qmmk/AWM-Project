@@ -20,5 +20,7 @@ namespace Surveys.BusinessLogic.Interfaces
         ServiceResponse<Principal> InsertOrUpdatePrincipal(Principal p);
 
         ServiceResponse<int> InsertOrUpdateRefreshToken(RefreshToken p);
+
+        ServiceResponse<Principal> CheckRefreshToken(string rToken);
     }
 }
