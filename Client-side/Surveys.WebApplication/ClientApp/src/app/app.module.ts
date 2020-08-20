@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -53,12 +53,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ]),
     BrowserAnimationsModule,
     MatSlideToggleModule
-
   ],
   providers: [AuthService, ConfigurationService, StorageService, IdentityService, AuthGuardService, SurveyService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide: APP_INITIALIZER, useFactory: appInit, deps: [ConfigurationService, IdentityService], multi: true }],
+    { provide: APP_INITIALIZER, useFactory: appInit, deps: [ConfigurationService, IdentityService], multi: true },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

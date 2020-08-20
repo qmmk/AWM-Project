@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { SurveyEntity } from '../../models/SurveyEntity';
 import { SurveyDetail } from '../../models/SurveyDetail';
 import { SurveyService } from '../../services/survey.service';
 import { ReplaySubject } from 'rxjs';
 import { SignalRService } from '../../services/signalr.service';
 import { HttpClient } from '@angular/common/http';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { Label, Color, BaseChartDirective  } from 'ng2-charts';
 
 
 @Component({
@@ -16,8 +18,9 @@ export class HomeComponent implements OnInit {
   public surveys: SurveyEntity[];
   public details: SurveyDetail[];
   public charts: string[] = ["A", "B"];
-  public chartOptions: any = {
-    scaleShowVerticalLines: true,
+
+  // CHART CONFIG
+  public chartOptions: ChartOptions = {
     responsive: true,
     scales: {
       yAxes: [{
@@ -27,13 +30,27 @@ export class HomeComponent implements OnInit {
       }]
     }
   };
-  public chartLabels: string[];
-  public chartType: string = 'horizontalBar';
-  public chartLegend: boolean = true;
-  public colors: any[] = [{ backgroundColor: '#5491DA' },
-    { backgroundColor: '#E74C3C' },
-    { backgroundColor: '#82E0AA' },
-    { backgroundColor: '#E5E7E9' }]
+  public chartLabels: Label[] = [];
+  public chartType: ChartType = 'horizontalBar';
+  public chartLegend: boolean = false;
+  public colors: any[] = [
+    {
+      backgroundColor: [
+        'rgba(255,0,0,0.5)',
+        'rgba(0,255,0,0.5)',
+        'rgba(0,0,255,0.5)'
+      ]
+    }
+  ];
+
+
+
+
+
+
+
+
+
 
   ready$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   ready: boolean = false;
@@ -44,10 +61,10 @@ export class HomeComponent implements OnInit {
     private http: HttpClient) { this.load(); }
 
     ngOnInit(): void {
-      //this.signalRService.startConnection();
-      //this.signalRService.addTransferChartDataListener();
-      //this.signalRService.addBroadcastChartDataListener();
-      //this.startHttpRequest();
+      this.signalRService.startConnection();
+      this.signalRService.addTransferChartDataListener();
+      this.signalRService.addBroadcastChartDataListener();
+      this.startHttpRequest();
     }
 
   load() {
@@ -59,6 +76,7 @@ export class HomeComponent implements OnInit {
   }
 
   onDetail(seid: number) {
+    /*
     // parte la connessione
     this.signalRService.startConnection();
 
@@ -70,16 +88,20 @@ export class HomeComponent implements OnInit {
 
     // bo
     this.startHttpRequest();
-    /*
+    */
+
     return this.service.GetSurveyDetails(seid).then((res: SurveyDetail[]) => {
       this.showDetail[seid] = !this.showDetail[seid];
-      res.forEach(x => {
-        this.chartLabels.push(x.descr);
-      });
+      if (this.showDetail[seid]) {
+        res.forEach(x => {
+          this.chartLabels.push(x.descr as Label);
+        });
+      }
+
       this.ready = true;
       this.ready$.next(true);
     });
-    */
+    
   }
 
   private startHttpRequest = () => {
