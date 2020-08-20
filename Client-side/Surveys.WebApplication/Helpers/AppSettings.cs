@@ -9,5 +9,6 @@ namespace Surveys.WebApplication.Helpers
     {
         public string AppName { get; set; }
         public string WebAPIServiceUrl { get; set; }
+        public string SignalRServiceUrl { get; set; }
     }
 }

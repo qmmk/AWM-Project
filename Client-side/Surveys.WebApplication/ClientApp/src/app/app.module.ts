@@ -5,13 +5,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './comps/nav-menu/nav-menu.component';
 import { HomeComponent } from './comps/home/home.component';
-import { CounterComponent } from './comps/counter/counter.component';
-import { FetchDataComponent } from './comps/fetch-data/fetch-data.component';
-import { LoginFormComponent} from './comps/login-form/login-form.component';
+import { LoginFormComponent } from './comps/login-form/login-form.component';
+import { SettingsComponent } from './comps/settings/settings.component';
 
 import { ConfigurationService } from './services/configuration.service';
 import { StorageService } from './services/storage.service';
@@ -19,16 +19,15 @@ import { IdentityService } from './services/identity.service';
 import { AuthService, AuthGuardService } from './services/auth.service';
 import { SurveyService } from './services/survey.service';
 import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,10 +46,14 @@ import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
         path: 'login',
         component: LoginFormComponent
       },
-      
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent }
-    ])
+      {
+        path: 'settings',
+        component: SettingsComponent
+      }
+    ]),
+    BrowserAnimationsModule,
+    MatSlideToggleModule
+
   ],
   providers: [AuthService, ConfigurationService, StorageService, IdentityService, AuthGuardService, SurveyService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -61,8 +64,9 @@ import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
 export class AppModule { }
 
 // assicura che prima di inizializzare l'app vengano caricate le configurazioni server minime
-export function appInit(config: ConfigurationService, identity: IdentityService) { 
+export function appInit(config: ConfigurationService) { 
   return async () => {
     await config.load();
+    await config.fast();
   }
 }

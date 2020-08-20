@@ -44,10 +44,10 @@ export class HomeComponent implements OnInit {
     private http: HttpClient) { this.load(); }
 
     ngOnInit(): void {
-      this.signalRService.startConnection();
-      this.signalRService.addTransferChartDataListener();
-      this.signalRService.addBroadcastChartDataListener();
-      this.startHttpRequest();
+      //this.signalRService.startConnection();
+      //this.signalRService.addTransferChartDataListener();
+      //this.signalRService.addBroadcastChartDataListener();
+      //this.startHttpRequest();
     }
 
   load() {
@@ -59,6 +59,18 @@ export class HomeComponent implements OnInit {
   }
 
   onDetail(seid: number) {
+    // parte la connessione
+    this.signalRService.startConnection();
+
+    // azione INVOKE
+    this.signalRService.addTransferChartDataListener();
+
+    // azione ON
+    this.signalRService.addBroadcastChartDataListener();
+
+    // bo
+    this.startHttpRequest();
+    /*
     return this.service.GetSurveyDetails(seid).then((res: SurveyDetail[]) => {
       this.showDetail[seid] = !this.showDetail[seid];
       res.forEach(x => {
@@ -67,6 +79,7 @@ export class HomeComponent implements OnInit {
       this.ready = true;
       this.ready$.next(true);
     });
+    */
   }
 
   private startHttpRequest = () => {

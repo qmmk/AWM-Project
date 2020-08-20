@@ -25,7 +25,8 @@ namespace Surveys.WebApplication.Controllers
             return new JsonResult(new
             {
                 AppName = _appSettings.AppName,
-                WebApiServiceUrl = _appSettings.WebAPIServiceUrl
+                WebApiServiceUrl = _appSettings.WebAPIServiceUrl,
+                SignalRServiceUrl = _appSettings.SignalRServiceUrl
             });
         }
     }

@@ -31,20 +31,6 @@ export class AuthService {
       }));
   }
 
-  fast(token: string) {
-    return this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token })
-        .pipe(map(user => {
-            // login successful if there's a jwt token in the response
-            this.identityService.removeUser();
-
-            if (user && user.accessToken) {
-                this.identityService.setUser(user);
-            }
-
-          return user;
-        }));
-  }
-
   logOut() {
     this.identityService.removeUser();
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });

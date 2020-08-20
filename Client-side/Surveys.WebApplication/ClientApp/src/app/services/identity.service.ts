@@ -26,6 +26,7 @@ export class IdentityService {
     this.user = user;
     this.OnLoggedIn.next(user);
   }
+
   removeUser() {
     localStorage.removeItem('currentUser');
     this.user = null;
