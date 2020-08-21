@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
+using Surveys.BusinessLogic.Interfaces;
 
-namespace Surveys.BusinessLogic.DataAccess
+namespace Surveys.BusinessLogic.Manager
 {
     [Authorize]
-    public class NotificationHub: Hub
+    public class HubManager : Hub
     {
+        
         public override async Task OnConnectedAsync()
         {
             await Clients.All.SendAsync("ReceiveSystemMessage", $"{Context.UserIdentifier} joined.");
@@ -27,25 +29,39 @@ namespace Surveys.BusinessLogic.DataAccess
             await Clients.User(user).SendAsync("ReceiveDirectMessage", $"{Context.UserIdentifier}: {message}");
         }
 
-        public async Task Send(string message)
+        public async Task Send(string message, object obj)
         {
-            await Clients.All.SendAsync("ReceiveChatMessage", $"{Context.UserIdentifier}: {message}");
+            await Clients.All.SendAsync($"{message}", obj);
         }
 
-        public async Task ExecuteAllAsync(CancellationToken stoppingToken, string message)
+        private async Task SendToGroup(string group, string message)
+        {
+            await Clients.Group(group).SendAsync("ReceiveDirectMessage", $"{Context.UserIdentifier}: {message}");
+        }
+
+        public async Task ExecuteAllAsync(CancellationToken stoppingToken, string message, object obj)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Clients.All.SendAsync("ReceiveChatMessage", $"{Context.UserIdentifier}: {message}");
+                await Send(message, obj);
                 await Task.Delay(1000);
             }
         }
 
-        public async Task ExecuteToUserAsync(CancellationToken stoppingToken, string message, string user)
+        public async Task ExecuteToUserAsync(CancellationToken stoppingToken, string user, string message)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Clients.User(user).SendAsync("ReceiveDirectMessage", $"{Context.UserIdentifier}: {message}"); ;
+                await SendToUser(user, message);
+                await Task.Delay(1000);
+            }
+        }
+
+        public async Task ExecuteToGroupAsync(CancellationToken stoppingToken, string group, string message)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await SendToGroup(group, message);
                 await Task.Delay(1000);
             }
         }

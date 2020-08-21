@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Surveys.BusinessLogic.DataAccess
 {
+    [DataContract]
     public class SurveyDetail
     {
         [Key]

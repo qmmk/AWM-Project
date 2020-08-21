@@ -7,44 +7,56 @@ import { ConfigurationService } from './configuration.service';
   providedIn: 'root'
 })
 export class SignalRService {
-  public data: ChartModel[];
+  public data: any[] = [];
   public bradcastedData: ChartModel[];
   private hubConnection: signalR.HubConnection
 
   constructor( private configService: ConfigurationService) {}
 
   public startConnection = () => {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.configService.serverSettings.signalRServiceUrl,
-        { accessTokenFactory: () => currentUser.accessToken }).build();
+    if (!this.isConnected()) {
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(this.configService.serverSettings.signalRServiceUrl,
+          { accessTokenFactory: () => currentUser.accessToken }).build();
 
-    this.hubConnection.start().then(() => console.log('Connection started')).catch(
-      err => console.log('Error while starting connection: ' + err));
+      this.hubConnection.start().then(() => console.log('Connection started')).catch(
+        err => console.log('Error while starting connection: ' + err));
+    }
   }
 
   public stopConnection = () => {
-    if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
+    if (this.isConnected()) {
       this.hubConnection.stop().then(() => console.log('Connection stopped')).catch(
         err => console.log('Error while stopping connection: ' + err));
     }
   }
 
-  public addTransferChartDataListener = () => {
-    this.hubConnection.on('transferchartdata', (data) => {
-      this.data = data;
-      //console.log(data);
+  public isConnected = () => {
+    if (typeof this.hubConnection !== "undefined") {
+      return this.hubConnection.state === (signalR.HubConnectionState.Connected) ? true : false;
+    }
+    return false;
+  }
+
+  public addTransferChartDataListener = (seid: number) => {
+    this.hubConnection.on('transferchartdata' + seid.toString(), (data) => {
+      this.data[seid] = data;
     });
   }
 
+  public delTransferChartDataListener = (seid: number) => {
+    this.hubConnection.off('transferchartdata' + seid.toString());
+  }
+
   public broadcastChartData = () => {
-    this.hubConnection.invoke('broadcastchartdata', this.data)
-      .catch(err => console.error(err));
+    //this.hubConnection.invoke('broadcastchartdata', this.data)
+    //  .catch(err => console.error(err));
   }
 
   public addBroadcastChartDataListener = () => {
-    this.hubConnection.on('broadcastchartdata', (data) => {
-      this.bradcastedData = data;
-    })
+    //this.hubConnection.on('broadcastchartdata', (data) => {
+    //  this.bradcastedData = data;
+    //})
   }
 }

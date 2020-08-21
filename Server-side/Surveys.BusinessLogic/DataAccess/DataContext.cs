@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using System.ComponentModel;
 using Surveys.BusinessLogic.Core;
 using static Surveys.BusinessLogic.Core.EnumTypes;
+using System.Reflection.Emit;
 
 namespace Surveys.BusinessLogic.DataAccess
 {
@@ -550,20 +551,125 @@ namespace Surveys.BusinessLogic.DataAccess
             return final;
         }
 
-        public ServiceResponse<List<ChartModel>> GetChartData()
+        public ServiceResponse<int> InsertActualVote(List<ActualVote> lav)
+        {
+            ServiceResponse<int> final = new ServiceResponse<int>();
+
+            foreach(ActualVote av in lav)
+            {
+                ServiceResponse<int> sr = new ServiceResponse<int>();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("Command", "IU_AV"));
+                parameters.Add(new SqlParameter("PID", av.PID));
+                parameters.Add(new SqlParameter("SDID", av.SDID));
+                parameters.Add(new SqlParameter("CustomField01", av.CustomField01));
+                parameters.Add(new SqlParameter("CustomField02", av.CustomField02));
+                parameters.Add(new SqlParameter("CustomField03", av.CustomField03));
+                parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                    ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+                try
+                {
+                    var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(Int32));
+
+                    switch (result[0][0])
+                    {
+                        case 0:
+                            final.Data++; 
+                            continue;
+                        case 6:
+                            sr.Data = result[0][0].ToString();
+                            sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                            sr.Message = string.Format("User {0} not exists", av.PID);
+                            sr.Success = false;
+                            return sr;
+                        case 11:
+                            sr.Data = result[0][0].ToString();
+                            sr.Error = DbErrorCode.DETAIL_NOT_EXISTS.ToString();
+                            sr.Message = string.Format("Survey Detail {0} not exists", av.SDID);
+                            sr.Success = false;
+                            return sr;
+                        default:
+                            sr.Data = result[0][0].ToString();
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during insert or update {0} Actual Vote Id", av.AVID);
+                            sr.Success = false;
+                            return sr;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    sr.Data = (Int32)DbErrorCode.EXCEPTION;
+                    sr.Error = DbErrorCode.EXCEPTION.ToString();
+                    sr.Message = ex.Message;
+                    sr.Success = false;
+                }
+            }
+
+            if(final.Data == lav.Count())
+            {
+                final.Error = DbErrorCode.SUCCESS.ToString();
+                final.Message = "Insert all votes";
+                final.Success = true;
+            }
+            else
+            {
+                final.Error = DbErrorCode.PARTIAL.ToString();
+                final.Message = string.Format("Inserted {0} votes instead of {1}", final.Data, lav.Count());
+                final.Success = true;
+                final.Data = (Int32)DbErrorCode.PARTIAL;
+            }
+
+            return final;
+        }
+
+        public ServiceResponse<List<ChartModel>> GetRealTimeData(int seid)
         {
             var r = new Random();
-            var sr = new ServiceResponse<List<ChartModel>>();
-            var lcm = new List<ChartModel>()
-            {
-                new ChartModel { Data = new List<int>(){ r.Next(1, 40), r.Next(1, 40), r.Next(1, 40), r.Next(1, 40)  }, Label = "chartRTD" }
+            ServiceResponse<List<ChartModel>> sr = new ServiceResponse<List<ChartModel>>();
+
+            var lcm = new List<ChartModel>(){
+                new ChartModel {
+                    Data = new List<int>() { r.Next(1, 40), r.Next(1, 40), r.Next(1, 40), r.Next(1, 40) },
+                    Label = "RealTimeData" + seid.ToString() }
             };
+            /*
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Command", "GET_RTD"));
+            parameters.Add(new SqlParameter("PID", null));
+            parameters.Add(new SqlParameter("SDID", null));
+            parameters.Add(new SqlParameter("CustomField01", null));
+            parameters.Add(new SqlParameter("CustomField02", null));
+            parameters.Add(new SqlParameter("CustomField03", null));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(List<int>), typeof(Int32));
+
+                if (result[1][0] == 0)
+                {
+                    var ct = new ChartModel
+                    {
+                        Data = (List<int>)result[0][0],
+                        Label = "RealTimeData " + seid.ToString()
+                    };
+
+                    sr.Data = lcm;  //ct;       <-- DA MODIFICARE CON ORIGINALE NB LISTA !
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = string.Format("Get real time data of survey {0}", seid);
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+            */
             sr.Data = lcm;
-            sr.Success = true;
-            sr.Message = "New votes";
-            sr.Error = DbErrorCode.SUCCESS.ToString();
-
             return sr;
         }
         #endregion

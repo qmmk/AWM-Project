@@ -23,6 +23,6 @@ namespace Surveys.BusinessLogic.Interfaces
 
         ServiceResponse<Principal> CheckRefreshToken(string rToken);
 
-        ServiceResponse<List<ChartModel>> GetChartData();
+        ServiceResponse<List<ChartModel>> GetRealTimeData(int seid);
     }
 }

@@ -17,11 +17,5 @@
     <ProjectReference Include="..\Surveys.BusinessLogic\Surveys.BusinessLogic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Hubs\" />
-  </ItemGroup>
-
 
 </Project>

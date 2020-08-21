@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -27,7 +26,7 @@ using Newtonsoft.Json;
 using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
 using Surveys.BusinessLogic.Manager;
-using Surveys.WebAPIService.Models;
+using Surveys.WebAPIService.Services;
 
 namespace Surveys.WebAPIService
 {
@@ -93,7 +92,6 @@ namespace Surveys.WebAPIService
                     ClockSkew = TimeSpan.Zero
                 };
 
-                //Access token rifiutato --> gestione lato client o server ?
                 // Evento handler del token signalr
 
                 x.Events = new JwtBearerEvents()
@@ -116,19 +114,21 @@ namespace Surveys.WebAPIService
                 //x.Events.OnAuthenticationFailed = async context => await AuthenticationFailed(context);
                 //x.Events.OnForbidden = async context => await AuthorizationFailed(context);
                 //x.Events.OnTokenValidated = async context => await ValidationSucceced(context);
-            }); 
+            });
 
-
+            //WithOrigins("https://localhost:44301")
+            //Access to XMLHttpRequest at 'https://localhost:44350/hub/negotiate' from origin 'https://localhost:44301' has been blocked by CORS policy
             services.AddCors(options =>
             {
-                options.AddPolicy("stdPolicy",
-                    builder =>
-                    {
+                options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
+
+                options.AddPolicy("hubPolicy", builder => {
                         builder.WithOrigins("https://localhost:44301").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
-                    });
+                });
             });
 
             services.AddSignalR();
+
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }
 
@@ -142,7 +142,7 @@ namespace Surveys.WebAPIService
 
             app.UseRouting();
 
-            app.UseCors("stdPolicy");
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
@@ -154,7 +154,7 @@ namespace Surveys.WebAPIService
             {
                 // API REST --> [controller]/[action]
                 endpoints.MapControllers();
-                endpoints.MapHub<NotificationHub>("/hub");
+                endpoints.MapHub<HubManager>("/hub").RequireCors("hubPolicy");
             });
         }
     }

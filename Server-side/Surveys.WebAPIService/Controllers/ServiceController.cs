@@ -11,6 +11,8 @@ using System.Security.Cryptography;
 using System;
 using Surveys.WebAPIService.Models;
 using Microsoft.AspNetCore.SignalR;
+using Surveys.BusinessLogic.Manager;
+using System.Threading;
 
 namespace Surveys.WebAPIService.Controllers
 {
@@ -20,11 +22,13 @@ namespace Surveys.WebAPIService.Controllers
     {
         private readonly IServiceManager _manager;
         private readonly AppSettings _opt;
+        private readonly IHubContext<HubManager> _hub;
 
-        public ServiceController(IServiceManager manager, IOptions<AppSettings> opt)
+        public ServiceController(IServiceManager manager, IHubContext<HubManager> hub, IOptions<AppSettings> opt)
         {
             _manager = manager;
             _opt = opt.Value;
+            _hub = hub;
         }
 
         #region Login
@@ -82,6 +86,7 @@ namespace Surveys.WebAPIService.Controllers
         {
             public string token { get; set; }
         }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult FastLogin([FromBody] LoginRefreshToken auth)
@@ -120,6 +125,14 @@ namespace Surveys.WebAPIService.Controllers
         public ActionResult GetSurveyDetails([FromQuery] int seid)
         {
             var surveyDetails = _manager.GetSurveyDetails(seid);
+            if (surveyDetails.Success)
+            {
+                var r = new Random();
+                var timerManager = new TimerManager(() =>
+                    _hub.Clients.All.SendAsync("transferchartdata" + seid.ToString(),
+                    _manager.GetRealTimeData(seid).Data
+                ));
+            }
             return Ok(surveyDetails.Data);
         }
 
@@ -139,5 +152,32 @@ namespace Surveys.WebAPIService.Controllers
 
         #endregion
 
+    }
+
+    public class TimerManager
+    {
+        private Timer _timer;
+        private AutoResetEvent _autoResetEvent;
+        private Action _action;
+
+        public DateTime _timerStarted { get; }
+
+        public TimerManager(Action action)
+        {
+            _action = action;
+            _autoResetEvent = new AutoResetEvent(false);
+            _timer = new Timer(Execute, _autoResetEvent, 1000, 2000);
+            _timerStarted = DateTime.Now;
+        }
+
+        public void Execute(object stateInfo)
+        {
+            _action();
+
+            if ((DateTime.Now - _timerStarted).Seconds > 60)
+            {
+                _timer.Dispose();
+            }
+        }
     }
 }

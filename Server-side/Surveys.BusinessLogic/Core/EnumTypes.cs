@@ -18,7 +18,8 @@ namespace Surveys.BusinessLogic.Core
             TRANSACTION_ABORTED = 7,
             SURVEY_NOT_EXISTS = 8,
             RT_INVALID = 9,
-            RT_NOT_EXISTS = 10
+            RT_NOT_EXISTS = 10,
+            DETAIL_NOT_EXISTS = 11
         }
     }
 }

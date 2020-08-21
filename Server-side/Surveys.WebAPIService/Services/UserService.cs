@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
@@ -61,5 +62,13 @@ namespace Surveys.WebAPIService.Services
             return user;
         }
 
+    }
+
+    public class UserIdProvider : IUserIdProvider
+    {
+        public string GetUserId(HubConnectionContext connection)
+        {
+            return connection.User?.Identity?.Name;
+        }
     }
 }
