@@ -10,6 +10,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System;
 using Surveys.WebAPIService.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Surveys.WebAPIService.Controllers
 {
@@ -46,7 +47,8 @@ namespace Surveys.WebAPIService.Controllers
             }
 
             // NEW LOGIN CRED
-            var user = UserService.Instance.Authenticate(res.Data, Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
+            var user = UserService.Instance.Authenticate(res.Data, 
+                Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
 
             if (user.RefreshToken == null || !user.RefreshToken.IsActive)
             {
@@ -91,7 +93,8 @@ namespace Surveys.WebAPIService.Controllers
             } 
             else
             {
-                var user = UserService.Instance.Authenticate(res.Data, Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
+                var user = UserService.Instance.Authenticate(res.Data, 
+                    Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
                 return Ok(user);
             }
 
@@ -133,6 +136,7 @@ namespace Surveys.WebAPIService.Controllers
             var res = _manager.InsertOrUpdateSurveyDetail(lsd);
             return Ok(res.Success);
         }
+
         #endregion
 
     }

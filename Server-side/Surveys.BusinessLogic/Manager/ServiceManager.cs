@@ -11,16 +11,23 @@ namespace Surveys.BusinessLogic.Manager
     {
         #region Fields
         private readonly DataContext _context;
-        #endregion
+        private bool disposedValue;
 
-        #region Properties
         public ServiceManager(DataContext context)
         {
             _context = context;
         }
 
+        ~ServiceManager()
+        {
+            // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(false);
+        }
+
         public void Dispose()
         {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -29,13 +36,13 @@ namespace Surveys.BusinessLogic.Manager
         {
             if (disposing)
             {
+                // TODO: dispose managed state (managed objects)
                 if (_context != null)
                     _context.Dispose();
             }
-        }
-        ~ServiceManager()
-        {
-            Dispose(false);
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
         }
 
         #endregion
@@ -86,6 +93,7 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.GetChartData();
         }
+
         #endregion
     }
 }

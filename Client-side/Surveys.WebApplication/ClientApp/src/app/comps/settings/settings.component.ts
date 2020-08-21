@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SurveyService } from '../../services/survey.service';
 
 @Component({
   selector: 'app-settings',
@@ -9,9 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class SettingsComponent implements OnInit {
   formGroup: FormGroup;
 
-  constructor(formBuilder: FormBuilder) {
+  constructor(formBuilder: FormBuilder, private service: SurveyService) {
     this.formGroup = formBuilder.group({
-      acceptTerms: '',
+      acceptTerms: ['', Validators.required],
       enableRTD: ''
     });
   }
@@ -19,7 +20,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
 
     // LOAD SYSCONFIG
-
+    //this.service.LoadSysConfig();
     /*
     this.formGroup.patchValue({
       acceptTerms: false,

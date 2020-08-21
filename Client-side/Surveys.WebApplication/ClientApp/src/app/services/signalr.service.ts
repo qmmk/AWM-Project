@@ -14,8 +14,10 @@ export class SignalRService {
   constructor( private configService: ConfigurationService) {}
 
   public startConnection = () => {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.configService.serverSettings.signalRServiceUrl).build();
+      .withUrl(this.configService.serverSettings.signalRServiceUrl,
+        { accessTokenFactory: () => currentUser.accessToken }).build();
 
     this.hubConnection.start().then(() => console.log('Connection started')).catch(
       err => console.log('Error while starting connection: ' + err));

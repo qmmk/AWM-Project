@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ using Newtonsoft.Json;
 using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
 using Surveys.BusinessLogic.Manager;
+using Surveys.WebAPIService.Models;
 
 namespace Surveys.WebAPIService
 {
@@ -92,19 +94,24 @@ namespace Surveys.WebAPIService
                 };
 
                 //Access token rifiutato --> gestione lato client o server ?
-                // Evento per handler del refresh token
+                // Evento handler del token signalr
 
-                //x.Events = new JwtBearerEvents()
-                //{
-                //    OnMessageReceived = context =>
-                //    {
-                //        if(context.Request.Headers.ContentLength != 0)
-                //        {
+                x.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
 
-                //        }
-                //        return Task.CompletedTask;
-                //    }
-                //};
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/hub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
 
                 //x.Events.OnAuthenticationFailed = async context => await AuthenticationFailed(context);
                 //x.Events.OnForbidden = async context => await AuthorizationFailed(context);
@@ -122,6 +129,7 @@ namespace Surveys.WebAPIService
             });
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -146,7 +154,7 @@ namespace Surveys.WebAPIService
             {
                 // API REST --> [controller]/[action]
                 endpoints.MapControllers();
-                endpoints.MapHub<ChartHub>("/chart");
+                endpoints.MapHub<NotificationHub>("/hub");
             });
         }
     }

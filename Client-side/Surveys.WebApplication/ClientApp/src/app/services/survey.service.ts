@@ -19,4 +19,8 @@ export class SurveyService {
   public async GetSurveyDetails(seid: number) {
     return await this.http.get<any>(`${this.serviceUrl}/GetSurveyDetails?seid=${seid}`).toPromise();
   }
+
+  public async LoadSysConfig() {
+    return await this.http.get<any>(`${this.serviceUrl}/LoadSysConfig`).toPromise();
+  }
 }

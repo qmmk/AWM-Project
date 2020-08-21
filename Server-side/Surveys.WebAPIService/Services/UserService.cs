@@ -43,8 +43,10 @@ namespace Surveys.WebAPIService.Services
                 Issuer = "Surveys",
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.PID.ToString()),
-                    new Claim("HWID", Guid.NewGuid().ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.PID.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("HWID", Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.Role, user.RoleID)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(

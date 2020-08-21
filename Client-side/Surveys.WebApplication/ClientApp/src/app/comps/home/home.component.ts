@@ -43,15 +43,6 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-
-
-
-
-
-
-
-
-
   ready$: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   ready: boolean = false;
   showDetail: boolean[] = [false];
@@ -105,7 +96,7 @@ export class HomeComponent implements OnInit {
   }
 
   private startHttpRequest = () => {
-    this.http.get('https://localhost:44350/api/chart')
+    this.http.get('https://localhost:44350/hub/Get')
       .subscribe(res => {
         console.log(res);
       })
