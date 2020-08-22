@@ -108,6 +108,7 @@ namespace Surveys.WebAPIService.Controllers
 
         #region API
         [HttpGet]
+
         public ActionResult LoadAllSurveys()
         {
             var surveyItems = _manager.GetAllSurveyEntities();
@@ -127,11 +128,13 @@ namespace Surveys.WebAPIService.Controllers
             var surveyDetails = _manager.GetSurveyDetails(seid);
             if (surveyDetails.Success)
             {
-                var r = new Random();
-                var timerManager = new TimerManager(() =>
-                    _hub.Clients.All.SendAsync("transferchartdata" + seid.ToString(),
-                    _manager.GetRealTimeData(seid).Data
-                ));
+                //var timerManager = new TimerManager(() =>
+                //    _hub.Clients.All.SendAsync("transferchartdata" + seid.ToString(),
+
+                //));
+
+                _hub.Clients.All.SendAsync("transferchartdata" + seid.ToString(),
+                    _manager.GetRealTimeData(seid).Data);
             }
             return Ok(surveyDetails.Data);
         }
@@ -149,6 +152,14 @@ namespace Surveys.WebAPIService.Controllers
             var res = _manager.InsertOrUpdateSurveyDetail(lsd);
             return Ok(res.Success);
         }
+
+        [HttpPost]
+        public ActionResult InsertActualVote([FromBody] List<ActualVote> lav)
+        {
+            var res = _manager.InsertActualVote(lav);
+            return Ok(res.Success);
+        }
+
 
         #endregion
 

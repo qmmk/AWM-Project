@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public chartOptions: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [{
+      xAxes: [{
         ticks: {
           beginAtZero: true
         }

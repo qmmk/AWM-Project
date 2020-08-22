@@ -386,7 +386,7 @@ namespace Surveys.BusinessLogic.DataAccess
                         Title = x.Title,
                         Descr = x.Descr,
                         CustomField01 = x.CustomField01,
-                        CustomField02 = x.CustomField02,
+                        IsOpen = x.IsOpen,
                         CustomField03 = x.CustomField03
                     }).ToList();
 
@@ -420,7 +420,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 parameters.Add(new SqlParameter("Title", se.Title));
                 parameters.Add(new SqlParameter("Descr", se.Descr));
                 parameters.Add(new SqlParameter("CustomField01", se.CustomField01));
-                parameters.Add(new SqlParameter("CustomField02", se.CustomField02));
+                parameters.Add(new SqlParameter("CustomField02", se.IsOpen));
                 parameters.Add(new SqlParameter("CustomField03", se.CustomField03));
                 parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                     ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
@@ -625,18 +625,17 @@ namespace Surveys.BusinessLogic.DataAccess
 
         public ServiceResponse<List<ChartModel>> GetRealTimeData(int seid)
         {
-            var r = new Random();
+            
             ServiceResponse<List<ChartModel>> sr = new ServiceResponse<List<ChartModel>>();
-
-            var lcm = new List<ChartModel>(){
-                new ChartModel {
-                    Data = new List<int>() { r.Next(1, 40), r.Next(1, 40), r.Next(1, 40), r.Next(1, 40) },
-                    Label = "RealTimeData" + seid.ToString() }
+            var ct = new ChartModel
+            {
+                Data = new List<int>(),
+                Label = "RealTimeData" + seid.ToString()
             };
-            /*
+
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("Command", "GET_RTD"));
-            parameters.Add(new SqlParameter("PID", null));
+            parameters.Add(new SqlParameter("PID", seid));
             parameters.Add(new SqlParameter("SDID", null));
             parameters.Add(new SqlParameter("CustomField01", null));
             parameters.Add(new SqlParameter("CustomField02", null));
@@ -646,19 +645,20 @@ namespace Surveys.BusinessLogic.DataAccess
 
             try
             {
-                var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(List<int>), typeof(Int32));
+                var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(Chart), typeof(Int32));
 
                 if (result[1][0] == 0)
                 {
-                    var ct = new ChartModel
-                    {
-                        Data = (List<int>)result[0][0],
-                        Label = "RealTimeData " + seid.ToString()
-                    };
 
-                    sr.Data = lcm;  //ct;       <-- DA MODIFICARE CON ORIGINALE NB LISTA !
+                    foreach(Chart c in result[0])
+                    {
+                        ct.Data.Add(c.count);
+                    }
+
+                    sr.Data = new List<ChartModel>() { ct };
                     sr.Error = DbErrorCode.SUCCESS.ToString();
                     sr.Message = string.Format("Get real time data of survey {0}", seid);
+                    sr.Success = true;
                 }
             }
             catch (Exception ex)
@@ -668,8 +668,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 sr.Message = ex.Message;
                 sr.Success = false;
             }
-            */
-            sr.Data = lcm;
+
             return sr;
         }
         #endregion

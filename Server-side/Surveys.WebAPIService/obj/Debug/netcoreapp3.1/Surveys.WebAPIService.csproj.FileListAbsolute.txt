@@ -126,10 +126,8 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.Owin.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Owin.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.CodeDom.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll

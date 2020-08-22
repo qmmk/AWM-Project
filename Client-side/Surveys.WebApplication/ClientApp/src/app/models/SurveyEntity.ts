@@ -5,7 +5,7 @@ export class SurveyEntity {
   title: string;
   descr: string;
   customField01: string;
-  customField02: string;
+  isOpen: string;
   customField03: string;
   surveyDetails?: SurveyDetail;
 

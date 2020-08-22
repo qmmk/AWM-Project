@@ -23,7 +23,7 @@ namespace Surveys.BusinessLogic.DataAccess
         public string CustomField01 { get; set; }
 
         [MaxLength(250)]
-        public string CustomField02 { get; set; }
+        public string CustomField02{ get; set; }
 
         [MaxLength(250)]
         public string CustomField03 { get; set; }

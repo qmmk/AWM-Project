@@ -32,7 +32,7 @@
         </ng-template>
         <ng-template #disBlock>
           <td colspan="4" style='border-top:none'>
-            <div style="display: block" *ngIf="signalRService.data[survey.seid] && survey.customField02 == 1  && showDetail[survey.seid]">
+            <div style="display: block" *ngIf="signalRService.data[survey.seid] && survey.isOpen == 1  && showDetail[survey.seid]">
               <canvas baseChart
                       [datasets]="signalRService.data[survey.seid]"
                       [labels]="chartLabels"

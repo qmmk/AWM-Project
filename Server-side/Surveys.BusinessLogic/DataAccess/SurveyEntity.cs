@@ -26,7 +26,7 @@ namespace Surveys.BusinessLogic.DataAccess
         public virtual string CustomField01 { get; set; }
 
         [DataMember]
-        public virtual string CustomField02 { get; set; }
+        public virtual string IsOpen { get; set; }
 
         [DataMember]
         public virtual string CustomField03 { get; set; }

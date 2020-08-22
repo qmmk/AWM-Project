@@ -14,4 +14,9 @@ namespace Surveys.BusinessLogic.DataAccess
             Data = new List<int>();
         }
     }
+
+    public class Chart
+    {
+        public int count { get; set; }
+    }
 }

@@ -3,7 +3,9 @@ using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Threading;
 
 namespace Surveys.BusinessLogic.Manager
 {
@@ -11,11 +13,18 @@ namespace Surveys.BusinessLogic.Manager
     {
         #region Fields
         private readonly DataContext _context;
-        private bool disposedValue;
 
         public ServiceManager(DataContext context)
         {
             _context = context;
+
+            bwRealTimeStat = new BackgroundWorker();
+            bwRealTimeStat.WorkerSupportsCancellation = true;
+            bwRealTimeStat.RunWorkerCompleted += bwRealTimeStat_RunWorkerCompleted;
+            bwRealTimeStat.DoWork += bwRealTimeStat_DoWork;
+
+            if (timerRealTimeData == null)
+                timerRealTimeData = new Timer(UpdateRealTimeData, null, 5000, 15000);
         }
 
         ~ServiceManager()
@@ -92,6 +101,71 @@ namespace Surveys.BusinessLogic.Manager
         public ServiceResponse<List<ChartModel>> GetRealTimeData(int seid)
         {
             return _context.GetRealTimeData(seid);
+        }
+
+        public ServiceResponse<int> InsertActualVote(List<ActualVote> lav)
+        {
+            return _context.InsertActualVote(lav);
+        }
+        #endregion
+
+        #region Worker
+
+        private static BackgroundWorker bwRealTimeStat;
+        private static Timer timerRealTimeData = null;
+
+        private void UpdateRealTimeData(object state)
+        {
+            if (bwRealTimeStat != null)
+            {
+                if (bwRealTimeStat.IsBusy)
+                    return;
+
+                bwRealTimeStat.RunWorkerAsync();
+            }
+        }
+
+        void bwRealTimeStat_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                bool bypass = true;
+
+                // SE QUALCUNO E' IN ATTESA DEI DATI
+                //foreach (var subscriber in broadcastNotificationSubscribers)
+                //{
+                //    if (subscriber.RealTimeDataEnabled)
+                //    {
+                //        bypass = false;
+                //        break;
+                //    }
+                //}
+
+                if (!bypass)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        void bwRealTimeStat_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled && e.Result != null /*&& LoggedUser != null*/)
+            {
+
+                try
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }
         }
 
         #endregion
