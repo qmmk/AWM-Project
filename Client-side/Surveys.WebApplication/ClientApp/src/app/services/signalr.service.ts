@@ -40,23 +40,19 @@ export class SignalRService {
   }
 
   public addTransferChartDataListener = (seid: number) => {
+    this.hubConnection.invoke("RealTimeDataChart", seid).catch(err =>
+      console.error(err));
+
+
     this.hubConnection.on('transferchartdata' + seid.toString(), (data) => {
       this.data[seid] = data;
     });
   }
 
   public delTransferChartDataListener = (seid: number) => {
+    this.hubConnection.invoke("CloseSurvey", seid).catch(err =>
+      console.error(err));
+
     this.hubConnection.off('transferchartdata' + seid.toString());
-  }
-
-  public broadcastChartData = () => {
-    //this.hubConnection.invoke('broadcastchartdata', this.data)
-    //  .catch(err => console.error(err));
-  }
-
-  public addBroadcastChartDataListener = () => {
-    //this.hubConnection.on('broadcastchartdata', (data) => {
-    //  this.bradcastedData = data;
-    //})
   }
 }

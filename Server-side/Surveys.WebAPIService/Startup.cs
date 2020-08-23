@@ -72,7 +72,7 @@ namespace Surveys.WebAPIService
 
 
             services.AddScoped<IServiceManager, ServiceManager>();
-            
+
             var key = Encoding.ASCII.GetBytes(appSettings.JwtTokenSecret);
             services.AddAuthentication(x =>
             {
@@ -118,6 +118,7 @@ namespace Surveys.WebAPIService
 
             //WithOrigins("https://localhost:44301")
             //Access to XMLHttpRequest at 'https://localhost:44350/hub/negotiate' from origin 'https://localhost:44301' has been blocked by CORS policy
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });

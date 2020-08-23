@@ -30,7 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }]
     }
   };
-  public chartLabels: Label[] = [];
+  public chartLabels: any[][] = [];
+  public labels: Label[] = [];
   public chartType: ChartType = 'horizontalBar';
   public chartLegend: boolean = false;
   public colors: any[] = [
@@ -57,8 +58,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {   
       this.signalRService.startConnection();
-      
-      //this.signalRService.addBroadcastChartDataListener();
   }
 
   ngOnDestroy(): void {
@@ -74,10 +73,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onDetail(seid: number) {
-    
-    // azione ON
-    //this.signalRService.addBroadcastChartDataListener();
-    
     this.showDetail[seid] = !this.showDetail[seid];
 
     if (this.showDetail[seid]) {
@@ -85,10 +80,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       return this.service.GetSurveyDetails(seid).then((res: SurveyDetail[]) => {
         res.forEach(x => {
-          if (!this.chartLabels.includes(x.descr as Label)) {
-            this.chartLabels.push(x.descr as Label);
+          if (typeof this.chartLabels[seid] !== 'undefined') {
+            if (!this.chartLabels[seid].includes(x.descr as Label)) {
+              this.chartLabels[seid].push(x.descr as Label);
+            }
+          } else {
+            this.labels.push(x.descr as Label);
           }
         });
+
+        if (typeof this.chartLabels[seid] == 'undefined') {
+          this.chartLabels[seid] = this.labels;
+          this.labels = [];
+        }
+        
+
         this.ready = true;
         this.ready$.next(true);
       });
@@ -96,10 +102,5 @@ export class HomeComponent implements OnInit, OnDestroy {
       // stoppo la connesione real time
       this.signalRService.delTransferChartDataListener(seid);
     }
-  }
-
-  public chartClicked = (event) => {
-    console.log(event);
-    this.signalRService.broadcastChartData();
   }
 }

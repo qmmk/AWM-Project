@@ -35,7 +35,7 @@
             <div style="display: block" *ngIf="signalRService.data[survey.seid] && survey.isOpen == 1  && showDetail[survey.seid]">
               <canvas baseChart
                       [datasets]="signalRService.data[survey.seid]"
-                      [labels]="chartLabels"
+                      [labels]="chartLabels[survey.seid]"
                       [options]="chartOptions"
                       [legend]="chartLegend"
                       [chartType]="chartType"

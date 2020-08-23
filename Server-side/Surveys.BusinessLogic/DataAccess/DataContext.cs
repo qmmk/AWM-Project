@@ -436,6 +436,13 @@ namespace Surveys.BusinessLogic.DataAccess
                         sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
                         sr.Success = false;
                         return sr;
+                    } else
+                    {
+                        var res = result[0][0] as SurveyEntity;
+                        foreach (SurveyDetail sd in se.surveyDetails)
+                        {
+                            sd.SEID = res.SEID;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -445,6 +452,9 @@ namespace Surveys.BusinessLogic.DataAccess
                     sr.Message = ex.Message;
                     sr.Success = false;
                 }
+
+                // da chiamare e aggiungere i dettagli
+                //InsertOrUpdateSurveyDetail(se.surveyDetails);
             }
 
 
