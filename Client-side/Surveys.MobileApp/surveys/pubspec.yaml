@@ -12,7 +12,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  riverpod: 0.6.1
+  riverpod: ^0.6.1
+  get_it: ^4.0.4
+  flutter_secure_storage: ^3.3.3
 
   cupertino_icons: ^0.1.3
 
