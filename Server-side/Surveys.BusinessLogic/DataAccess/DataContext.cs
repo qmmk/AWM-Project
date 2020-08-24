@@ -329,30 +329,31 @@ namespace Surveys.BusinessLogic.DataAccess
             try
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(RefreshToken), typeof(Principal), typeof(Int32));
-
-                switch (result[2][0])
+                if(result.Count() == 3)
                 {
-                    case 0:
-                        sr.Data = (Principal)result[1][0];
-                        sr.Data.RefreshToken = (RefreshToken)result[0][0];
-                        sr.Error = DbErrorCode.SUCCESS.ToString();
-                        sr.Message = "Returned the refresh token.";
-                        sr.Success = true;
-                        return sr;
-                    case 9:
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.RT_INVALID.ToString();
-                        sr.Message = string.Format("Refresh token not found.");
-                        sr.Success = false;
-                        return sr;
-                    default:
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                        sr.Message = string.Format("Error occur during checking refresh token.");
-                        sr.Success = false;
-                        return sr;
+                    switch (result[2][0])
+                    {
+                        case 0:
+                            sr.Data = (Principal)result[1][0];
+                            sr.Data.RefreshToken = (RefreshToken)result[0][0];
+                            sr.Error = DbErrorCode.SUCCESS.ToString();
+                            sr.Message = "Returned the refresh token.";
+                            sr.Success = true;
+                            return sr;
+                        case 9:
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.RT_INVALID.ToString();
+                            sr.Message = string.Format("Refresh token not found.");
+                            sr.Success = false;
+                            return sr;
+                        default:
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during checking refresh token.");
+                            sr.Success = false;
+                            return sr;
+                    }
                 }
-
             }
             catch (Exception ex)
             {

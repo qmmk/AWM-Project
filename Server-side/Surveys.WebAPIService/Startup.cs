@@ -128,7 +128,12 @@ namespace Surveys.WebAPIService
                 });
             });
 
-            services.AddSignalR();
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.EnableDetailedErrors = true;
+            });
+
+            //services.AddHostedService<WorkerService>();
 
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }

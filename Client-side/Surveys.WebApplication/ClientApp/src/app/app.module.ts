@@ -67,6 +67,5 @@ export class AppModule { }
 export function appInit(config: ConfigurationService) { 
   return async () => {
     await config.load();
-    await config.fast();
   }
 }

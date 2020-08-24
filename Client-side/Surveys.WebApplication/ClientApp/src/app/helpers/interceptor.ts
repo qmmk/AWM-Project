@@ -4,12 +4,10 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
-import { ConfigurationService } from '../services/configuration.service';
-
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private configService: ConfigurationService) { }
+  constructor(private authService: AuthService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(catchError(err => {
@@ -18,7 +16,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (currentUser.refreshToken.isActive) {
 
           // Gestire l'invocazione per il fresh token !!
-          this.configService.fast();
+          //await this.authService.fast();
           location.reload(true);
           return next.handle(req);
         }

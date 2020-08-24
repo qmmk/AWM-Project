@@ -50,6 +50,7 @@ export class ConfigurationService {
               if (response && response.accessToken) {
                 this.identityService.setUser(response);
               }
+
               resolve(true);
             });
         }

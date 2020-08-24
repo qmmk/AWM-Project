@@ -40,8 +40,17 @@ export class SignalRService {
   }
 
   public addTransferChartDataListener = (seid: number) => {
-    this.hubConnection.invoke("RealTimeDataChart", seid).catch(err =>
-      console.error(err));
+    this.hubConnection.stream("RealTimeDataChart", seid).subscribe({
+      next: (item) => {
+        console.log("ITEM - ", item);
+      },
+      complete: () => {
+        console.log("COMPLETE");
+      },
+      error: (err) => {
+        console.log("ERRORE - ", err);    
+      },
+      });
 
 
     this.hubConnection.on('transferchartdata' + seid.toString(), (data) => {
@@ -50,9 +59,6 @@ export class SignalRService {
   }
 
   public delTransferChartDataListener = (seid: number) => {
-    this.hubConnection.invoke("CloseSurvey", seid).catch(err =>
-      console.error(err));
-
     this.hubConnection.off('transferchartdata' + seid.toString());
   }
 }

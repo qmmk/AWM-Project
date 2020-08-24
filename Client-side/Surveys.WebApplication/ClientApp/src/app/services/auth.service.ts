@@ -43,8 +43,12 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.identityService.isLoggedIn) {
-      // logged in so return true
-      return true;
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser.refreshToken.isActive) {
+
+        // logged in so return true
+        return true;
+      }
     }
 
     // not logged in so redirect to login page with the return url
