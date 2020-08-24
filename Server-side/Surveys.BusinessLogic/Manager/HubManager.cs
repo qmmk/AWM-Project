@@ -5,13 +5,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using Surveys.BusinessLogic.Interfaces;
+using Surveys.BusinessLogic.DataAccess;
+using System.Collections.Generic;
 
 namespace Surveys.BusinessLogic.Manager
 {
     [Authorize]
     public class HubManager : Hub
     {
-        
+        private readonly DataContext _context;
+        protected Dictionary<int, CancellationTokenSource> _rtd;
+
+        public HubManager(DataContext context)
+        {
+            _context = context;
+            _rtd = new Dictionary<int, CancellationTokenSource>();
+        }
+
+        #region Defaults
+
         public override async Task OnConnectedAsync()
         {
             await Clients.All.SendAsync("ReceiveSystemMessage", $"{Context.UserIdentifier} joined.");
@@ -65,7 +77,53 @@ namespace Surveys.BusinessLogic.Manager
                 await Task.Delay(1000);
             }
         }
+
+        #endregion
+
+        public async Task RealTimeDataChart(int seid)
+        {
+            int i = 0;
+            if (!_rtd.ContainsKey(seid))
+            {
+                Console.WriteLine("Inizio trasferimento per " + seid.ToString());
+                CancellationTokenSource cts = new CancellationTokenSource();
+
+                _rtd.Add(seid, cts);
+
+                while (!_rtd[seid].IsCancellationRequested && i != 5)
+                {
+                    Console.WriteLine("TRASFERISCO -->" + seid.ToString());
+                    await Clients.All.SendAsync("transferchartdata" + seid.ToString(),
+                        _context.GetRealTimeData(seid).Data);
+
+
+                    i++;
+
+                    // ASPETTO 5 SECONDI
+                    await Task.Delay(5000);
+                }
+
+                Console.WriteLine("Cancellazione richiesta per " + seid.ToString());
+            }
+
+        }
+
+        public async Task CloseSurvey(int seid)
+        {
+            if (_rtd.ContainsKey(seid))
+            {
+                //CONTROLLI
+                // 1- votazioni chiuse 
+                // 2- nessun listener
+
+                _rtd[seid].Cancel();
+                _rtd[seid].Dispose();
+                _rtd.Remove(seid);
+
+            }
+
+            await Task.Delay(1000);
+        }
+
     }
-
-
 }
