@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:surveys/logic/configs/routing/routes.dart';
+import 'package:surveys/views/home.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key}) : super(key: key);
@@ -41,7 +43,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Text(
                       "Sign up",
                     ),
-                    onPressed: () {})
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          CupertinoPageRoute(builder: (context) => HomePage()),
+                          ModalRoute.withName(Routes.root));
+                    })
               ],
             ),
           ),
