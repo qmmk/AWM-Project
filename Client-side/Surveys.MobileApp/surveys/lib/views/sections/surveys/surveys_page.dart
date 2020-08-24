@@ -40,6 +40,7 @@ class _SurveysPageState extends State<SurveysPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: false,
           middle: Text("Explore surveys"),
           border: null,
         ),

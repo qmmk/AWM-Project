@@ -25,7 +25,6 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      
         child: Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Column(
