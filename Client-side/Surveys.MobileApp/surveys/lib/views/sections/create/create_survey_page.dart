@@ -13,6 +13,7 @@ class CreateSurveyPage extends StatefulWidget {
 
 class _CreateSurveyPageState extends State<CreateSurveyPage> {
   Survey _survey;
+  bool _open;
 
   @override
   void initState() {
@@ -20,6 +21,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       SurveyDetail(id: 0, surveyId: -1, description: "John Biden"),
       SurveyDetail(id: 1, surveyId: -1, description: "Donald Trump")
     ]);
+    _open = false;
     super.initState();
   }
 
@@ -68,44 +70,52 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 15),
-                            child: CupertinoTextField(
-                              placeholder: "Title",
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: CupertinoTextField(
+                            placeholder: "Title",
                           ),
-                          CupertinoTextField(
-                            placeholder: "Description",
-                            minLines: 2,
-                            maxLines: 10,
-                          ),
-                          if (_survey?.details != null) _entryList(),
-                          CupertinoButton(
-                              child: Text("Add entry"),
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pushNamed(Routes.createSurveyEntry)
-                                    .then((value) {
-                                  if (value != null)
-                                    setState(() {
-                                      _survey.details.add(SurveyDetail(
-                                          id: 0,
-                                          surveyId: -1,
-                                          description: value));
-                                    });
-                                });
-                              }),
-                        ],
-                      ),
+                        ),
+                        CupertinoTextField(
+                          placeholder: "Description",
+                          minLines: 2,
+                          maxLines: 10,
+                        ),
+                        if (_survey?.details != null) _entryList(),
+                        CupertinoButton(
+                            child: Text("Add entry",),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed(Routes.createSurveyEntry)
+                                  .then((value) {
+                                if (value != null)
+                                  setState(() {
+                                    _survey.details.add(SurveyDetail(
+                                        id: 0,
+                                        surveyId: -1,
+                                        description: value));
+                                  });
+                              });
+                            }),
+                        Row(
+                          children: [
+                            CupertinoSwitch(
+                                value: _open,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _open = value;
+                                  });
+                                }),
+                            Text("Open")
+                          ],
+                        )
+                      ],
                     ),
-                    Flexible(
-                      child: CupertinoButton.filled(
-                          child: Text("Confirm"), onPressed: () {}),
-                    ),
+                    CupertinoButton.filled(
+                        child: Text("Confirm"), onPressed: () {}),
                   ],
                 ),
               ),
