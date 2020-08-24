@@ -84,6 +84,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -133,7 +134,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
               )
             ],
           ),
-          CupertinoButton.filled(
+          /*CupertinoButton.filled(
               child: Text("Confirm"),
               onPressed: () {
                 _survey
@@ -141,7 +142,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   ..description = _descriptionController.text
                   ..isOpen = _open;
                 if (_isModifying) Navigator.of(context).pop(_survey);
-              }),
+              }),*/
         ],
       );
 
@@ -155,6 +156,18 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
               ? Text("Update survey")
               : Text("Create a survey"),
           border: null,
+          trailing: GestureDetector(
+              onTap: () {
+                _survey
+                  ..title = _titleController.text
+                  ..description = _descriptionController.text
+                  ..isOpen = _open;
+                if (_isModifying) Navigator.of(context).pop(_survey);
+              },
+              child: Icon(
+                CupertinoIcons.check_mark,
+                size: 43,
+              )),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

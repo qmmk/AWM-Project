@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
@@ -29,10 +30,22 @@ class _SurveysPageState extends State<SurveysPage> {
             details: []));
   }
 
-  Widget _surveyElement(Survey survey) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SurveyEntryWidget(survey: survey),
+  Widget _surveyElement(int index) => Card(
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPress: () {
+            Navigator.of(context).pushNamed(Routes.createSurvey,
+                arguments: {"survey": _surveys[index]}).then((survey) {
+              if (survey != null)
+                setState(() {
+                  _surveys[index] = survey;
+                });
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SurveyEntryWidget(survey: _surveys[index]),
+          ),
         ),
       );
 
@@ -45,7 +58,7 @@ class _SurveysPageState extends State<SurveysPage> {
           border: null,
         ),
         child: ListView.separated(
-            itemBuilder: (context, index) => _surveyElement(_surveys[index]),
+            itemBuilder: (context, index) => _surveyElement(index),
             separatorBuilder: (context, index) => SizedBox(
                   height: 10,
                 ),
