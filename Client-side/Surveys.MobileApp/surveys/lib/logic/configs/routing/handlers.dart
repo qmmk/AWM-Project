@@ -7,6 +7,7 @@ import 'package:surveys/views/home.dart';
 import 'package:surveys/views/sections/create/create_update_entry_page.dart';
 import 'package:surveys/views/sections/create/create_update_survey_page.dart';
 import 'package:surveys/views/splash.dart';
+import 'package:surveys/views/survey_results.dart';
 
 class Handlers {
   static Function(RouteSettings) mainHandler = (RouteSettings settings) {
@@ -37,9 +38,13 @@ class Handlers {
       case Routes.createSurveyEntry:
         return CupertinoPageRoute(
             builder: (context) => CreateEntryPage(
-                  surveyDetail:
-                      arguments != null ? arguments["surveyDetail"] : null,
+                  surveyDetail: arguments["surveyDetail"],
                 ));
+
+      case Routes.surveyResults:
+        return CupertinoPageRoute(
+            builder: (context) =>
+                SurveyResultsPage(survey: arguments["survey"]));
 
       default:
         return CupertinoPageRoute(builder: (context) => SplashPage());
