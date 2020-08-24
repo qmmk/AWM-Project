@@ -38,13 +38,13 @@ class Handlers {
       case Routes.createSurveyEntry:
         return CupertinoPageRoute(
             builder: (context) => CreateEntryPage(
-                  surveyDetail: arguments["surveyDetail"],
+                  surveyDetail:
+                      arguments != null ? arguments["surveyDetail"] : null,
                 ));
 
       case Routes.surveyResults:
         return CupertinoPageRoute(
-            builder: (context) =>
-                SurveyResultsPage(survey: arguments["survey"]));
+            builder: (context) => SurveyResultsPage(survey: arguments["survey"]));
 
       default:
         return CupertinoPageRoute(builder: (context) => SplashPage());
