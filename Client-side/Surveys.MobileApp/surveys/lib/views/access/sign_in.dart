@@ -21,34 +21,37 @@ class _SignInPageState extends State<SignInPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: CupertinoTextField(
-                    placeholder: "Enter email",
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: CupertinoTextField(
-                    placeholder: "Enter password",
-                    obscureText: true,
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                CupertinoButton(
-                    child: Text(
-                      "Sign in",
+            child: Form(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: CupertinoTextField(
+                      placeholder: "Enter email",
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          CupertinoPageRoute(builder: (context) => HomePage()),
-                          ModalRoute.withName(Routes.root));
-                    })
-              ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: CupertinoTextField(
+                      placeholder: "Enter password",
+                      obscureText: true,
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  CupertinoButton(
+                      child: Text(
+                        "Sign in",
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            CupertinoPageRoute(
+                                builder: (context) => HomePage()),
+                            ModalRoute.withName(Routes.root));
+                      })
+                ],
+              ),
             ),
           ),
         ));

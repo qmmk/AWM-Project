@@ -8,5 +8,5 @@ class SurveyDetail {
   String customField02;
   String customdField03;
 
-  SurveyDetail({@required this.id, @required this.surveyId});
+  SurveyDetail({@required this.id, @required this.surveyId, this.description});
 }

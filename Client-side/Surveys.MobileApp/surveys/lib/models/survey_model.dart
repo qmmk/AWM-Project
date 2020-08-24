@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:surveys/models/survey_details_model.dart';
+import 'package:surveys/models/survey_detail_model.dart';
 
 class Survey {
   final int id;

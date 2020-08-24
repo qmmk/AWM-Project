@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:surveys/views/sections/surveys/surveys.dart';
+import 'package:surveys/views/sections/create/create_survey_page.dart';
+import 'package:surveys/views/sections/surveys/surveys_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
             case 0:
               return SurveysPage();
             case 1:
-              return SurveysPage();
+              return CreateSurveyPage();
             case 2:
               return SurveysPage();
             default:
