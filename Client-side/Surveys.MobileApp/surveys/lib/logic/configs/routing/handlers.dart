@@ -4,7 +4,8 @@ import 'package:surveys/views/access/access_hub.dart';
 import 'package:surveys/views/access/sign_in.dart';
 import 'package:surveys/views/access/sign_up.dart';
 import 'package:surveys/views/home.dart';
-import 'package:surveys/views/sections/create/create_entry_page.dart';
+import 'package:surveys/views/sections/create/create_update_entry_page.dart';
+import 'package:surveys/views/sections/create/create_update_survey_page.dart';
 import 'package:surveys/views/splash.dart';
 
 class Handlers {
@@ -26,6 +27,12 @@ class Handlers {
 
       case Routes.home:
         return CupertinoPageRoute(builder: (context) => HomePage());
+
+      case Routes.createSurvey:
+        return CupertinoPageRoute(
+            builder: (context) => CreateSurveyPage(
+                  survey: arguments["survey"],
+                ));
 
       case Routes.createSurveyEntry:
         return CupertinoPageRoute(

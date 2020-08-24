@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:surveys/views/sections/create/create_survey_page.dart';
+import 'package:surveys/views/sections/create/create_update_survey_page.dart';
+import 'package:surveys/views/sections/personal_area/personal_area.dart';
 import 'package:surveys/views/sections/surveys/surveys_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
             case 1:
               return CreateSurveyPage();
             case 2:
-              return SurveysPage();
+              return PersonalAreaPage();
             default:
               return SurveysPage();
           }

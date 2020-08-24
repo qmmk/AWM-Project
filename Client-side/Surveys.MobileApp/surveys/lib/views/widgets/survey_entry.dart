@@ -20,7 +20,7 @@ class SurveyEntryWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
-              if (survey.description != null)
+              if (survey.description != null && survey.description.trim().isNotEmpty)
                 Text(
                   survey.description,
                   maxLines: 1,
