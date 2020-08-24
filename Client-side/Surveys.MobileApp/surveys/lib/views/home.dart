@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:surveys/views/sections/surveys/surveys.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -20,8 +21,17 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(CupertinoIcons.person), title: Text("Personal area"))
           ],
         ),
-        tabBuilder: (context, index) => Center(
-              child: Text('$index'),
-            ));
+        tabBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return SurveysPage();
+            case 1:
+              return SurveysPage();
+            case 2:
+              return SurveysPage();
+            default:
+              return SurveysPage();
+          }
+        });
   }
 }
