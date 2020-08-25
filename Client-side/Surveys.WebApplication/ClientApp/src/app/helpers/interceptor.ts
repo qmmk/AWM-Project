@@ -1,36 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
+import { ConfigurationService } from '../services/configuration.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+    private config: ConfigurationService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(catchError(err => {
       if (err && err.status === 401) {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser.refreshToken.isActive) {
-
-          // Gestire l'invocazione per il fresh token !!
-          //await this.authService.fast();
-          location.reload(true);
-          return next.handle(req);
+        if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
+          this.config.fast();          
         }
-        else
-        {
+        else {
           this.authService.logOut();
           location.reload(true);
         }
       }
-      else
-      {
-        //return throwError(err);
-        throw (err);
-      }
+      throw (err);
     }));
   }
 }

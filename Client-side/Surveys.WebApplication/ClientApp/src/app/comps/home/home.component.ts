@@ -57,11 +57,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     public signalRService: SignalRService) { this.load(); }
 
   ngOnInit(): void {   
-      this.signalRService.startConnection();
+    this.signalRService.startConnection();
   }
 
   ngOnDestroy(): void {
-      this.signalRService.stopConnection();
+    this.signalRService.delTransferChartDataListener();
   }
 
   load() {
@@ -72,11 +72,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDetail(seid: number) {
+  onDetail(seid: number, i: number) {
     this.showDetail[seid] = !this.showDetail[seid];
 
     if (this.showDetail[seid]) {
-      this.signalRService.addTransferChartDataListener(seid);
+      this.signalRService.addTransferChartDataListener(seid, i);
 
       return this.service.GetSurveyDetails(seid).then((res: SurveyDetail[]) => {
         res.forEach(x => {
@@ -93,14 +93,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.chartLabels[seid] = this.labels;
           this.labels = [];
         }
-        
 
         this.ready = true;
         this.ready$.next(true);
       });
-    } else {
-      // stoppo la connesione real time
-      this.signalRService.delTransferChartDataListener(seid);
     }
   }
 }

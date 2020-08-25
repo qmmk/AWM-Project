@@ -44,7 +44,7 @@ export class AuthGuardService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.identityService.isLoggedIn) {
       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (currentUser.refreshToken.isActive) {
+      if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
 
         // logged in so return true
         return true;

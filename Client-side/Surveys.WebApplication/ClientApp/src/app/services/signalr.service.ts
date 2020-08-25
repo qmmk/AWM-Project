@@ -11,7 +11,7 @@ export class SignalRService {
   public bradcastedData: ChartModel[];
   private hubConnection: signalR.HubConnection
 
-  constructor( private configService: ConfigurationService) {}
+  constructor(private configService: ConfigurationService) { }
 
   public startConnection = () => {
     if (!this.isConnected()) {
@@ -32,15 +32,8 @@ export class SignalRService {
     }
   }
 
-  public isConnected = () => {
-    if (typeof this.hubConnection !== "undefined") {
-      return this.hubConnection.state === (signalR.HubConnectionState.Connected) ? true : false;
-    }
-    return false;
-  }
-
-  public addTransferChartDataListener = (seid: number) => {
-    this.hubConnection.stream("RealTimeDataChart", seid).subscribe({
+  public realTimeDataChart = () => {
+    this.hubConnection.stream("RealTimeDataChart").subscribe({
       next: (item) => {
         console.log("ITEM - ", item);
       },
@@ -48,17 +41,27 @@ export class SignalRService {
         console.log("COMPLETE");
       },
       error: (err) => {
-        console.log("ERRORE - ", err);    
+        console.log("ERRORE - ", err);
       },
-      });
-
-
-    this.hubConnection.on('transferchartdata' + seid.toString(), (data) => {
-      this.data[seid] = data;
     });
   }
 
-  public delTransferChartDataListener = (seid: number) => {
-    this.hubConnection.off('transferchartdata' + seid.toString());
+  public isConnected = () => {
+    if (typeof this.hubConnection !== "undefined") {
+      return this.hubConnection.state === (signalR.HubConnectionState.Connected) ? true : false;
+    }
+    return false;
+  }
+
+  public addTransferChartDataListener = (seid: number, i: number) => {
+    this.hubConnection.on("RealTimeDataChart", (data) => {
+      var r: any[] = [];
+      r.push(data[i]);
+      this.data[seid] = r;
+    });
+  }
+
+  public delTransferChartDataListener = () => {
+    this.hubConnection.off("RealTimeDataChart");
   }
 }

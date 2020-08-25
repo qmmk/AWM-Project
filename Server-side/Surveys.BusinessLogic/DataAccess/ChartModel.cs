@@ -17,6 +17,8 @@ namespace Surveys.BusinessLogic.DataAccess
 
     public class Chart
     {
+        public int SEID { get; set; }
+        public string Descr { get; set; }
         public int count { get; set; }
     }
 }

@@ -18,6 +18,8 @@ using System.ComponentModel;
 using Surveys.BusinessLogic.Core;
 using static Surveys.BusinessLogic.Core.EnumTypes;
 using System.Reflection.Emit;
+using System.Dynamic;
+using System.Runtime.CompilerServices;
 
 namespace Surveys.BusinessLogic.DataAccess
 {
@@ -94,12 +96,14 @@ namespace Surveys.BusinessLogic.DataAccess
             }
             return results;
         }
+
         #endregion
 
-        public DbSet<SurveyEntity> SurveyEntity { get; set; }
-        public DbSet<SurveyDetail> SurveyDetail { get; set; }
+        #region DbSet
+
         public DbSet<Principal> Principal { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        #endregion
 
         #region Stored Procedure
 
@@ -180,31 +184,32 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManagePrincipal", parameters.ToArray(), typeof(Principal), typeof(Int32));
 
-                if (result[1][0] == 0)
+                if(result.Count == 2)
                 {
-                    sr.Data = result[0].Select(x => new Principal
+                    if (result[1][0] == 0)
                     {
-                        PID = x.PID,
-                        UserName = x.UserName,
-                        CustomField01 = x.CustomField01,
-                        CustomField02 = x.CustomField02,
-                        CustomField03 = x.CustomField03,
-                        RoleID = x.RoleID
-                    }).ToList().FirstOrDefault();
+                        sr.Data = result[0].Select(x => new Principal
+                        {
+                            PID = x.PID,
+                            UserName = x.UserName,
+                            CustomField01 = x.CustomField01,
+                            CustomField02 = x.CustomField02,
+                            CustomField03 = x.CustomField03,
+                            RoleID = x.RoleID
+                        }).ToList().FirstOrDefault();
 
-                    sr.Error = DbErrorCode.SUCCESS.ToString();
-                    sr.Message = "Returned the user just created.";
-                    sr.Success = true;
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Returned the user just created.";
+                        sr.Success = true;
+                    }
+                    else if (result[1][0] == 5)
+                    {
+                        sr.Data = null;
+                        sr.Error = DbErrorCode.USER_ALREADY_EXISTS.ToString();
+                        sr.Message = "The user already exists.";
+                        sr.Success = true;
+                    }
                 }
-                else if(result[1][0] == 5) 
-                {
-                    sr.Data = null;
-                    sr.Error = DbErrorCode.USER_ALREADY_EXISTS.ToString();
-                    sr.Message = "The user already exists.";
-                    sr.Success = true;
-                }
-                else { }
-
             }
             catch(Exception ex)
             {
@@ -279,28 +284,30 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(RefreshToken), typeof(Int32));
 
-                switch (result[1][0])
+                if(result.Count == 2)
                 {
-                    case 0:
-                        sr.Data = (RefreshToken)result[0][0];
-                        sr.Error = DbErrorCode.SUCCESS.ToString();
-                        sr.Message = "Returned the refresh token.";
-                        sr.Success = true;
-                        return sr;
-                    case 10:
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.RT_NOT_EXISTS.ToString();
-                        sr.Message = string.Format("Refresh token not found.");
-                        sr.Success = false;
-                        return sr;
-                    default:
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                        sr.Message = string.Format("Error occur during getting refresh token");
-                        sr.Success = false;
-                        return sr;
+                    switch (result[1][0])
+                    {
+                        case 0:
+                            sr.Data = (RefreshToken)result[0][0];
+                            sr.Error = DbErrorCode.SUCCESS.ToString();
+                            sr.Message = "Returned the refresh token.";
+                            sr.Success = true;
+                            return sr;
+                        case 10:
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.RT_NOT_EXISTS.ToString();
+                            sr.Message = string.Format("Refresh token not found.");
+                            sr.Success = false;
+                            return sr;
+                        default:
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during getting refresh token");
+                            sr.Success = false;
+                            return sr;
+                    }
                 }
-
             }
             catch (Exception ex)
             {
@@ -329,7 +336,8 @@ namespace Surveys.BusinessLogic.DataAccess
             try
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(RefreshToken), typeof(Principal), typeof(Int32));
-                if(result.Count() == 3)
+
+                if(result.Count == 3)
                 {
                     switch (result[2][0])
                     {
@@ -379,24 +387,25 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyEntity), typeof(Int32));
 
-                if (result[1][0] == 0) 
+                if(result.Count == 2)
                 {
-                    sr.Data = result[0].Select(x => new SurveyEntity
+                    if (result[1][0] == 0)
                     {
-                        SEID = x.SEID,
-                        Title = x.Title,
-                        Descr = x.Descr,
-                        CustomField01 = x.CustomField01,
-                        IsOpen = x.IsOpen,
-                        CustomField03 = x.CustomField03
-                    }).ToList();
+                        sr.Data = result[0].Select(x => new SurveyEntity
+                        {
+                            SEID = x.SEID,
+                            Title = x.Title,
+                            Descr = x.Descr,
+                            CustomField01 = x.CustomField01,
+                            IsOpen = x.IsOpen,
+                            CustomField03 = x.CustomField03
+                        }).ToList();
 
-                    sr.Error = DbErrorCode.SUCCESS.ToString();
-                    sr.Message = "Returned all survey entities";
-                    sr.Success = true;
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Returned all survey entities";
+                        sr.Success = true;
+                    }
                 }
-                else { }
-
             }
             catch (Exception ex)
             {
@@ -430,21 +439,26 @@ namespace Surveys.BusinessLogic.DataAccess
                 {
                     var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyEntity), typeof(Int32));
 
-                    if (result[1][0] != 0)
+                    if(result.Count == 2)
                     {
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                        sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
-                        sr.Success = false;
-                        return sr;
-                    } else
-                    {
-                        var res = result[0][0] as SurveyEntity;
-                        foreach (SurveyDetail sd in se.surveyDetails)
+                        if (result[1][0] != 0)
                         {
-                            sd.SEID = res.SEID;
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
+                            sr.Success = false;
+                            return sr;
+                        }
+                        else
+                        {
+                            var res = result[0][0] as SurveyEntity;
+                            foreach (SurveyDetail sd in se.surveyDetails)
+                            {
+                                sd.SEID = res.SEID;
+                            }
                         }
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -454,10 +468,9 @@ namespace Surveys.BusinessLogic.DataAccess
                     sr.Success = false;
                 }
 
-                // da chiamare e aggiungere i dettagli
-                //InsertOrUpdateSurveyDetail(se.surveyDetails);
+                var output = InsertOrUpdateSurveyDetail(se.surveyDetails);
+                if (output.Success) { continue; }
             }
-
 
             return GetAllSurveyEntities();
         }
@@ -476,24 +489,25 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyDetail), typeof(Int32));
 
-                if (result[1][0] == 0)
+                if(result.Count == 2)
                 {
-                    sr.Data = result[0].Select(x => new SurveyDetail
+                    if (result[1][0] == 0)
                     {
-                        SEID = x.SEID,
-                        SDID = x.SDID,
-                        Descr = x.Descr,
-                        CustomField01 = x.CustomField01,
-                        CustomField02 = x.CustomField02,
-                        CustomField03 = x.CustomField03
-                    }).ToList();
+                        sr.Data = result[0].Select(x => new SurveyDetail
+                        {
+                            SEID = x.SEID,
+                            SDID = x.SDID,
+                            Descr = x.Descr,
+                            CustomField01 = x.CustomField01,
+                            CustomField02 = x.CustomField02,
+                            CustomField03 = x.CustomField03
+                        }).ToList();
 
-                    sr.Error = DbErrorCode.SUCCESS.ToString();
-                    sr.Message = "Returned all survey details";
-                    sr.Success = true;
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Returned all survey details";
+                        sr.Success = true;
+                    }
                 }
-                else { }
-
             }
             catch (Exception ex)
             {
@@ -527,22 +541,25 @@ namespace Surveys.BusinessLogic.DataAccess
                 try
                 {
                     var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyEntity), typeof(Int32));
-
-                    switch (result[1][0])
+                    
+                    if(result.Count == 2)
                     {
-                        case 0: continue;
-                        case 8:
-                            sr.Data = result[1][0].ToString();
-                            sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
-                            sr.Message = string.Format("Survey {0} not exists", sd.SEID);
-                            sr.Success = false;
-                            return sr;
-                        default:
-                            sr.Data = result[1][0].ToString();
-                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                            sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
-                            sr.Success = false;
-                            return sr;
+                        switch (result[1][0])
+                        {
+                            case 0: continue;
+                            case 8:
+                                sr.Data = result[1][0].ToString();
+                                sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                                sr.Message = string.Format("Survey {0} not exists", sd.SEID);
+                                sr.Success = false;
+                                return sr;
+                            default:
+                                sr.Data = result[1][0].ToString();
+                                sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                                sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
+                                sr.Success = false;
+                                return sr;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -634,19 +651,15 @@ namespace Surveys.BusinessLogic.DataAccess
             return final;
         }
 
-        public ServiceResponse<List<ChartModel>> GetRealTimeData(int seid)
+        public ServiceResponse<List<ChartModel>> GetRealTimeData()
         {
             
             ServiceResponse<List<ChartModel>> sr = new ServiceResponse<List<ChartModel>>();
-            var ct = new ChartModel
-            {
-                Data = new List<int>(),
-                Label = "RealTimeData" + seid.ToString()
-            };
+            var lct = new List<ChartModel>();
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("Command", "GET_RTD"));
-            parameters.Add(new SqlParameter("PID", seid));
+            parameters.Add(new SqlParameter("PID", null));
             parameters.Add(new SqlParameter("SDID", null));
             parameters.Add(new SqlParameter("CustomField01", null));
             parameters.Add(new SqlParameter("CustomField02", null));
@@ -658,18 +671,29 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(Chart), typeof(Int32));
 
-                if (result[1][0] == 0)
+                if (result.Count == 2)
                 {
-
-                    foreach(Chart c in result[0])
+                    if (result[1][0] == 0)
                     {
-                        ct.Data.Add(c.count);
-                    }
+                        result[0].AsEnumerable().GroupBy(x => x.SEID).ToList().ForEach(x => {
+                            int seid = 0;
+                            var ct = new ChartModel();
 
-                    sr.Data = new List<ChartModel>() { ct };
-                    sr.Error = DbErrorCode.SUCCESS.ToString();
-                    sr.Message = string.Format("Get real time data of survey {0}", seid);
-                    sr.Success = true;
+                            foreach (Chart v in x)
+                            {
+                                ct.Data.Add(v.count);
+                                seid = v.SEID;
+                            }
+
+                            ct.Label = "RealTimeData" + seid.ToString();
+                            lct.Add(ct);
+                        });
+
+                        sr.Data = lct;
+                        sr.Error = DbErrorCode.SUCCESS.ToString();
+                        sr.Message = "Get real time data of survey";
+                        sr.Success = true;
+                    }
                 }
             }
             catch (Exception ex)

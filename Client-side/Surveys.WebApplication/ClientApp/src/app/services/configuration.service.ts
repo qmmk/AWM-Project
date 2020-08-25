@@ -40,7 +40,8 @@ export class ConfigurationService {
     return new Promise((resolve, reject) => {
       if (this.identityService.isLoggedIn) {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser.refreshToken.isActive) {
+
+        if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
           let token = currentUser.refreshToken.rToken;
           return this.http.post<any>(`${this.serverSettings.webApiServiceUrl}/FastLogin`, { token })
             .subscribe(response => {

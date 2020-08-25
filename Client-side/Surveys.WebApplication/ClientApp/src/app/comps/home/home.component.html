@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    <ng-container *ngFor="let survey of surveys;">
+    <ng-container *ngFor="let survey of surveys; index as i">
       <tr *ngFor="let chart of charts; first as isFirst">
         <div *ngIf="isFirst; then pariBlock else disBlock"></div>
         <ng-template #pariBlock>
@@ -27,7 +27,7 @@
             <ng-template #openBlock><span class="circle" style="background-color:limegreen"></span></ng-template>
           </td>
           <td style="width:40px">
-            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid)" [disabled]="survey.customField02 == 0">Detail</button>
+            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid, i)" [disabled]="survey.customField02 == 0">Detail</button>
           </td>
         </ng-template>
         <ng-template #disBlock>

@@ -92,9 +92,9 @@ namespace Surveys.BusinessLogic.Manager
             return _context.InsertOrUpdateSurveyDetail(lsd);
         }
 
-        public ServiceResponse<List<ChartModel>> GetRealTimeData(int seid)
+        public ServiceResponse<List<ChartModel>> GetRealTimeData()
         {
-            return _context.GetRealTimeData(seid);
+            return _context.GetRealTimeData();
         }
 
         public ServiceResponse<int> InsertActualVote(List<ActualVote> lav)

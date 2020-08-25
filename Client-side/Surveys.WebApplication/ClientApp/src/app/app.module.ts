@@ -20,6 +20,7 @@ import { AuthService, AuthGuardService } from './services/auth.service';
 import { SurveyService } from './services/survey.service';
 import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SignalRService } from './services/signalr.service';
 
 @NgModule({
   declarations: [
@@ -48,13 +49,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       },
       {
         path: 'settings',
-        component: SettingsComponent
+        component: SettingsComponent,
+        canActivate: [AuthGuardService]
       }
     ]),
     BrowserAnimationsModule,
     MatSlideToggleModule
   ],
-  providers: [AuthService, ConfigurationService, StorageService, IdentityService, AuthGuardService, SurveyService,
+  providers: [AuthService, ConfigurationService, StorageService, IdentityService, AuthGuardService, SurveyService, SignalRService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: APP_INITIALIZER, useFactory: appInit, deps: [ConfigurationService, IdentityService], multi: true },
@@ -67,5 +69,6 @@ export class AppModule { }
 export function appInit(config: ConfigurationService) { 
   return async () => {
     await config.load();
+    await config.fast();
   }
 }
