@@ -35,15 +35,17 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     });
   }
 
+  double calculateEntryPercentage({@required int voteId}) {
+    return _votes.where((element) => element.surveyDetailId == voteId).length /
+        _votes.length;
+  }
+
   Widget _content() {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          double perc = _votes
-                  .where((element) =>
-                      element.surveyDetailId == widget.survey.details[index].id)
-                  .length /
-              _votes.length;
+          double perc =
+              calculateEntryPercentage(voteId: widget.survey.details[index].id);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +80,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
         ),
-        child: !widget.survey.isOpen
+        child: !widget.survey.isOpen || widget.survey.details.length <= 0
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -110,7 +112,10 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
-                        child: Text(widget.survey.description, style: TextStyle(color: CupertinoColors.systemGrey),),
+                        child: Text(
+                          widget.survey.description,
+                          style: TextStyle(color: CupertinoColors.systemGrey),
+                        ),
                       )
                     ],
                   ),
