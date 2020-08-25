@@ -46,9 +46,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
-                            CupertinoPageRoute(
-                                builder: (context) => HomePage()),
-                            ModalRoute.withName(Routes.root));
+                            CupertinoPageRoute(builder: (context) => HomePage()), ModalRoute.withName(Routes.root));
                       })
                 ],
               ),

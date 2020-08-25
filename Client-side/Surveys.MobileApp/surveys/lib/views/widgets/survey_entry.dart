@@ -34,9 +34,7 @@ class SurveyEntryWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10),
           child: Icon(
             CupertinoIcons.circle_filled,
-            color: survey.isOpen
-                ? CupertinoColors.activeGreen
-                : CupertinoColors.systemRed,
+            color: survey.isOpen ? CupertinoColors.activeGreen : CupertinoColors.systemRed,
           ),
         )
       ],

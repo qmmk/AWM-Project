@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 750)).then((value) =>
-        Navigator.of(context).pushReplacementNamed(Routes.accessHub));
+    Future.delayed(Duration(milliseconds: 750))
+        .then((value) => Navigator.of(context).pushReplacementNamed(Routes.accessHub));
   }
 }

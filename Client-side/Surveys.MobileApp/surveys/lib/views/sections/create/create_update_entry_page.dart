@@ -36,9 +36,7 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
               Text("Add an entry to the survey"),
               CupertinoButton(
                 onPressed: () {
-                  Navigator.of(context).pop(_controller.text.trim().isNotEmpty
-                      ? _controller.text.trim()
-                      : null);
+                  Navigator.of(context).pop(_controller.text.trim().isNotEmpty ? _controller.text.trim() : null);
                 },
                 child: Icon(
                   CupertinoIcons.check_mark_circled_solid,
@@ -48,8 +46,7 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
             ],
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 10),
+            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 10),
             child: CupertinoTextField(
               controller: _controller,
               placeholder: "Description",
