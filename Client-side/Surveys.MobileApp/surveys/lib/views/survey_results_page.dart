@@ -17,10 +17,12 @@ class SurveyResultsPage extends StatefulWidget {
 
 class _SurveyResultsPageState extends State<SurveyResultsPage> {
   List<SurveyVote> _votes;
+  bool _notAcessible = false;
 
   @override
   void initState() {
     super.initState();
+    _notAcessible = !widget.survey.isOpen || widget.survey.details.length <= 0;
     _votes = _generateRandomVotes();
   }
 
@@ -28,34 +30,27 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     Random random = Random();
 
     return List.generate(200, (index) {
-      SurveyDetail picked =
-          widget.survey.details[random.nextInt(widget.survey.details.length)];
-      return SurveyVote(
-          id: index, surveyId: picked.surveyId, surveyDetailId: picked.id);
+      SurveyDetail picked = widget.survey.details[random.nextInt(widget.survey.details.length)];
+      return SurveyVote(id: index, surveyId: picked.surveyId, surveyDetailId: picked.id);
     });
   }
 
   double calculateEntryPercentage({@required int voteId}) {
-    return _votes.where((element) => element.surveyDetailId == voteId).length /
-        _votes.length;
+    return _votes.where((element) => element.surveyDetailId == voteId).length / _votes.length;
   }
 
   Widget _content() {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          double perc =
-              calculateEntryPercentage(voteId: widget.survey.details[index].id);
+          double perc = calculateEntryPercentage(voteId: widget.survey.details[index].id);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(widget.survey.details[index].description),
-                  Text((perc * 100).toStringAsFixed(1) + "%")
-                ],
+                children: [Text(widget.survey.details[index].description), Text((perc * 100).toStringAsFixed(1) + "%")],
               ),
               LinearProgressIndicator(
                 value: perc,
@@ -80,7 +75,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
         ),
-        child: !widget.survey.isOpen || widget.survey.details.length <= 0
+        child: _notAcessible
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -18,8 +18,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   bool _isModifying;
 
   TextEditingController _titleController = TextEditingController(text: "title");
-  TextEditingController _descriptionController =
-      TextEditingController(text: "description");
+  TextEditingController _descriptionController = TextEditingController(text: "description");
 
   @override
   void initState() {
@@ -55,12 +54,9 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
             itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(Routes.createSurveyEntry,
-                        arguments: {
-                          "surveyDetail": _survey.details[index]
-                        }).then((value) {
+                        arguments: {"surveyDetail": _survey.details[index]}).then((value) {
                       setState(() {
-                        if (value != null)
-                          _survey.details[index].description = value;
+                        if (value != null) _survey.details[index].description = value;
                       });
                     });
                   },
@@ -71,8 +67,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                         });
                       },
                       key: Key(_survey.details[index].id.toString()),
-                      child: Container(
-                          child: Text(_survey?.details[index].description))),
+                      child: Container(child: Text(_survey?.details[index].description))),
                 ),
             separatorBuilder: (context, index) => SizedBox(
                   height: 5,
@@ -110,13 +105,10 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     "Add entry",
                   ),
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(Routes.createSurveyEntry)
-                        .then((value) {
+                    Navigator.of(context).pushNamed(Routes.createSurveyEntry).then((value) {
                       if (value != null)
                         setState(() {
-                          _survey.details.add(SurveyDetail(
-                              id: 0, surveyId: -1, description: value));
+                          _survey.details.add(SurveyDetail(id: 0, surveyId: -1, description: value));
                         });
                     });
                   }),
@@ -152,9 +144,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: false,
-          middle: widget.survey != null
-              ? Text("Update survey")
-              : Text("Create a survey"),
+          middle: widget.survey != null ? Text("Update survey") : Text("Create a survey"),
           border: null,
           trailing: GestureDetector(
               onTap: () {
@@ -174,9 +164,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
           child: widget.survey != null
               ? _content()
               : SingleChildScrollView(
-                  child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: _content()),
+                  child: Container(height: MediaQuery.of(context).size.height, child: _content()),
                 ),
         ));
   }

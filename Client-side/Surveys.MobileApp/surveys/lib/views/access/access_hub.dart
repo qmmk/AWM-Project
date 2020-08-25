@@ -10,10 +10,7 @@ class AccessHubPage extends StatelessWidget {
         child: Center(
       child: Column(
         children: [
-          Expanded(
-              flex: 10,
-              child: Center(
-                  child: Text("The smartest way to take and create surveys"))),
+          Expanded(flex: 10, child: Center(child: Text("The smartest way to take and create surveys"))),
           Expanded(
             flex: 10,
             child: Column(

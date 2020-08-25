@@ -28,22 +28,17 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
             description:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel neque ac turpis euismod elementum. Vestibulum gravida nisi venenatis dignissim vehicula. Nunc commodo eleifend nisi vitae volutpat. Donec nec felis quis ante tincidunt maximus at ac sem. Praesent efficitur, nunc id iaculis sodales, tellus purus bibendum est, sed tincidunt orci est quis arcu. Pellentesque non ante eget ex fermentum porta ac vitae tortor. Maecenas velit augue, laoreet pretium elit eget, lobortis varius massa. Mauris fermentum ex et augue pretium cursus. Suspendisse ornare ultricies pharetra. Suspendisse nec elit eu tortor placerat tincidunt. Phasellus dapibus sed purus ut malesuada. Vivamus feugiat in nibh quis commodo. Cras a suscipit nibh.",
             isOpen: Random().nextBool(),
-            details: List.generate(
-                4,
-                (index) => SurveyDetail(
-                    id: index, surveyId: -1, description: "Entry $index"))));
+            details: List.generate(4, (index) => SurveyDetail(id: index, surveyId: -1, description: "Entry $index"))));
   }
 
   Widget _surveyElement(int index) => Card(
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            Navigator.of(context).pushNamed(Routes.surveyResults,
-                arguments: {"survey": _surveys[index]});
+            Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": _surveys[index]});
           },
           onLongPress: () {
-            Navigator.of(context).pushNamed(Routes.createSurvey,
-                arguments: {"survey": _surveys[index]}).then((survey) {
+            Navigator.of(context).pushNamed(Routes.createSurvey, arguments: {"survey": _surveys[index]}).then((survey) {
               if (survey != null)
                 setState(() {
                   _surveys[index] = survey;

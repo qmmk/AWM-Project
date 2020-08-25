@@ -57,11 +57,13 @@ class _VotePageState extends State<VotePage> {
           backgroundColor: CupertinoColors.white,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
-          trailing: _notAccessible ? Container() : GestureDetector(
-              child: Icon(
-            CupertinoIcons.check_mark,
-            size: 43,
-          )),
+          trailing: _notAccessible
+              ? Container()
+              : GestureDetector(
+                  child: Icon(
+                  CupertinoIcons.check_mark,
+                  size: 43,
+                )),
         ),
         child: _notAccessible
             ? Center(

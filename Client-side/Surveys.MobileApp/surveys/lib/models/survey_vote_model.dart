@@ -6,9 +6,5 @@ class SurveyVote {
   final int surveyDetailId;
   final DateTime registeredOn;
 
-  SurveyVote(
-      {@required this.id,
-      @required this.surveyId,
-      @required this.surveyDetailId,
-      this.registeredOn});
+  SurveyVote({@required this.id, @required this.surveyId, @required this.surveyDetailId, this.registeredOn});
 }

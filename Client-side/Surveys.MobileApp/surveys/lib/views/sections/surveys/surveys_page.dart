@@ -38,12 +38,10 @@ class _SurveysPageState extends State<SurveysPage> {
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            Navigator.of(context).pushNamed(Routes.surveyResults,
-                arguments: {"survey": _surveys[index]});
+            Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": _surveys[index]});
           },
           onLongPress: () {
-            Navigator.of(context)
-                .pushNamed(Routes.vote, arguments: {"survey": _surveys[index]});
+            Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": _surveys[index]});
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

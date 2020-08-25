@@ -10,10 +10,5 @@ class Survey {
   String customField01;
   String customField03;
 
-  Survey(
-      {@required this.id,
-      this.title,
-      this.description,
-      this.isOpen,
-      this.details});
+  Survey({@required this.id, this.title, this.description, this.isOpen, this.details});
 }

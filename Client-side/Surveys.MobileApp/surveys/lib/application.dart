@@ -9,7 +9,6 @@ class Application {
   }
 
   void _initializeApplicationInstances() {
-    getIt.registerSingleton(FlutterSecureStorage(),
-        instanceName: "secureStorage");
+    getIt.registerSingleton(FlutterSecureStorage(), instanceName: "secureStorage");
   }
 }
