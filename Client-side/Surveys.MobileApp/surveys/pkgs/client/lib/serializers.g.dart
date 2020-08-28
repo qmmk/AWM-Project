@@ -7,6 +7,7 @@ part of serializers;
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(FastLoginRequestBody.serializer)
       ..add(LoginRequestBody.serializer)
       ..add(LoginResponse.serializer)
       ..add(RefreshToken.serializer))

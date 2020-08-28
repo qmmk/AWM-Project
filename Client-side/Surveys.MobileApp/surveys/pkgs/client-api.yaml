@@ -50,6 +50,12 @@ components:
         customField03:
           type: string
 
+    FastLoginRequestBody:
+      type: object
+      properties:
+        token:
+          type: string
+
 info:
   title: Survey API
   description: API for Surveys
@@ -69,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequestBody'
+              $ref: "#/components/schemas/LoginRequestBody"
 
       responses:
         200:
@@ -78,3 +84,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LoginResponse"
+        400:
+          description: "Incorrect data"
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /service/fastlogin:
+    post:
+      operationId: "fastLogin"
+      description: "Login with refresh token"
+      requestBody:
+        description: "Refresh token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FastLoginRequestBody"
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        400:
+          description: "Incorrect data"
+          content:
+            text/plain:
+              schema:
+                type: string

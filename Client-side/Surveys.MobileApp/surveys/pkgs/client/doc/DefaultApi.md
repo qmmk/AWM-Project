@@ -9,8 +9,52 @@ All URIs are relative to *https://192.168.1.206:45455*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastlogin | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
 
+
+# **fastLogin**
+> LoginResponse fastLogin(fastLoginRequestBody)
+
+
+
+Login with refresh token
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var fastLoginRequestBody = new FastLoginRequestBody(); // FastLoginRequestBody | Refresh token
+
+try { 
+    var result = api_instance.fastLogin(fastLoginRequestBody);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->fastLogin: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **fastLoginRequestBody** | [**FastLoginRequestBody**](FastLoginRequestBody.md)| Refresh token | 
+
+### Return type
+
+[**LoginResponse**](LoginResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **login**
 > LoginResponse login(loginRequestBody)
@@ -51,7 +95,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, text/plain
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

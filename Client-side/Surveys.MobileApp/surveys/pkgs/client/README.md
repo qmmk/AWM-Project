@@ -41,13 +41,13 @@ import 'package:survey_client/api.dart';
 
 
 var api_instance = new DefaultApi();
-var loginRequestBody = new LoginRequestBody(); // LoginRequestBody | Username and password
+var fastLoginRequestBody = new FastLoginRequestBody(); // FastLoginRequestBody | Refresh token
 
 try {
-    var result = api_instance.login(loginRequestBody);
+    var result = api_instance.fastLogin(fastLoginRequestBody);
     print(result);
 } catch (e) {
-    print("Exception when calling DefaultApi->login: $e\n");
+    print("Exception when calling DefaultApi->fastLogin: $e\n");
 }
 
 ```
@@ -58,11 +58,13 @@ All URIs are relative to *https://192.168.1.206:45455*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
 
 
 ## Documentation For Models
 
+ - [FastLoginRequestBody](doc\/FastLoginRequestBody.md)
  - [LoginRequestBody](doc\/LoginRequestBody.md)
  - [LoginResponse](doc\/LoginResponse.md)
  - [RefreshToken](doc\/RefreshToken.md)

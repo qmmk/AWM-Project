@@ -26,10 +26,6 @@ class CupertinoAppWithTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPaintSizeEnabled = false;
     
-    AccessService().login(username: "admin", password: "pa\$\$w0rd").then((response) {
-      int fermati = 0;
-    });
-    
     return CupertinoApp(
       localizationsDelegates: [
         DefaultMaterialLocalizations.delegate,
