@@ -18,8 +18,11 @@ dependencies:
   get_it: ^4.0.4
   flutter_secure_storage: ^3.3.3
   after_layout: ^1.0.7+2
-
+  email_validator: ^1.0.5
   cupertino_icons: ^0.1.3
+  dio: ^3.0.9
+  survey_client:
+    path: pkgs/client
 
 dev_dependencies:
   flutter_test:

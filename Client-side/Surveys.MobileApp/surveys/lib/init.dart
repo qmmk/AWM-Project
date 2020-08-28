@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:surveys/application.dart';
 import 'package:surveys/logic/configs/routing/handlers.dart';
+import 'package:surveys/logic/services/access_service.dart';
 
 class Init extends StatefulWidget {
   final Application application = Application();
@@ -23,8 +25,17 @@ class CupertinoAppWithTheme extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPaintSizeEnabled = false;
-
+    
+    AccessService().login(username: "admin", password: "pa\$\$w0rd").then((response) {
+      int fermati = 0;
+    });
+    
     return CupertinoApp(
+      localizationsDelegates: [
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate
+      ],
       title: 'Surveys',
       debugShowCheckedModeBanner: false,
       onGenerateRoute: Handlers.mainHandler,

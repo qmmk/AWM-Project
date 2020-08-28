@@ -1,0 +1,80 @@
+openapi: 3.0.0
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RefreshToken:
+      type: object
+      properties:
+        rToken:
+          type: string
+        expires:
+          type: string
+        createdBy:
+          type: integer
+        revoked:
+          type: boolean
+
+    LoginRequestBody:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        pid:
+          type: integer
+        userName:
+          type: string
+        hashedPwd:
+          type: string
+        refreshToken:
+          $ref: "#/components/schemas/RefreshToken"
+        roleID:
+          type: string
+        customField01:
+          type: string
+        customField02:
+          type: string
+        customField03:
+          type: string
+
+info:
+  title: Survey API
+  description: API for Surveys
+  version: 1.0.0
+
+servers:
+  - url: https://192.168.1.206:45455
+
+paths:
+  /service/login:
+    post:
+      operationId: "login"
+      description: "Performs a standard login"
+      requestBody:
+        description: "Username and password"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
+
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
