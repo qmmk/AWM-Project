@@ -473,7 +473,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 if (output.Success) { continue; }
             }
 
-            return GetAllSurveyEntities(-1);
+            return GetAllSurveyEntities(-1, "GETALL");
         }
 
         public ServiceResponse<List<SurveyDetail>> GetSurveyDetails(int seid)
