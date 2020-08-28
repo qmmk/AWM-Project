@@ -133,10 +133,15 @@ namespace Surveys.WebAPIService.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddPrincipal([FromBody] Principal p)
+        [AllowAnonymous]
+        public ActionResult SignUp([FromBody] Principal p)
         {
             var res = _manager.InsertOrUpdatePrincipal(p);
-            return Ok(res.Success);
+
+            if (res.Success)
+                return Ok(true);
+            else
+                return BadRequest(false);
         }
 
         [HttpGet]
