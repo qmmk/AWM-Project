@@ -108,6 +108,19 @@ namespace Surveys.WebAPIService.Controllers
             }
 
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult SignUp([FromBody] Principal p)
+        {
+            var res = _manager.InsertOrUpdatePrincipal(p);
+
+            if (res.Success)
+                return Ok(res.Success);
+            else
+                return BadRequest(res.Success);
+        }
+
         #endregion
 
         #region API
@@ -130,18 +143,6 @@ namespace Surveys.WebAPIService.Controllers
         {
             var surveyItems = _manager.LoadAllSurveysExceptUser(pid);
             return Ok(surveyItems.Data);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult SignUp([FromBody] Principal p)
-        {
-            var res = _manager.InsertOrUpdatePrincipal(p);
-
-            if (res.Success)
-                return Ok(true);
-            else
-                return BadRequest(false);
         }
 
         [HttpGet]
