@@ -25,6 +25,7 @@ namespace Surveys.BusinessLogic.DataAccess
         public virtual string HashedPwd { get; set; }
 
         [DataMember]
+        [NotMapped]
         public virtual string Password { get; set; }
 
         [DataMember]
