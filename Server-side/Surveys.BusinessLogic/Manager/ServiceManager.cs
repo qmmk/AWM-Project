@@ -72,9 +72,23 @@ namespace Surveys.BusinessLogic.Manager
             return _context.CheckRefreshToken(rToken);
         }
 
-        public ServiceResponse<List<SurveyEntity>> GetAllSurveyEntities()
+        public ServiceResponse<List<SurveyEntity>> LoadAllSurveys()
         {
-            return _context.GetAllSurveyEntities();
+            int pid = -1;
+            string cmd = "GETALL";
+            return _context.GetAllSurveyEntities(pid, cmd);
+        }
+
+        public ServiceResponse<List<SurveyEntity>> LoadAllSurveysByUser(int pid)
+        {
+            string cmd = "GET_BY_USER";
+            return _context.GetAllSurveyEntities(pid, cmd);
+        }
+
+        public ServiceResponse<List<SurveyEntity>> LoadAllSurveysExceptUser(int pid)
+        {
+            string cmd = "EXCEPT";
+            return _context.GetAllSurveyEntities(pid, cmd);
         }
 
         public ServiceResponse<List<SurveyEntity>> InsertOrUpdateSurveyEntity(List<SurveyEntity> lse)

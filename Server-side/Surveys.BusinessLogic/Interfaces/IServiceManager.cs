@@ -7,7 +7,11 @@ namespace Surveys.BusinessLogic.Interfaces
 {
     public interface IServiceManager
     {
-        ServiceResponse<List<SurveyEntity>> GetAllSurveyEntities();
+        ServiceResponse<List<SurveyEntity>> LoadAllSurveys();
+
+        ServiceResponse<List<SurveyEntity>> LoadAllSurveysByUser(int pid);
+
+        ServiceResponse<List<SurveyEntity>> LoadAllSurveysExceptUser(int pid);
 
         ServiceResponse<List<SurveyEntity>> InsertOrUpdateSurveyEntity(List<SurveyEntity> lse);
 

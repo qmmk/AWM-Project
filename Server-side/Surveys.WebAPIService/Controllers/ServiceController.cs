@@ -114,7 +114,21 @@ namespace Surveys.WebAPIService.Controllers
         [HttpGet]
         public ActionResult LoadAllSurveys()
         {
-            var surveyItems = _manager.GetAllSurveyEntities();
+            var surveyItems = _manager.LoadAllSurveys();
+            return Ok(surveyItems.Data);
+        }
+
+        [HttpGet]
+        public ActionResult LoadAllSurveysByUser([FromQuery] int pid)
+        {
+            var surveyItems = _manager.LoadAllSurveysByUser(pid);
+            return Ok(surveyItems.Data);
+        }
+
+        [HttpGet]
+        public ActionResult LoadAllSurveysExceptUser([FromQuery] int pid)
+        {
+            var surveyItems = _manager.LoadAllSurveysExceptUser(pid);
             return Ok(surveyItems.Data);
         }
 

@@ -172,7 +172,7 @@ namespace Surveys.BusinessLogic.DataAccess
 
             parameters.Add(new SqlParameter("Command", "ADD"));
             parameters.Add(new SqlParameter("Username", p.UserName));
-            parameters.Add(new SqlParameter("HashedPwd", hasher.HashPassword(p, p.HashedPwd)));
+            parameters.Add(new SqlParameter("HashedPwd", hasher.HashPassword(p, p.Password)));
             parameters.Add(new SqlParameter("CustomField01", p.CustomField01));
             parameters.Add(new SqlParameter("CustomField02", p.CustomField02));
             parameters.Add(new SqlParameter("CustomField03", p.CustomField03));
@@ -374,12 +374,13 @@ namespace Surveys.BusinessLogic.DataAccess
             return sr;
         }
 
-        public ServiceResponse<List<SurveyEntity>> GetAllSurveyEntities()
+        public ServiceResponse<List<SurveyEntity>> GetAllSurveyEntities(int pid, string cmd)
         {
             ServiceResponse<List<SurveyEntity>> sr = new ServiceResponse<List<SurveyEntity>>();
             List<SqlParameter> parameters = new List<SqlParameter>();
 
-            parameters.Add(new SqlParameter("Command", "GETALL"));
+            parameters.Add(new SqlParameter("Command", cmd));
+            parameters.Add(new SqlParameter("PID", pid));
             parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                 ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 
@@ -472,7 +473,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 if (output.Success) { continue; }
             }
 
-            return GetAllSurveyEntities();
+            return GetAllSurveyEntities(-1);
         }
 
         public ServiceResponse<List<SurveyDetail>> GetSurveyDetails(int seid)
