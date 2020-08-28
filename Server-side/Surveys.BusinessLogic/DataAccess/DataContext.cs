@@ -707,6 +707,44 @@ namespace Surveys.BusinessLogic.DataAccess
 
             return sr;
         }
+
+        public ServiceResponse<int> Logout(int pid)
+        {
+            ServiceResponse<int> sr = new ServiceResponse<int>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("Command", "DELETE"));
+            parameters.Add(new SqlParameter("rToken", null));
+            parameters.Add(new SqlParameter("Expires", null));
+            parameters.Add(new SqlParameter("CreatedBy", pid));
+            parameters.Add(new SqlParameter("Revoked", null));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                    ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageRefreshToken", parameters.ToArray(), typeof(Int32));
+
+                if (result.Count == 1 && result[0][0] == 0)
+                {
+                    sr.Data = result[0][0];
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = "Invalidate the refresh token.";
+                    sr.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = -1;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
+            
+        
         #endregion
 
     }

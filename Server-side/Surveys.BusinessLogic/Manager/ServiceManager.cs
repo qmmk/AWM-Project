@@ -115,6 +115,11 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.InsertActualVote(lav);
         }
+
+        public ServiceResponse<int> Logout(int pid)
+        {
+            return _context.Logout(pid);
+        }
         #endregion
     }
 }

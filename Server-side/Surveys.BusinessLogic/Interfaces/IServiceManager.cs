@@ -30,5 +30,7 @@ namespace Surveys.BusinessLogic.Interfaces
         ServiceResponse<List<ChartModel>> GetRealTimeData();
 
         ServiceResponse<int> InsertActualVote(List<ActualVote> lav);
+
+        ServiceResponse<int> Logout(int pid);
     }
 }

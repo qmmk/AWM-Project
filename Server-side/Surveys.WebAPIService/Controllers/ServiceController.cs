@@ -173,6 +173,12 @@ namespace Surveys.WebAPIService.Controllers
             return Ok(res.Success);
         }
 
+        [HttpPost]
+        public ActionResult Logout([FromBody] int pid)
+        {
+            var res = _manager.Logout(pid);
+            return Ok(res);
+        }
         #endregion
     }
 }

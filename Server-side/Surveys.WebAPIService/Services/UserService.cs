@@ -25,7 +25,7 @@ namespace Surveys.WebAPIService.Services
 
         #endregion
 
-        private UserService() 
+        private UserService()
         {
             _mapperConfig = new MapperConfiguration(
                 cfg => cfg.CreateMap<Principal, UserDTO>());
@@ -61,7 +61,6 @@ namespace Surveys.WebAPIService.Services
 
             return user;
         }
-
     }
 
     public class UserIdProvider : IUserIdProvider
