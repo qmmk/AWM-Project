@@ -60,6 +60,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
+*DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signup | 
 
 
 ## Documentation For Models
@@ -68,6 +69,7 @@ Class | Method | HTTP request | Description
  - [LoginRequestBody](doc\/LoginRequestBody.md)
  - [LoginResponse](doc\/LoginResponse.md)
  - [RefreshToken](doc\/RefreshToken.md)
+ - [User](doc\/User.md)
 
 
 ## Documentation For Authorization

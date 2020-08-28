@@ -56,6 +56,18 @@ components:
         token:
           type: string
 
+    User:
+      type: object
+      properties:
+        pid:
+          type: integer
+        UserName:
+          type: string
+        Password:
+          type: string
+        RoleID:
+          type: string
+
 info:
   title: Survey API
   description: API for Surveys
@@ -115,3 +127,28 @@ paths:
             text/plain:
               schema:
                 type: string
+
+  /service/signup:
+    post:
+      operationId: "signUp"
+      description: "Sign up"
+      requestBody:
+        description: "Username, Password and RoleID"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: "Success."
+          content:
+            text/plain:
+              schema:
+                type: boolean
+        400:
+          description: "Couldn't sign up"
+          content:
+            text/plain:
+              schema:
+                type: boolean

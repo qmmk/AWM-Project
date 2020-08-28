@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastlogin | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
+[**signUp**](DefaultApi.md#signUp) | **post** /service/signup | 
 
 
 # **fastLogin**
@@ -96,6 +97,49 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json, text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **signUp**
+> bool signUp(user)
+
+
+
+Sign up
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var user = new User(); // User | Username, Password and RoleID
+
+try { 
+    var result = api_instance.signUp(user);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->signUp: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user** | [**User**](User.md)| Username, Password and RoleID | 
+
+### Return type
+
+**bool**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/plain
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

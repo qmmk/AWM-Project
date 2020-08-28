@@ -8,6 +8,7 @@ import 'package:built_value/serializer.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:survey_client/model/login_request_body.dart';
+import 'package:survey_client/model/user.dart';
 
 class DefaultApi {
     final Dio _dio;
@@ -105,6 +106,56 @@ class DefaultApi {
         var data = _serializers.deserializeWith<LoginResponse>(serializer, response.data is String ? jsonDecode(response.data) : response.data);
 
             return Response<LoginResponse>(
+                data: data,
+                headers: response.headers,
+                request: response.request,
+                redirects: response.redirects,
+                statusCode: response.statusCode,
+                statusMessage: response.statusMessage,
+                extra: response.extra,
+            );
+            });
+            }
+        /// 
+        ///
+        /// Sign up
+        Future<Response<bool>>signUp(User user,{ CancelToken cancelToken, Map<String, String> headers,}) async {
+
+        String _path = "/service/signup";
+
+        Map<String, dynamic> queryParams = {};
+        Map<String, String> headerParams = Map.from(headers ?? {});
+        dynamic bodyData;
+
+        queryParams.removeWhere((key, value) => value == null);
+        headerParams.removeWhere((key, value) => value == null);
+
+        List<String> contentTypes = ["application/json"];
+
+
+            var serializedBody = _serializers.serialize(user);
+            var jsonuser = json.encode(serializedBody);
+            bodyData = jsonuser;
+
+            return _dio.request(
+            _path,
+            queryParameters: queryParams,
+            data: bodyData,
+            options: Options(
+            method: 'post'.toUpperCase(),
+            headers: headerParams,
+            extra: {
+                'secure': [],
+            },
+            contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
+            ),
+            cancelToken: cancelToken,
+            ).then((response) {
+
+        var serializer = _serializers.serializerForType(bool);
+        var data = _serializers.deserializeWith<bool>(serializer, response.data is String ? jsonDecode(response.data) : response.data);
+
+            return Response<bool>(
                 data: data,
                 headers: response.headers,
                 request: response.request,

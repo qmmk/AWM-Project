@@ -92,7 +92,6 @@ class _SignInPageState extends State<SignInPage> {
                               setState(() {
                                 _isWaitingForServer = true;
                               });
-                              await Future.delayed(Duration(seconds: 1));
                               LoginResponse response =
                                   await _accessService.login(username: username, password: password);
                               HttpUtils.registerToken(response.accessToken);

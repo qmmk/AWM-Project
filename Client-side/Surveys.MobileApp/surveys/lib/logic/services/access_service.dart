@@ -5,6 +5,7 @@ import 'package:survey_client/api.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:survey_client/model/user.dart';
 
 class AccessService {
   SurveyClient _client;
@@ -32,6 +33,20 @@ class AccessService {
     fastLoginRequestBody = fastLoginRequestBodyBuilder.build();
 
     Response<LoginResponse> response = await _client.getDefaultApi().fastLogin(fastLoginRequestBody);
+    return response.data;
+  }
+
+  Future<bool> signUp({@required String username, @required String password, String roleID = "0"}) async {
+    User user = User();
+    UserBuilder userBuilder = user.toBuilder();
+
+    userBuilder
+      ..userName = username
+      ..password = password
+      ..roleID = roleID;
+    user = userBuilder.build();
+
+    Response<bool> response = await _client.getDefaultApi().signUp(user);
     return response.data;
   }
 }

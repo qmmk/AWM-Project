@@ -10,6 +10,7 @@ import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:survey_client/model/refresh_token.dart';
+import 'package:survey_client/model/user.dart';
 
 
 part 'serializers.g.dart';
@@ -19,6 +20,7 @@ FastLoginRequestBody,
 LoginRequestBody,
 LoginResponse,
 RefreshToken,
+User,
 
 ])
 
@@ -36,6 +38,9 @@ const FullType(BuiltList, const [const FullType(LoginResponse)]),
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(RefreshToken)]),
 () => new ListBuilder<RefreshToken>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(User)]),
+() => new ListBuilder<User>())
 
 ..add(Iso8601DateTimeSerializer())
 ).build();
