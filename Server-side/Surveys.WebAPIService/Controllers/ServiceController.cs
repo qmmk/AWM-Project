@@ -160,7 +160,7 @@ namespace Surveys.WebAPIService.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSurveyEntity([FromBody] List<SurveyDetail> lsd)
+        public ActionResult AddSurveyDetails([FromBody] List<SurveyDetail> lsd)
         {
             var res = _manager.InsertOrUpdateSurveyDetail(lsd);
             return Ok(res.Success);
