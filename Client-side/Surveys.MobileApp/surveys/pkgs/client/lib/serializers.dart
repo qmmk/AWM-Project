@@ -11,8 +11,9 @@ import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:survey_client/model/logout_response.dart';
 import 'package:survey_client/model/only_pid_parameter.dart';
+import 'package:survey_client/model/openapi_survey.dart';
+import 'package:survey_client/model/openapi_user.dart';
 import 'package:survey_client/model/refresh_token.dart';
-import 'package:survey_client/model/user.dart';
 
 
 part 'serializers.g.dart';
@@ -23,8 +24,9 @@ LoginRequestBody,
 LoginResponse,
 LogoutResponse,
 OnlyPidParameter,
+OpenapiSurvey,
+OpenapiUser,
 RefreshToken,
-User,
 
 ])
 
@@ -46,11 +48,14 @@ const FullType(BuiltList, const [const FullType(LogoutResponse)]),
 const FullType(BuiltList, const [const FullType(OnlyPidParameter)]),
 () => new ListBuilder<OnlyPidParameter>())
 ..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(OpenapiSurvey)]),
+() => new ListBuilder<OpenapiSurvey>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(OpenapiUser)]),
+() => new ListBuilder<OpenapiUser>())
+..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(RefreshToken)]),
 () => new ListBuilder<RefreshToken>())
-..addBuilderFactory(
-const FullType(BuiltList, const [const FullType(User)]),
-() => new ListBuilder<User>())
 
 ..add(Iso8601DateTimeSerializer())
 ).build();

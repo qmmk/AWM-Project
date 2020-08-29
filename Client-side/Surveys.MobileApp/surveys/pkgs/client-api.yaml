@@ -74,7 +74,7 @@ components:
         pid:
           type: integer
 
-    User:
+    OpenapiUser:
       type: object
       properties:
         pid:
@@ -84,6 +84,22 @@ components:
         Password:
           type: string
         RoleID:
+          type: string
+
+    OpenapiSurvey:
+      type: object
+      properties:
+        seid:
+          type: integer
+        title:
+          type: string
+        descr:
+          type: string
+        customField01:
+          type: string
+        isOpen:
+          type: string
+        customField03:
           type: string
 
 info:
@@ -156,7 +172,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/OpenapiUser"
       responses:
         200:
           description: "Success."
@@ -181,7 +197,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OnlyPidParameter'
+              $ref: "#/components/schemas/OnlyPidParameter"
       responses:
         200:
           description: "Success."
@@ -189,3 +205,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LogoutResponse"
+
+  /service/loadallsurveysbyuser:
+    get:
+      operationId: "loadAllSurveysByUser"
+      description: "load all surveys by user"
+      parameters:
+        - in: query
+          name: pid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenapiSurvey"

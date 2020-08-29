@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/current_user_provider.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/models/user_model.dart';
 
 class AccountSettingsPage extends StatefulWidget {

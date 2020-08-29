@@ -59,6 +59,7 @@ All URIs are relative to *https://192.168.1.206:45455*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
+*DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadallsurveysbyuser | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
 *DefaultApi* | [**logout**](doc\/DefaultApi.md#logout) | **post** /service/logout | 
 *DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signup | 
@@ -71,8 +72,9 @@ Class | Method | HTTP request | Description
  - [LoginResponse](doc\/LoginResponse.md)
  - [LogoutResponse](doc\/LogoutResponse.md)
  - [OnlyPidParameter](doc\/OnlyPidParameter.md)
+ - [OpenapiSurvey](doc\/OpenapiSurvey.md)
+ - [OpenapiUser](doc\/OpenapiUser.md)
  - [RefreshToken](doc\/RefreshToken.md)
- - [User](doc\/User.md)
 
 
 ## Documentation For Authorization

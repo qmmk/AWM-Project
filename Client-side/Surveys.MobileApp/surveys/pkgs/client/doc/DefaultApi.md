@@ -10,6 +10,7 @@ All URIs are relative to *https://192.168.1.206:45455*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastlogin | 
+[**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadallsurveysbyuser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
 [**logout**](DefaultApi.md#logout) | **post** /service/logout | 
 [**signUp**](DefaultApi.md#signUp) | **post** /service/signup | 
@@ -55,6 +56,49 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json, text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **loadAllSurveysByUser**
+> List<OpenapiSurvey> loadAllSurveysByUser(pid)
+
+
+
+load all surveys by user
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var pid = 56; // int | 
+
+try { 
+    var result = api_instance.loadAllSurveysByUser(pid);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->loadAllSurveysByUser: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+[**List<OpenapiSurvey>**](OpenapiSurvey.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -145,7 +189,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **signUp**
-> bool signUp(user)
+> bool signUp(openapiUser)
 
 
 
@@ -156,10 +200,10 @@ Sign up
 import 'package:survey_client/api.dart';
 
 var api_instance = new DefaultApi();
-var user = new User(); // User | Username, Password and RoleID
+var openapiUser = new OpenapiUser(); // OpenapiUser | Username, Password and RoleID
 
 try { 
-    var result = api_instance.signUp(user);
+    var result = api_instance.signUp(openapiUser);
     print(result);
 } catch (e) {
     print("Exception when calling DefaultApi->signUp: $e\n");
@@ -170,7 +214,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **user** | [**User**](User.md)| Username, Password and RoleID | 
+ **openapiUser** | [**OpenapiUser**](OpenapiUser.md)| Username, Password and RoleID | 
 
 ### Return type
 

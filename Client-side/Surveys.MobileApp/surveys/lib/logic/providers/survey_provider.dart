@@ -1,4 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:surveys/logic/providers/base_provider.dart';
+import 'package:surveys/models/survey_model.dart';
 
-abstract class SurveyProvider with ChangeNotifier{
+class SurveyProvider extends BaseProvider{
+  List<Survey> _othersSurveys = [];
+
 }

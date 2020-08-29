@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
@@ -19,12 +20,14 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
 
   TextEditingController _titleController = TextEditingController(text: "title");
   TextEditingController _descriptionController = TextEditingController(text: "description");
+  GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void initState() {
     _isModifying = widget.survey != null;
     if (_isModifying) {
       _survey = widget.survey;
+      if (_survey.details == null) _survey.details = [];
       _titleController.text = _survey.title;
       _descriptionController.text = _survey.description;
       _open = _survey.isOpen;
@@ -78,53 +81,65 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   Widget _content() => Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15),
-                child: CupertinoTextField(
-                  controller: _titleController,
-                  placeholder: "Title",
-                ),
-              ),
-              CupertinoTextField(
-                controller: _descriptionController,
-                placeholder: "Description",
-                minLines: 3,
-                maxLines: 3,
-              ),
-              if (_survey?.details != null)
+          Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: _entryList(),
-                ),
-              CupertinoButton(
-                  child: Text(
-                    "Add entry",
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Material(
+                    child: TextFormField(
+                      controller: _titleController,
+                      validator: (s) {
+                        if (s.trim().isEmpty) return "Please enter the survey's name";
+
+                        return null;
+                      },
+                      decoration: InputDecoration(hintText: "Title"),
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.createSurveyEntry).then((value) {
-                      if (value != null)
-                        setState(() {
-                          _survey.details.add(SurveyDetail(id: 0, surveyId: -1, description: value));
-                        });
-                    });
-                  }),
-              Row(
-                children: [
-                  CupertinoSwitch(
-                      value: _open,
-                      onChanged: (value) {
-                        setState(() {
-                          _open = value;
-                        });
-                      }),
-                  Text("Open")
-                ],
-              )
-            ],
+                ),
+                Material(
+                  child: TextFormField(
+                    minLines: 3,
+                    maxLines: 3,
+                    controller: _descriptionController,
+                    decoration: InputDecoration(hintText: "Enter the survey's description"),
+                  ),
+                ),
+                if (_survey?.details != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: _entryList(),
+                  ),
+                CupertinoButton(
+                    child: Text(
+                      "Add entry",
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.createSurveyEntry).then((value) {
+                        if (value != null)
+                          setState(() {
+                            _survey.details.add(SurveyDetail(id: 0, surveyId: -1, description: value));
+                          });
+                      });
+                    }),
+                Row(
+                  children: [
+                    CupertinoSwitch(
+                        value: _open,
+                        onChanged: (value) {
+                          setState(() {
+                            _open = value;
+                          });
+                        }),
+                    Text("Open")
+                  ],
+                )
+              ],
+            ),
           ),
           /*CupertinoButton.filled(
               child: Text("Confirm"),
@@ -148,6 +163,8 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
           border: null,
           trailing: GestureDetector(
               onTap: () {
+                if (!_formKey.currentState.validate()) return;
+
                 _survey
                   ..title = _titleController.text
                   ..description = _descriptionController.text
