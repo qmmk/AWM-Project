@@ -21,6 +21,57 @@ class DefaultApi {
 
         /// 
         ///
+        /// Create survey
+        Future<Response<bool>>createSurvey(List<OpenapiSurvey> openapiSurvey,{ CancelToken cancelToken, Map<String, String> headers,}) async {
+
+        String _path = "/service/addsurveyentity";
+
+        Map<String, dynamic> queryParams = {};
+        Map<String, String> headerParams = Map.from(headers ?? {});
+        dynamic bodyData;
+
+        queryParams.removeWhere((key, value) => value == null);
+        headerParams.removeWhere((key, value) => value == null);
+
+        List<String> contentTypes = ["application/json"];
+
+
+            final type = const FullType(BuiltList, const [const FullType(OpenapiSurvey)]);
+            var serializedBody = _serializers.serialize(BuiltList<OpenapiSurvey>.from(openapiSurvey), specifiedType: type);
+            var jsonopenapiSurvey = json.encode(serializedBody);
+            bodyData = jsonopenapiSurvey;
+
+            return _dio.request(
+            _path,
+            queryParameters: queryParams,
+            data: bodyData,
+            options: Options(
+            method: 'post'.toUpperCase(),
+            headers: headerParams,
+            extra: {
+                'secure': [],
+            },
+            contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
+            ),
+            cancelToken: cancelToken,
+            ).then((response) {
+
+        var serializer = _serializers.serializerForType(bool);
+        var data = _serializers.deserializeWith<bool>(serializer, response.data is String ? jsonDecode(response.data) : response.data);
+
+            return Response<bool>(
+                data: data,
+                headers: response.headers,
+                request: response.request,
+                redirects: response.redirects,
+                statusCode: response.statusCode,
+                statusMessage: response.statusMessage,
+                extra: response.extra,
+            );
+            });
+            }
+        /// 
+        ///
         /// Login with refresh token
         Future<Response<LoginResponse>>fastLogin(FastLoginRequestBody fastLoginRequestBody,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 

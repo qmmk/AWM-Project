@@ -55,6 +55,13 @@ class _$OpenapiSurveySerializer implements StructuredSerializer<OpenapiSurvey> {
         ..add(serializers.serialize(object.customField03,
             specifiedType: const FullType(String)));
     }
+    if (object.surveyDetails != null) {
+      result
+        ..add('surveyDetails')
+        ..add(serializers.serialize(object.surveyDetails,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(OpenapiSurveyDetail)])));
+    }
     return result;
   }
 
@@ -94,6 +101,12 @@ class _$OpenapiSurveySerializer implements StructuredSerializer<OpenapiSurvey> {
           result.customField03 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'surveyDetails':
+          result.surveyDetails.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(OpenapiSurveyDetail)]))
+              as BuiltList<Object>);
+          break;
       }
     }
 
@@ -114,6 +127,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
   final String isOpen;
   @override
   final String customField03;
+  @override
+  final BuiltList<OpenapiSurveyDetail> surveyDetails;
 
   factory _$OpenapiSurvey([void Function(OpenapiSurveyBuilder) updates]) =>
       (new OpenapiSurveyBuilder()..update(updates)).build();
@@ -124,7 +139,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
       this.descr,
       this.customField01,
       this.isOpen,
-      this.customField03})
+      this.customField03,
+      this.surveyDetails})
       : super._();
 
   @override
@@ -143,17 +159,22 @@ class _$OpenapiSurvey extends OpenapiSurvey {
         descr == other.descr &&
         customField01 == other.customField01 &&
         isOpen == other.isOpen &&
-        customField03 == other.customField03;
+        customField03 == other.customField03 &&
+        surveyDetails == other.surveyDetails;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc($jc(0, seid.hashCode), title.hashCode), descr.hashCode),
-                customField01.hashCode),
-            isOpen.hashCode),
-        customField03.hashCode));
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, seid.hashCode), title.hashCode),
+                        descr.hashCode),
+                    customField01.hashCode),
+                isOpen.hashCode),
+            customField03.hashCode),
+        surveyDetails.hashCode));
   }
 
   @override
@@ -164,7 +185,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
           ..add('descr', descr)
           ..add('customField01', customField01)
           ..add('isOpen', isOpen)
-          ..add('customField03', customField03))
+          ..add('customField03', customField03)
+          ..add('surveyDetails', surveyDetails))
         .toString();
   }
 }
@@ -199,6 +221,12 @@ class OpenapiSurveyBuilder
   set customField03(String customField03) =>
       _$this._customField03 = customField03;
 
+  ListBuilder<OpenapiSurveyDetail> _surveyDetails;
+  ListBuilder<OpenapiSurveyDetail> get surveyDetails =>
+      _$this._surveyDetails ??= new ListBuilder<OpenapiSurveyDetail>();
+  set surveyDetails(ListBuilder<OpenapiSurveyDetail> surveyDetails) =>
+      _$this._surveyDetails = surveyDetails;
+
   OpenapiSurveyBuilder();
 
   OpenapiSurveyBuilder get _$this {
@@ -209,6 +237,7 @@ class OpenapiSurveyBuilder
       _customField01 = _$v.customField01;
       _isOpen = _$v.isOpen;
       _customField03 = _$v.customField03;
+      _surveyDetails = _$v.surveyDetails?.toBuilder();
       _$v = null;
     }
     return this;
@@ -229,14 +258,28 @@ class OpenapiSurveyBuilder
 
   @override
   _$OpenapiSurvey build() {
-    final _$result = _$v ??
-        new _$OpenapiSurvey._(
-            seid: seid,
-            title: title,
-            descr: descr,
-            customField01: customField01,
-            isOpen: isOpen,
-            customField03: customField03);
+    _$OpenapiSurvey _$result;
+    try {
+      _$result = _$v ??
+          new _$OpenapiSurvey._(
+              seid: seid,
+              title: title,
+              descr: descr,
+              customField01: customField01,
+              isOpen: isOpen,
+              customField03: customField03,
+              surveyDetails: _surveyDetails?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'surveyDetails';
+        _surveyDetails?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'OpenapiSurvey', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

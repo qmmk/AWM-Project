@@ -1,3 +1,5 @@
+            import 'package:built_collection/built_collection.dart';
+            import 'package:survey_client/model/openapi_survey_detail.dart';
         import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -29,6 +31,10 @@ abstract class OpenapiSurvey implements Built<OpenapiSurvey, OpenapiSurveyBuilde
         @nullable
     @BuiltValueField(wireName: r'customField03')
     String get customField03;
+    
+        @nullable
+    @BuiltValueField(wireName: r'surveyDetails')
+    BuiltList<OpenapiSurveyDetail> get surveyDetails;
 
     // Boilerplate code needed to wire-up generated code
     OpenapiSurvey._();

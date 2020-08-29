@@ -12,6 +12,7 @@ import 'package:survey_client/model/login_response.dart';
 import 'package:survey_client/model/logout_response.dart';
 import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/openapi_survey.dart';
+import 'package:survey_client/model/openapi_survey_detail.dart';
 import 'package:survey_client/model/openapi_user.dart';
 import 'package:survey_client/model/refresh_token.dart';
 
@@ -25,6 +26,7 @@ LoginResponse,
 LogoutResponse,
 OnlyPidParameter,
 OpenapiSurvey,
+OpenapiSurveyDetail,
 OpenapiUser,
 RefreshToken,
 
@@ -50,6 +52,9 @@ const FullType(BuiltList, const [const FullType(OnlyPidParameter)]),
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(OpenapiSurvey)]),
 () => new ListBuilder<OpenapiSurvey>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(OpenapiSurveyDetail)]),
+() => new ListBuilder<OpenapiSurveyDetail>())
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(OpenapiUser)]),
 () => new ListBuilder<OpenapiUser>())

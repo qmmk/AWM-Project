@@ -6,7 +6,7 @@ class SurveyDetail {
   String description;
   String customField01;
   String customField02;
-  String customdField03;
+  String customField03;
 
   SurveyDetail({@required this.id, @required this.surveyId, this.description});
 }

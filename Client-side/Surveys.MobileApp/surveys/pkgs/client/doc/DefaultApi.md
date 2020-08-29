@@ -5,16 +5,60 @@
 import 'package:survey_client/api.dart';
 ```
 
-All URIs are relative to *https://192.168.1.206:45455*
+All URIs are relative to *https://192.168.1.9:45455*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addsurveyentity | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastlogin | 
 [**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadallsurveysbyuser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
 [**logout**](DefaultApi.md#logout) | **post** /service/logout | 
 [**signUp**](DefaultApi.md#signUp) | **post** /service/signup | 
 
+
+# **createSurvey**
+> bool createSurvey(openapiSurvey)
+
+
+
+Create survey
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var openapiSurvey = [new List&lt;OpenapiSurvey&gt;()]; // List<OpenapiSurvey> | survey
+
+try { 
+    var result = api_instance.createSurvey(openapiSurvey);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->createSurvey: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **openapiSurvey** | [**List&lt;OpenapiSurvey&gt;**](OpenapiSurvey.md)| survey | 
+
+### Return type
+
+**bool**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **fastLogin**
 > LoginResponse fastLogin(fastLoginRequestBody)

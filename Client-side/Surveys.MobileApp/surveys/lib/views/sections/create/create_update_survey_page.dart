@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 
@@ -21,6 +23,26 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   TextEditingController _titleController = TextEditingController(text: "title");
   TextEditingController _descriptionController = TextEditingController(text: "description");
   GlobalKey<FormState> _formKey = GlobalKey();
+
+  void _showErrorDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+              title: Text(
+                "Logout failed",
+                style: TextStyle(color: Colors.red),
+              ),
+              content: Text("Please try again later"),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"),
+                )
+              ],
+            ));
+  }
 
   @override
   void initState() {
@@ -162,13 +184,26 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
           middle: widget.survey != null ? Text("Update survey") : Text("Create a survey"),
           border: null,
           trailing: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (!_formKey.currentState.validate()) return;
 
                 _survey
                   ..title = _titleController.text
                   ..description = _descriptionController.text
                   ..isOpen = _open;
+
+                if (!_isModifying) {
+                  bool success = await Provider.of<UserProvider>(context, listen: false).createSurvey(survey: _survey);
+                  if (!success) {
+                    _showErrorDialog();
+                    return;
+                  }
+
+                  _titleController.text = "";
+                  _descriptionController.text = "";
+                  FocusScope.of(context).requestFocus(FocusNode());
+                }
+
                 if (_isModifying) Navigator.of(context).pop(_survey);
               },
               child: Icon(

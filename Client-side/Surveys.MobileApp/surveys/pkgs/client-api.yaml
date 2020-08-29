@@ -1,5 +1,13 @@
 openapi: 3.0.0
 
+info:
+  title: Survey API
+  description: API for Surveys
+  version: 1.0.0
+
+servers:
+  - url: https://192.168.1.9:45455
+
 components:
   securitySchemes:
     bearerAuth:
@@ -86,6 +94,22 @@ components:
         RoleID:
           type: string
 
+    OpenapiSurveyDetail:
+      type: object
+      properties:
+        sdid:
+          type: integer
+        seid:
+          type: integer
+        descr:
+          type: string
+        CustomField01:
+          type: string
+        CustomField02:
+          type: string
+        CustomField03:
+          type: string
+
     OpenapiSurvey:
       type: object
       properties:
@@ -101,14 +125,10 @@ components:
           type: string
         customField03:
           type: string
-
-info:
-  title: Survey API
-  description: API for Surveys
-  version: 1.0.0
-
-servers:
-  - url: https://192.168.1.206:45455
+        surveyDetails:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenapiSurveyDetail"
 
 paths:
   /service/login:
@@ -224,3 +244,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/OpenapiSurvey"
+
+  /service/addsurveyentity:
+    post:
+      operationId: "createSurvey"
+      description: "Create survey"
+      requestBody:
+        description: "survey"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/OpenapiSurvey"
+      responses:
+        200:
+          description: "Success."
+          content:
+            text/plain:
+              schema:
+                type: boolean

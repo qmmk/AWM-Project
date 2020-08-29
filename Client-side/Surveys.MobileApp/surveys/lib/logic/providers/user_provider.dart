@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/services/survey_service.dart';
@@ -33,6 +34,7 @@ class UserProvider extends BaseProvider {
       await _accessService.logout(pid: _user.pid);
       await HttpUtils.invalidateTokens();
       _user = null;
+      _userSurveys = null;
       return true;
     } on DioError catch (e) {
       return false;
@@ -50,5 +52,17 @@ class UserProvider extends BaseProvider {
 
     _userSurveys[index] = survey;
     notifyListeners();
+  }
+
+  Future<bool> createSurvey({@required Survey survey}) async {
+    survey.customField03 = _user.pid.toString();
+    bool success = await _surveyService.createSurvey(survey: survey);
+    if (success) {
+      _userSurveys.add(survey);
+      notifyListeners();
+      return true;
+    }
+
+    return false;
   }
 }

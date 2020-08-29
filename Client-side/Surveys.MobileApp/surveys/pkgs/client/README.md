@@ -41,23 +41,24 @@ import 'package:survey_client/api.dart';
 
 
 var api_instance = new DefaultApi();
-var fastLoginRequestBody = new FastLoginRequestBody(); // FastLoginRequestBody | Refresh token
+var openapiSurvey = [new List&lt;OpenapiSurvey&gt;()]; // List<OpenapiSurvey> | survey
 
 try {
-    var result = api_instance.fastLogin(fastLoginRequestBody);
+    var result = api_instance.createSurvey(openapiSurvey);
     print(result);
 } catch (e) {
-    print("Exception when calling DefaultApi->fastLogin: $e\n");
+    print("Exception when calling DefaultApi->createSurvey: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://192.168.1.206:45455*
+All URIs are relative to *https://192.168.1.9:45455*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addsurveyentity | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
 *DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadallsurveysbyuser | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
@@ -73,6 +74,7 @@ Class | Method | HTTP request | Description
  - [LogoutResponse](doc\/LogoutResponse.md)
  - [OnlyPidParameter](doc\/OnlyPidParameter.md)
  - [OpenapiSurvey](doc\/OpenapiSurvey.md)
+ - [OpenapiSurveyDetail](doc\/OpenapiSurveyDetail.md)
  - [OpenapiUser](doc\/OpenapiUser.md)
  - [RefreshToken](doc\/RefreshToken.md)
 
