@@ -10,4 +10,6 @@ class Routes {
 
   static const String createSurvey = "/create_entry";
   static const String createSurveyEntry = "/create_entry/create_survey_entry";
+
+  static const String accountSettings = "/personal_area/account_settings";
 }

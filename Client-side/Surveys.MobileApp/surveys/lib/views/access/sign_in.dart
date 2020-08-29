@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
+import 'package:surveys/logic/providers/current_user_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
+import 'package:surveys/models/user_model.dart';
 import 'package:surveys/views/home.dart';
 
 class SignInPage extends StatefulWidget {
@@ -87,6 +90,8 @@ class _SignInPageState extends State<SignInPage> {
 
                             String username = _usernameController.text;
                             String password = _passwordController.text;
+
+                            Provider.of<UserProvider>(context, listen: false).setUser(User(username: username));
 
                             try {
                               setState(() {

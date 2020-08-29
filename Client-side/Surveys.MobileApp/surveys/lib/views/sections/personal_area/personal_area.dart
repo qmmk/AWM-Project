@@ -59,7 +59,13 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
           transitionBetweenRoutes: false,
           middle: Text("My surveys"),
           border: null,
-          trailing: Icon(CupertinoIcons.settings),
+          trailing: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.accountSettings);
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Icon(CupertinoIcons.settings),
+          ),
         ),
         child: ListView.separated(
             itemBuilder: (context, index) => _surveyElement(index),

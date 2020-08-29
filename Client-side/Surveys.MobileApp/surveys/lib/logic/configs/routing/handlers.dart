@@ -6,6 +6,7 @@ import 'package:surveys/views/access/sign_up.dart';
 import 'package:surveys/views/home.dart';
 import 'package:surveys/views/sections/create/create_update_entry_page.dart';
 import 'package:surveys/views/sections/create/create_update_survey_page.dart';
+import 'package:surveys/views/sections/personal_area/account_settings.dart';
 import 'package:surveys/views/sections/surveys/vote_page.dart';
 import 'package:surveys/views/splash.dart';
 import 'package:surveys/views/survey_results_page.dart';
@@ -47,6 +48,9 @@ class Handlers {
 
       case Routes.vote:
         return CupertinoPageRoute(builder: (context) => VotePage(survey: arguments["survey"]));
+
+      case Routes.accountSettings:
+        return CupertinoPageRoute(builder: (context) => AccountSettingsPage());
 
       default:
         return CupertinoPageRoute(builder: (context) => SplashPage());
