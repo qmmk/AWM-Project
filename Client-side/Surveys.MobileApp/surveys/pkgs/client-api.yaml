@@ -56,6 +56,24 @@ components:
         token:
           type: string
 
+    LogoutResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
+
+    OnlyPidParameter:
+      type: object
+      properties:
+        pid:
+          type: integer
+
     User:
       type: object
       properties:
@@ -152,3 +170,22 @@ paths:
             text/plain:
               schema:
                 type: boolean
+
+  /service/logout:
+    post:
+      operationId: "logout"
+      description: "Logout"
+      requestBody:
+        description: "pid"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnlyPidParameter'
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogoutResponse"

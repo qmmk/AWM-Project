@@ -5,6 +5,8 @@ import 'package:survey_client/api.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:survey_client/model/logout_response.dart';
+import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/user.dart';
 
 class AccessService {
@@ -47,6 +49,17 @@ class AccessService {
     user = userBuilder.build();
 
     Response<bool> response = await _client.getDefaultApi().signUp(user);
+    return response.data;
+  }
+
+  Future<LogoutResponse> logout({@required int pid}) async {
+    OnlyPidParameter onlyPidParameter = OnlyPidParameter();
+    OnlyPidParameterBuilder onlyPidParameterBuilder = onlyPidParameter.toBuilder();
+
+    onlyPidParameterBuilder.pid = pid;
+    onlyPidParameter = onlyPidParameterBuilder.build();
+
+    Response<LogoutResponse> response = await _client.getDefaultApi().logout(onlyPidParameter);
     return response.data;
   }
 }

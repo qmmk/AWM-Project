@@ -60,6 +60,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
+*DefaultApi* | [**logout**](doc\/DefaultApi.md#logout) | **post** /service/logout | 
 *DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signup | 
 
 
@@ -68,6 +69,8 @@ Class | Method | HTTP request | Description
  - [FastLoginRequestBody](doc\/FastLoginRequestBody.md)
  - [LoginRequestBody](doc\/LoginRequestBody.md)
  - [LoginResponse](doc\/LoginResponse.md)
+ - [LogoutResponse](doc\/LogoutResponse.md)
+ - [OnlyPidParameter](doc\/OnlyPidParameter.md)
  - [RefreshToken](doc\/RefreshToken.md)
  - [User](doc\/User.md)
 

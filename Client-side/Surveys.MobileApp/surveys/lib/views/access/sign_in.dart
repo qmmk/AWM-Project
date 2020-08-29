@@ -91,8 +91,6 @@ class _SignInPageState extends State<SignInPage> {
                             String username = _usernameController.text;
                             String password = _passwordController.text;
 
-                            Provider.of<UserProvider>(context, listen: false).setUser(User(username: username));
-
                             try {
                               setState(() {
                                 _isWaitingForServer = true;
@@ -101,6 +99,8 @@ class _SignInPageState extends State<SignInPage> {
                                   await _accessService.login(username: username, password: password);
                               HttpUtils.registerToken(response.accessToken);
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .setUser(User(pid: response.pid, username: response.userName));
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),
                                   ModalRoute.withName(Routes.root));

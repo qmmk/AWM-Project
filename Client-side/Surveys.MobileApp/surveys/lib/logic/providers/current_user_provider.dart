@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:surveys/logic/providers/survey_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
+import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/user_model.dart';
 
 class UserProvider extends SurveyProvider {
@@ -19,4 +21,15 @@ class UserProvider extends SurveyProvider {
   }
 
   void setPassword(String password) {}
+
+  Future<bool> logout() async {
+    try {
+      await _accessService.logout(pid: _user.pid);
+      await HttpUtils.invalidateTokens();
+      _user = null;
+      return true;
+    } on DioError catch (e){
+      return false;
+    }
+  }
 }

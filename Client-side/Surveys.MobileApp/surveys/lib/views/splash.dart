@@ -35,7 +35,8 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
         AccessService accessService = AccessService();
         try {
           accessService.fastLogin(refreshToken: refreshToken).then((LoginResponse response) {
-            Provider.of<UserProvider>(context, listen: false).setUser(User(username: response.userName));
+            Provider.of<UserProvider>(context, listen: false)
+                .setUser(User(pid: response.pid, username: response.userName));
 
             HttpUtils.registerToken(response.accessToken);
             HttpUtils.storeRefreshToken(response.refreshToken.rToken).then((_) {

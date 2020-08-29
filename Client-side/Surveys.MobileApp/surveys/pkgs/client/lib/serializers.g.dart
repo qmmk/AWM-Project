@@ -10,6 +10,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(FastLoginRequestBody.serializer)
       ..add(LoginRequestBody.serializer)
       ..add(LoginResponse.serializer)
+      ..add(LogoutResponse.serializer)
+      ..add(OnlyPidParameter.serializer)
       ..add(RefreshToken.serializer)
       ..add(User.serializer))
     .build();

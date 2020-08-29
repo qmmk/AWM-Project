@@ -37,4 +37,11 @@ class HttpUtils {
     FlutterSecureStorage secureStorage = GetIt.instance.get(instanceName: "secureStorage");
     return secureStorage.read(key: _refreshTokenKey);
   }
+
+  static Future<void> invalidateTokens() async {
+    FlutterSecureStorage secureStorage = GetIt.instance.get(instanceName: "secureStorage");
+    await secureStorage.delete(key: _refreshTokenKey);
+    SurveyClient client = GetIt.instance.get(instanceName: "surveyClient");
+    client.dio.interceptors.removeLast();
+  }
 }

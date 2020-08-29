@@ -9,6 +9,8 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:survey_client/model/logout_response.dart';
+import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/refresh_token.dart';
 import 'package:survey_client/model/user.dart';
 
@@ -19,6 +21,8 @@ part 'serializers.g.dart';
 FastLoginRequestBody,
 LoginRequestBody,
 LoginResponse,
+LogoutResponse,
+OnlyPidParameter,
 RefreshToken,
 User,
 
@@ -35,6 +39,12 @@ const FullType(BuiltList, const [const FullType(LoginRequestBody)]),
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(LoginResponse)]),
 () => new ListBuilder<LoginResponse>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(LogoutResponse)]),
+() => new ListBuilder<LogoutResponse>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(OnlyPidParameter)]),
+() => new ListBuilder<OnlyPidParameter>())
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(RefreshToken)]),
 () => new ListBuilder<RefreshToken>())
