@@ -17,7 +17,7 @@ namespace Surveys.BusinessLogic.Interfaces
 
         ServiceResponse<List<SurveyDetail>> GetSurveyDetails(int seid);
 
-        ServiceResponse<string> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd);
+        ServiceResponse<List<SurveyDetail>> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd);
 
         ServiceResponse<Principal> Login(string user, string pwd);
 

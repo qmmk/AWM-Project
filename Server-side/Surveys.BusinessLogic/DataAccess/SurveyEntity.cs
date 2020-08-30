@@ -31,6 +31,7 @@ namespace Surveys.BusinessLogic.DataAccess
         [DataMember]
         public virtual string CustomField03 { get; set; }
 
+        [DataMember]
         public virtual List<SurveyDetail> surveyDetails { get; set; }
     }
 }

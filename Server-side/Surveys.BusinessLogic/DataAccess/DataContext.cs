@@ -421,9 +421,10 @@ namespace Surveys.BusinessLogic.DataAccess
 
         public ServiceResponse<List<SurveyEntity>> InsertOrUpdateSurveyEntity(List<SurveyEntity> lse)
         {
-            foreach(SurveyEntity se in lse)
+            ServiceResponse<List<SurveyEntity>> sr = new ServiceResponse<List<SurveyEntity>>();
+            foreach (SurveyEntity se in lse)
             {
-                ServiceResponse<List<SurveyEntity>> sr = new ServiceResponse<List<SurveyEntity>>();
+                ServiceResponse<SurveyEntity> sre = new ServiceResponse<SurveyEntity>();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("Command", "IU_SE"));
                 parameters.Add(new SqlParameter("SEID", se.SEID));
@@ -444,10 +445,10 @@ namespace Surveys.BusinessLogic.DataAccess
                     {
                         if (result[1][0] != 0)
                         {
-                            sr.Data = null;
-                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                            sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
-                            sr.Success = false;
+                            sre.Data = null;
+                            sre.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sre.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
+                            sre.Success = false;
                             return sr;
                         }
                         else
@@ -463,17 +464,26 @@ namespace Surveys.BusinessLogic.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    sr.Data = null;
-                    sr.Error = DbErrorCode.EXCEPTION.ToString();
-                    sr.Message = ex.Message;
-                    sr.Success = false;
+                    sre.Data = null;
+                    sre.Error = DbErrorCode.EXCEPTION.ToString();
+                    sre.Message = ex.Message;
+                    sre.Success = false;
                 }
 
                 var output = InsertOrUpdateSurveyDetail(se.surveyDetails);
-                if (output.Success) { continue; }
+                if (output.Success) {
+                    sre.Data.surveyDetails = output.Data;
+                    continue; 
+                }
+
+                sr.Data.Add(sre.Data);
             }
 
-            return GetAllSurveyEntities(-1, "GETALL");
+            sr.Error = DbErrorCode.SUCCESS.ToString();
+            sr.Message = "All survey entity with detail inserted or update, operation complete.";
+            sr.Success = true;
+
+            return sr;
         }
 
         public ServiceResponse<List<SurveyDetail>> GetSurveyDetails(int seid)
@@ -521,12 +531,12 @@ namespace Surveys.BusinessLogic.DataAccess
             return sr;
         }
 
-        public ServiceResponse<string> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd)
+        public ServiceResponse<List<SurveyDetail>> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd)
         {
-            ServiceResponse<string> final = new ServiceResponse<string>();
+            ServiceResponse<List<SurveyDetail>> final = new ServiceResponse<List<SurveyDetail>>();
             foreach (SurveyDetail sd in lsd)
             {
-                ServiceResponse<string> sr = new ServiceResponse<string>();
+                ServiceResponse<SurveyDetail> sr = new ServiceResponse<SurveyDetail>();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("Command", "IU_SD"));
                 parameters.Add(new SqlParameter("SEID", sd.SEID));
@@ -541,38 +551,49 @@ namespace Surveys.BusinessLogic.DataAccess
 
                 try
                 {
-                    var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyEntity), typeof(Int32));
+                    var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyDetail), typeof(Int32));
                     
                     if(result.Count == 2)
                     {
                         switch (result[1][0])
                         {
-                            case 0: continue;
+                            case 0:
+                                sr.Data = result[0].Select(x => new SurveyDetail
+                                {
+                                    SEID = x.SEID,
+                                    SDID = x.SDID,
+                                    Descr = x.Descr,
+                                    CustomField01 = x.CustomField01,
+                                    CustomField02 = x.CustomField02,
+                                    CustomField03 = x.CustomField03
+                                }).ToList().FirstOrDefault();
+                                continue;
                             case 8:
-                                sr.Data = result[1][0].ToString();
-                                sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
-                                sr.Message = string.Format("Survey {0} not exists", sd.SEID);
-                                sr.Success = false;
-                                return sr;
+                                final.Data = null;
+                                final.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                                final.Message = string.Format("Survey {0} not exists", sd.SEID);
+                                final.Success = false;
+                                return final;
                             default:
-                                sr.Data = result[1][0].ToString();
-                                sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                                sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
-                                sr.Success = false;
-                                return sr;
+                                final.Data = null;
+                                final.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                                final.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
+                                final.Success = false;
+                                return final;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    sr.Data = null;
-                    sr.Error = DbErrorCode.EXCEPTION.ToString();
-                    sr.Message = ex.Message;
-                    sr.Success = false;
+                    final.Data = null;
+                    final.Error = DbErrorCode.EXCEPTION.ToString();
+                    final.Message = ex.Message;
+                    final.Success = false;
                 }
+
+                final.Data.Add(sr.Data);
             }
 
-            final.Data = null;
             final.Error = DbErrorCode.SUCCESS.ToString();
             final.Message = "All survey detail inserted or update, operation complete.";
             final.Success = true;

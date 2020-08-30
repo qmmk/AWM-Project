@@ -156,7 +156,7 @@ namespace Surveys.WebAPIService.Controllers
         public ActionResult AddSurveyEntity([FromBody] List<SurveyEntity> lse)
         {
             var res = _manager.InsertOrUpdateSurveyEntity(lse);
-            return Ok(res.Success);
+            return Ok(res.Data);
         }
 
         [HttpPost]
