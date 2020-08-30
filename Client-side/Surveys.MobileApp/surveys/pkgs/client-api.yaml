@@ -157,7 +157,7 @@ paths:
               schema:
                 type: string
 
-  /service/fastlogin:
+  /service/fastLogin:
     post:
       operationId: "fastLogin"
       description: "Login with refresh token"
@@ -182,7 +182,7 @@ paths:
               schema:
                 type: string
 
-  /service/signup:
+  /service/signUp:
     post:
       operationId: "signUp"
       description: "Sign up"
@@ -226,7 +226,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/LogoutResponse"
 
-  /service/loadallsurveysbyuser:
+  /service/loadAllSurveysByUser:
     get:
       operationId: "loadAllSurveysByUser"
       description: "load all surveys by user"
@@ -245,7 +245,26 @@ paths:
                 items:
                   $ref: "#/components/schemas/OpenapiSurvey"
 
-  /service/addsurveyentity:
+  /service/loadAllSurveysExceptUser:
+    get:
+      operationId: "loadAllSurveysExceptUser"
+      description: "load all surveys except the ones of the current user"
+      parameters:
+        - in: query
+          name: pid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenapiSurvey"
+
+  /service/addSurveyEntity:
     post:
       operationId: "createSurvey"
       description: "Create survey"
@@ -265,3 +284,4 @@ paths:
             text/plain:
               schema:
                 type: boolean
+

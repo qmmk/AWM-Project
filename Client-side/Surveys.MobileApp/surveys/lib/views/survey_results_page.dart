@@ -17,12 +17,16 @@ class SurveyResultsPage extends StatefulWidget {
 
 class _SurveyResultsPageState extends State<SurveyResultsPage> {
   List<SurveyVote> _votes;
-  bool _notAcessible = false;
+  bool _notAccessible = false;
+  bool _noEntries = false;
 
   @override
   void initState() {
     super.initState();
-    _notAcessible = !widget.survey.isOpen || widget.survey.details.length <= 0;
+    _noEntries = (widget?.survey?.details?.length ?? 0) <= 0;
+    _notAccessible = !widget.survey.isOpen;
+
+    if (_notAccessible || _noEntries) return;
     _votes = _generateRandomVotes();
   }
 
@@ -75,7 +79,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
         ),
-        child: _notAcessible
+        child: _notAccessible || _noEntries
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +88,9 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
                       CupertinoIcons.flag,
                       size: 70,
                     ),
-                    Text("Sorry, this survey hasn't already been opened!")
+                    Text(_noEntries
+                        ? "Sorry, there are no entries for this survey!"
+                        : "Sorry, this survey hasn't already been opened!")
                   ],
                 ),
               )

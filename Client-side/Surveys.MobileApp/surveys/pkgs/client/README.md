@@ -58,12 +58,13 @@ All URIs are relative to *https://192.168.1.9:45455*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addsurveyentity | 
-*DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastlogin | 
-*DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadallsurveysbyuser | 
+*DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addSurveyEntity | 
+*DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
+*DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadAllSurveysByUser | 
+*DefaultApi* | [**loadAllSurveysExceptUser**](doc\/DefaultApi.md#loadallsurveysexceptuser) | **get** /service/loadAllSurveysExceptUser | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
 *DefaultApi* | [**logout**](doc\/DefaultApi.md#logout) | **post** /service/logout | 
-*DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signup | 
+*DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signUp | 
 
 
 ## Documentation For Models

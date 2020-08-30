@@ -13,9 +13,11 @@ class UserAndCollectionProvider extends BaseProvider {
 
   User _user = User();
   List<Survey> _userSurveys;
+  List<Survey> _othersSurveys;
 
   User get user => _user;
   List<Survey> get userSurveys => _userSurveys;
+  List<Survey> get othersSurveys => _othersSurveys;
 
   void setUser(User user) {
     _user = user;
@@ -45,6 +47,12 @@ class UserAndCollectionProvider extends BaseProvider {
     if (_userSurveys != null) return;
 
     _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.pid);
+  }
+
+  Future<void> initOthersSurveys() async {
+    if (_othersSurveys != null) return;
+
+    _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.pid);
   }
 
   Future<bool> modifySurvey(int index, Survey survey) async {

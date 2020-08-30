@@ -24,7 +24,7 @@ class DefaultApi {
         /// Create survey
         Future<Response<bool>>createSurvey(List<OpenapiSurvey> openapiSurvey,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
-        String _path = "/service/addsurveyentity";
+        String _path = "/service/addSurveyEntity";
 
         Map<String, dynamic> queryParams = {};
         Map<String, String> headerParams = Map.from(headers ?? {});
@@ -75,7 +75,7 @@ class DefaultApi {
         /// Login with refresh token
         Future<Response<LoginResponse>>fastLogin(FastLoginRequestBody fastLoginRequestBody,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
-        String _path = "/service/fastlogin";
+        String _path = "/service/fastLogin";
 
         Map<String, dynamic> queryParams = {};
         Map<String, String> headerParams = Map.from(headers ?? {});
@@ -125,7 +125,56 @@ class DefaultApi {
         /// load all surveys by user
         Future<Response<List<OpenapiSurvey>>>loadAllSurveysByUser({ int pid,CancelToken cancelToken, Map<String, String> headers,}) async {
 
-        String _path = "/service/loadallsurveysbyuser";
+        String _path = "/service/loadAllSurveysByUser";
+
+        Map<String, dynamic> queryParams = {};
+        Map<String, String> headerParams = Map.from(headers ?? {});
+        dynamic bodyData;
+
+                queryParams[r'pid'] = pid;
+        queryParams.removeWhere((key, value) => value == null);
+        headerParams.removeWhere((key, value) => value == null);
+
+        List<String> contentTypes = [];
+
+
+
+            return _dio.request(
+            _path,
+            queryParameters: queryParams,
+            data: bodyData,
+            options: Options(
+            method: 'get'.toUpperCase(),
+            headers: headerParams,
+            extra: {
+                'secure': [],
+            },
+            contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
+            ),
+            cancelToken: cancelToken,
+            ).then((response) {
+
+                final FullType type = const FullType(BuiltList, const [const FullType(OpenapiSurvey)]);
+                BuiltList<OpenapiSurvey> dataList = _serializers.deserialize(response.data is String ? jsonDecode(response.data) : response.data, specifiedType: type);
+                var data = dataList.toList();
+
+            return Response<List<OpenapiSurvey>>(
+                data: data,
+                headers: response.headers,
+                request: response.request,
+                redirects: response.redirects,
+                statusCode: response.statusCode,
+                statusMessage: response.statusMessage,
+                extra: response.extra,
+            );
+            });
+            }
+        /// 
+        ///
+        /// load all surveys except the ones of the current user
+        Future<Response<List<OpenapiSurvey>>>loadAllSurveysExceptUser({ int pid,CancelToken cancelToken, Map<String, String> headers,}) async {
+
+        String _path = "/service/loadAllSurveysExceptUser";
 
         Map<String, dynamic> queryParams = {};
         Map<String, String> headerParams = Map.from(headers ?? {});
@@ -274,7 +323,7 @@ class DefaultApi {
         /// Sign up
         Future<Response<bool>>signUp(OpenapiUser openapiUser,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
-        String _path = "/service/signup";
+        String _path = "/service/signUp";
 
         Map<String, dynamic> queryParams = {};
         Map<String, String> headerParams = Map.from(headers ?? {});

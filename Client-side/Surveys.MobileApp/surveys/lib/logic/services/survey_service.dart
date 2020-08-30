@@ -33,6 +33,11 @@ class SurveyService extends BaseService {
     return response.data.map(_convertOpenapiSurveyToSurvey).toList();
   }
 
+  Future<List<Survey>> loadAllSurveysExceptUser({@required int pid}) async {
+    Response<List<OpenapiSurvey>> response = await client.getDefaultApi().loadAllSurveysExceptUser(pid: pid);
+    return response.data.map(_convertOpenapiSurveyToSurvey).toList();
+  }
+
   Future<bool> createSurvey({@required Survey survey}) async {
     OpenapiSurvey openapiSurvey = OpenapiSurvey();
     OpenapiSurveyBuilder openapiSurveyBuilder = openapiSurvey.toBuilder();

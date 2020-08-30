@@ -9,12 +9,13 @@ All URIs are relative to *https://192.168.1.9:45455*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addsurveyentity | 
-[**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastlogin | 
-[**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadallsurveysbyuser | 
+[**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addSurveyEntity | 
+[**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
+[**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadAllSurveysByUser | 
+[**loadAllSurveysExceptUser**](DefaultApi.md#loadAllSurveysExceptUser) | **get** /service/loadAllSurveysExceptUser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
 [**logout**](DefaultApi.md#logout) | **post** /service/logout | 
-[**signUp**](DefaultApi.md#signUp) | **post** /service/signup | 
+[**signUp**](DefaultApi.md#signUp) | **post** /service/signUp | 
 
 
 # **createSurvey**
@@ -122,6 +123,49 @@ try {
     print(result);
 } catch (e) {
     print("Exception when calling DefaultApi->loadAllSurveysByUser: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+[**List<OpenapiSurvey>**](OpenapiSurvey.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **loadAllSurveysExceptUser**
+> List<OpenapiSurvey> loadAllSurveysExceptUser(pid)
+
+
+
+load all surveys except the ones of the current user
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var pid = 56; // int | 
+
+try { 
+    var result = api_instance.loadAllSurveysExceptUser(pid);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->loadAllSurveysExceptUser: $e\n");
 }
 ```
 

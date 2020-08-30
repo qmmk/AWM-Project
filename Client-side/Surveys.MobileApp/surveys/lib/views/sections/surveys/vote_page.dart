@@ -14,11 +14,13 @@ class VotePage extends StatefulWidget {
 class _VotePageState extends State<VotePage> {
   int _chosenIndex = -1;
   bool _notAccessible = false;
+  bool _noEntries = false;
 
   @override
   void initState() {
     super.initState();
-    _notAccessible = !widget.survey.isOpen || widget.survey.details.length <= 0;
+    _noEntries = (widget?.survey?.details?.length ?? 0) <= 0;
+    _notAccessible = !widget.survey.isOpen;
   }
 
   Widget _content() {
@@ -57,7 +59,7 @@ class _VotePageState extends State<VotePage> {
           backgroundColor: CupertinoColors.white,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
-          trailing: _notAccessible
+          trailing: _notAccessible || _noEntries
               ? Container()
               : GestureDetector(
                   child: Icon(
@@ -65,7 +67,7 @@ class _VotePageState extends State<VotePage> {
                   size: 43,
                 )),
         ),
-        child: _notAccessible
+        child: _notAccessible || _noEntries
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +76,9 @@ class _VotePageState extends State<VotePage> {
                       CupertinoIcons.flag,
                       size: 70,
                     ),
-                    Text("Sorry, this survey hasn't already been opened!")
+                    Text(_noEntries
+                        ? "Sorry, there are no entries for this survey!"
+                        : "Sorry, this survey hasn't already been opened!")
                   ],
                 ),
               )
