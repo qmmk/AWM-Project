@@ -41,6 +41,7 @@ class SurveyService extends BaseService {
     listBuilder.addAll(survey.details.map(_convertSurveyDetailToOpenapiSurveyDetail).toList());
 
     openapiSurveyBuilder
+      ..seid = survey.id
       ..title = survey.title
       ..descr = survey.description
       ..surveyDetails = listBuilder

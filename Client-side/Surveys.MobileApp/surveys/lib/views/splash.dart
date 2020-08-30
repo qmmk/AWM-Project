@@ -6,7 +6,7 @@ import 'package:survey_client/model/login_response.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
-import 'package:surveys/logic/providers/user_provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/models/user_model.dart';
 
 class SplashPage extends StatefulWidget {
@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
         AccessService accessService = AccessService();
         try {
           accessService.fastLogin(refreshToken: refreshToken).then((LoginResponse response) {
-            Provider.of<UserProvider>(context, listen: false)
+            Provider.of<UserAndCollectionProvider>(context, listen: false)
                 .setUser(User(pid: response.pid, username: response.userName));
 
             HttpUtils.registerToken(response.accessToken);

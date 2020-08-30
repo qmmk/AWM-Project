@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 
@@ -29,7 +29,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
               title: Text(
-                "Logout failed",
+                _isModifying ? "Update failed" : "Creation failed",
                 style: TextStyle(color: Colors.red),
               ),
               content: Text("Please try again later"),
@@ -192,19 +192,22 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   ..description = _descriptionController.text
                   ..isOpen = _open;
 
-                if (!_isModifying) {
-                  bool success = await Provider.of<UserProvider>(context, listen: false).createSurvey(survey: _survey);
-                  if (!success) {
-                    _showErrorDialog();
-                    return;
-                  }
-
-                  _titleController.text = "";
-                  _descriptionController.text = "";
-                  FocusScope.of(context).requestFocus(FocusNode());
+                if (_isModifying) {
+                  Navigator.of(context).pop(_survey);
+                  return;
                 }
 
-                if (_isModifying) Navigator.of(context).pop(_survey);
+                UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+                bool success = await userProvider.createSurvey(survey: _survey);
+
+                if (!success) {
+                  _showErrorDialog();
+                  return;
+                }
+
+                _titleController.text = "";
+                _descriptionController.text = "";
+                FocusScope.of(context).requestFocus(FocusNode());
               },
               child: Icon(
                 CupertinoIcons.check_mark,

@@ -7,7 +7,7 @@ import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/user_model.dart';
 
-class UserProvider extends BaseProvider {
+class UserAndCollectionProvider extends BaseProvider {
   AccessService _accessService = AccessService();
   SurveyService _surveyService = SurveyService();
 
@@ -47,11 +47,17 @@ class UserProvider extends BaseProvider {
     _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.pid);
   }
 
-  void modifySurvey(int index, Survey survey) {
-    if (index < 0 || index >= _userSurveys.length) return;
+  Future<bool> modifySurvey(int index, Survey survey) async {
+    if (index < 0 || index >= _userSurveys.length || survey.id == null) return Future.value(false);
 
-    _userSurveys[index] = survey;
-    notifyListeners();
+    bool success = await _surveyService.createSurvey(survey: survey);
+    if (success) {
+      _userSurveys[index] = survey;
+      notifyListeners();
+      return true;
+    }
+
+    return false;
   }
 
   Future<bool> createSurvey({@required Survey survey}) async {

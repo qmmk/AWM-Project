@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class PersonalAreaPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
   }
 
   Widget _surveyElement(int index) {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
 
     return Card(
       child: GestureDetector(
@@ -57,7 +57,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
           ),
         ),
         child: FutureBuilder(
-          future: Provider.of<UserProvider>(context).initPersonalSurveys(),
+          future: Provider.of<UserAndCollectionProvider>(context).initPersonalSurveys(),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done)
               return Center(
@@ -69,7 +69,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
                 separatorBuilder: (context, index) => SizedBox(
                       height: 10,
                     ),
-                itemCount: Provider.of<UserProvider>(context).userSurveys.length);
+                itemCount: Provider.of<UserAndCollectionProvider>(context).userSurveys.length);
           },
         ));
   }

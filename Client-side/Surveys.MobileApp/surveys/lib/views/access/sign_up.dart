@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/user_model.dart';
@@ -101,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               HttpUtils.registerToken(response.accessToken);
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
 
-                              Provider.of<UserProvider>(context, listen: false)
+                              Provider.of<UserAndCollectionProvider>(context, listen: false)
                                   .setUser(User(pid: response.pid, username: username));
 
                               Navigator.of(context).pushAndRemoveUntil(

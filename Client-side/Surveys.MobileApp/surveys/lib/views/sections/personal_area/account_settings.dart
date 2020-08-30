@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/models/user_model.dart';
 
 class AccountSettingsPage extends StatefulWidget {
@@ -112,14 +112,14 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                           String username = _usernameController.text;
                           String password = _passwordController.text;
 
-                          Provider.of<UserProvider>(context, listen: false).setUsername(username);
+                          Provider.of<UserAndCollectionProvider>(context, listen: false).setUsername(username);
                         })
                   ],
                 ),
               ),
               CupertinoButton(
                   onPressed: () async {
-                    bool success = await Provider.of<UserProvider>(context, listen: false).logout();
+                    bool success = await Provider.of<UserAndCollectionProvider>(context, listen: false).logout();
                     if (success)
                       Navigator.of(context).pushNamedAndRemoveUntil(Routes.accessHub, ModalRoute.withName(Routes.root));
                     else
@@ -139,7 +139,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
   @override
   void afterFirstLayout(BuildContext context) {
     setState(() {
-      _usernameController.text = Provider.of<UserProvider>(context, listen: false).user.username;
+      _usernameController.text = Provider.of<UserAndCollectionProvider>(context, listen: false).user.username;
     });
   }
 }
