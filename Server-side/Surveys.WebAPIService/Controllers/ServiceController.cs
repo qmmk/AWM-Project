@@ -145,6 +145,16 @@ namespace Surveys.WebAPIService.Controllers
             return Ok(surveyItems.Data);
         }
 
+        [HttpDelete]
+        public ActionResult DeleteSurvey([FromQuery] int seid)
+        {
+            var res = _manager.DeleteSurvey(seid);
+            if (res.Success)
+                return Ok(res.Message);
+            else
+                return BadRequest(res.Message);
+        }
+ 
         [HttpGet]
         public ActionResult GetSurveyDetails([FromQuery] int seid)
         {

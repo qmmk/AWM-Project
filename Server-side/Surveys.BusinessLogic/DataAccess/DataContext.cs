@@ -780,7 +780,48 @@ namespace Surveys.BusinessLogic.DataAccess
             return sr;
         }
             
-        
+        public ServiceResponse<int> DeleteSurvey(int seid)
+        {
+            ServiceResponse<int> sr = new ServiceResponse<int>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("Command", "DEL_SE"));
+            parameters.Add(new SqlParameter("SEID", seid));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(Int32));
+
+                if (result.Count == 1)
+                {
+                    switch (result[0][0]) {
+                        case 0:
+                            sr.Data = (int)DbErrorCode.SUCCESS;
+                            sr.Error = DbErrorCode.SUCCESS.ToString();
+                            sr.Message = "Survey entity deleted, operation complete.";
+                            sr.Success = true;
+                            break;
+                        default :
+                            sr.Data = (int)DbErrorCode.SURVEY_NOT_EXISTS;
+                            sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                            sr.Message = "Survey entity already deleted or not exists.";
+                            sr.Success = true;
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = (int)DbErrorCode.EXCEPTION;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
         #endregion
 
     }

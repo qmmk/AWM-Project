@@ -120,6 +120,11 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.Logout(pid);
         }
+
+        public ServiceResponse<int> DeleteSurvey(int seid)
+        {
+            return _context.DeleteSurvey(seid);
+        }
         #endregion
     }
 }

@@ -32,5 +32,7 @@ namespace Surveys.BusinessLogic.Interfaces
         ServiceResponse<int> InsertActualVote(List<ActualVote> lav);
 
         ServiceResponse<int> Logout(int pid);
+
+        ServiceResponse<int> DeleteSurvey(int seid);
     }
 }
