@@ -56,7 +56,7 @@ class _VotePageState extends State<VotePage> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           border: null,
-          backgroundColor: CupertinoColors.white,
+          backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
           trailing: _notAccessible || _noEntries

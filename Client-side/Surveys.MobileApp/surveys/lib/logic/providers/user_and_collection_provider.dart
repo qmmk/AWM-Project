@@ -56,29 +56,19 @@ class UserAndCollectionProvider extends BaseProvider {
     _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.pid);
   }
 
-  Future<bool> modifySurvey(int index, Survey survey) async {
+  Future<void> modifySurvey(int index, Survey survey) async {
     if (index < 0 || index >= _userSurveys.length || survey.id == null) return Future.value(false);
 
-    bool success = await _surveyService.createSurvey(survey: survey);
-    if (success) {
-      _userSurveys[index] = survey;
-      notifyListeners();
-      return true;
-    }
-
-    return false;
+    Survey updated = await _surveyService.createSurvey(survey: survey);
+    _userSurveys[index] = updated;
+    notifyListeners();
   }
 
-  Future<bool> createSurvey({@required Survey survey}) async {
+  Future<void> createSurvey({@required Survey survey}) async {
     survey.customField03 = _user.pid.toString();
-    bool success = await _surveyService.createSurvey(survey: survey);
-    if (success) {
-      _userSurveys.add(survey);
-      notifyListeners();
-      return true;
-    }
-
-    return false;
+    Survey created = await _surveyService.createSurvey(survey: survey);
+    _userSurveys.add(created);
+    notifyListeners();
   }
 
   Future<void> loadDetails({@required int index, @required bool isPersonal}) async {
@@ -88,7 +78,7 @@ class UserAndCollectionProvider extends BaseProvider {
       _userSurveys[index].details = details;
     else
       _othersSurveys[index].details = details;
-    
+
     notifyListeners();
   }
 }

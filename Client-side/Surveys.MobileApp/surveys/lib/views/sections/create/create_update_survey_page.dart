@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,26 +26,6 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   TextEditingController _descriptionController = TextEditingController(text: "description");
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  void _showErrorDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Text(
-                _isModifying ? "Update failed" : "Creation failed",
-                style: TextStyle(color: Colors.red),
-              ),
-              content: Text("Please try again later"),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Ok"),
-                )
-              ],
-            ));
-  }
-
   @override
   void initState() {
     _isModifying = widget.survey != null;
@@ -63,31 +45,32 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   }
 
   Widget _entryList() => SizedBox(
-        height: 100,
+        height: 150,
         child: ListView.separated(
             padding: EdgeInsets.all(0),
             shrinkWrap: true,
             itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(Routes.createSurveyEntry,
-                        arguments: {"surveyDetail": _survey.details[index]}).then((value) {
+                        arguments: {"surveyDetail": _survey.details[index]}).then((surveyDetail) {
                       setState(() {
-                        if (value != null) _survey.details[index].description = value;
+                        if (surveyDetail != null) _survey.details[index] = surveyDetail;
                       });
                     });
                   },
-                  child: Dismissible(
-                      onDismissed: (direction) {
-                        setState(() {
-                          _survey.details.removeAt(index);
-                        });
-                      },
-                      key: Key(_survey.details[index].id.toString()),
-                      child: Container(child: Text(_survey?.details[index].description))),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: index == 0 ? 10 : 0, left: 10, right: 10),
+                    child: Dismissible(
+                        onDismissed: (direction) {
+                          setState(() {
+                            _survey.details.removeAt(index);
+                          });
+                        },
+                        key: Key(_survey.details[index].id.toString()),
+                        child: Container(child: Text(_survey?.details[index].description))),
+                  ),
                 ),
-            separatorBuilder: (context, index) => SizedBox(
-                  height: 5,
-                ),
+            separatorBuilder: (context, index) => Divider(),
             itemCount: _survey?.details?.length ?? 0),
       );
 
@@ -125,17 +108,28 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 if (_survey?.details != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: _entryList(),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            border: Border.all(color: CupertinoColors.systemBlue)),
+                        child: _entryList()),
                   ),
                 CupertinoButton(
                     child: Text(
                       "Add entry",
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(Routes.createSurveyEntry).then((value) {
-                        if (value != null)
+                      Navigator.of(context).pushNamed(Routes.createSurveyEntry).then((surveyDetail) {
+                        if (surveyDetail != null)
                           setState(() {
-                            _survey.details.add(SurveyDetail(id: 0, surveyId: -1, description: value));
+                            int id = (_survey.details?.length ?? 0) == 0
+                                ? 0
+                                : _survey.details.map((e) => e.id).toList().reduce(max) + 1;
+
+                            _survey.details.add(SurveyDetail(
+                                id: id,
+                                surveyId: widget.survey == null ? -1 : widget.survey.id,
+                                description: (surveyDetail as SurveyDetail).description));
                           });
                       });
                     }),
@@ -172,6 +166,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: false,
+          backgroundColor: Colors.transparent,
           middle: widget.survey != null ? Text("Update survey") : Text("Create a survey"),
           border: null,
           trailing: GestureDetector(
@@ -189,12 +184,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 }
 
                 UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
-                bool success = await userProvider.createSurvey(survey: _survey);
-
-                if (!success) {
-                  _showErrorDialog();
-                  return;
-                }
+                await userProvider.createSurvey(survey: _survey);
 
                 _titleController.text = "";
                 _descriptionController.text = "";

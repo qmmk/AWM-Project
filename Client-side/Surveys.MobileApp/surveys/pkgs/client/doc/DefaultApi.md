@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 
 # **createSurvey**
-> bool createSurvey(openapiSurvey)
+> List<OpenapiSurvey> createSurvey(openapiSurvey)
 
 
 
@@ -49,7 +49,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**bool**
+[**List<OpenapiSurvey>**](OpenapiSurvey.md)
 
 ### Authorization
 
@@ -58,7 +58,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: text/plain
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -23,30 +23,27 @@ class _SurveysPageState extends State<SurveysPage> {
   Widget _surveyElement(int index) {
     UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
 
-    return Card(
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () async {
-          if (userProvider.othersSurveys[index].details == null) {
-            setState(() {
-              _isWaitingForServer = true;
-            });
-            await userProvider.loadDetails(index: index, isPersonal: false);
-          }
-
-          Navigator.of(context)
-              .pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.othersSurveys[index]});
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () async {
+        if (userProvider.othersSurveys[index].details == null) {
           setState(() {
-            _isWaitingForServer = false;
+            _isWaitingForServer = true;
           });
-        },
-        onLongPress: () {
-          Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SurveyEntryWidget(survey: userProvider.othersSurveys[index]),
-        ),
+          await userProvider.loadDetails(index: index, isPersonal: false);
+        }
+
+        Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.othersSurveys[index]});
+        setState(() {
+          _isWaitingForServer = false;
+        });
+      },
+      onLongPress: () {
+        Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SurveyEntryWidget(survey: userProvider.othersSurveys[index]),
       ),
     );
   }
@@ -61,9 +58,7 @@ class _SurveysPageState extends State<SurveysPage> {
 
           return ListView.separated(
               itemBuilder: (context, index) => _surveyElement(index),
-              separatorBuilder: (context, index) => SizedBox(
-                    height: 10,
-                  ),
+              separatorBuilder: (context, index) => Divider(),
               itemCount: Provider.of<UserAndCollectionProvider>(context).othersSurveys.length);
         },
       );
@@ -72,6 +67,7 @@ class _SurveysPageState extends State<SurveysPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text("Explore surveys"),
           border: null,

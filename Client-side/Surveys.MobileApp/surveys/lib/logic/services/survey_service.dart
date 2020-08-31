@@ -13,7 +13,8 @@ class SurveyService extends BaseService {
       description: openapiSurvey.descr,
       isOpen: openapiSurvey.isOpen == "1",
       title: openapiSurvey.title,
-      customField03: openapiSurvey.customField03);
+      customField03: openapiSurvey.customField03,
+      details: openapiSurvey.surveyDetails?.map(_convertOpenapiSurveyDetailToSurveyDetail)?.toList());
 
   OpenapiSurveyDetail _convertSurveyDetailToOpenapiSurveyDetail(SurveyDetail surveyDetail) {
     OpenapiSurveyDetailBuilder openapiSurveyDetailBuilder = OpenapiSurveyDetailBuilder();
@@ -46,7 +47,7 @@ class SurveyService extends BaseService {
     return response.data.map(_convertOpenapiSurveyToSurvey).toList();
   }
 
-  Future<bool> createSurvey({@required Survey survey}) async {
+  Future<Survey> createSurvey({@required Survey survey}) async {
     OpenapiSurvey openapiSurvey = OpenapiSurvey();
     OpenapiSurveyBuilder openapiSurveyBuilder = openapiSurvey.toBuilder();
 
@@ -61,8 +62,8 @@ class SurveyService extends BaseService {
       ..isOpen = survey.isOpen ? "1" : "0"
       ..customField03 = survey.customField03;
     openapiSurvey = openapiSurveyBuilder.build();
-    Response<bool> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
-    return response.data;
+    Response<List<OpenapiSurvey>> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
+    return _convertOpenapiSurveyToSurvey(response.data[0]);
   }
 
   Future<List<SurveyDetail>> getSurveyDetails({@required int seid}) async {

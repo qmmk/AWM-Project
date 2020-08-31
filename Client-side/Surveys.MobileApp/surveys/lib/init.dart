@@ -27,6 +27,9 @@ class CupertinoAppWithTheme extends StatelessWidget {
     debugPaintSizeEnabled = false;
 
     return CupertinoApp(
+      theme: CupertinoThemeData(
+        brightness: Brightness.light,
+      ),
       localizationsDelegates: [
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,

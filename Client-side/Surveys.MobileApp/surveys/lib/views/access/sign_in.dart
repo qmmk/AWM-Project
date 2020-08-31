@@ -31,7 +31,7 @@ class _SignInPageState extends State<SignInPage> {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: "Back",
-          backgroundColor: CupertinoColors.white,
+          backgroundColor: Colors.transparent,
           border: null,
         ),
         child: Center(

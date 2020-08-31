@@ -23,32 +23,38 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
   Widget _surveyElement(int index) {
     UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
 
-    return Card(
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () async {
-          if (userProvider.userSurveys[index].details == null) {
-            setState(() {
-              _isWaitingForServer = true;
-            });
-            await userProvider.loadDetails(index: index, isPersonal: true);
-          }
-
-          Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.userSurveys[index]});
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () async {
+        if (userProvider.userSurveys[index].details == null) {
           setState(() {
-            _isWaitingForServer = false;
+            _isWaitingForServer = true;
           });
-        },
-        onLongPress: () {
-          Navigator.of(context)
-              .pushNamed(Routes.createSurvey, arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
-            if (survey != null) userProvider.modifySurvey(index, survey);
+        }
+        await userProvider.loadDetails(index: index, isPersonal: true);
+        setState(() {
+          _isWaitingForServer = false;
+        });
+        Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.userSurveys[index]});
+      },
+      onLongPress: () async {
+        if (userProvider.userSurveys[index].details == null) {
+          setState(() {
+            _isWaitingForServer = true;
           });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SurveyEntryWidget(survey: userProvider.userSurveys[index]),
-        ),
+        }
+        await userProvider.loadDetails(index: index, isPersonal: true);
+        setState(() {
+          _isWaitingForServer = false;
+        });
+        Navigator.of(context)
+            .pushNamed(Routes.createSurvey, arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
+          if (survey != null) userProvider.modifySurvey(index, survey);
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SurveyEntryWidget(survey: userProvider.userSurveys[index]),
       ),
     );
   }
@@ -63,9 +69,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
 
           return ListView.separated(
               itemBuilder: (context, index) => _surveyElement(index),
-              separatorBuilder: (context, index) => SizedBox(
-                    height: 10,
-                  ),
+              separatorBuilder: (context, index) => Divider(),
               itemCount: Provider.of<UserAndCollectionProvider>(context).userSurveys.length);
         },
       );
@@ -74,6 +78,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text("My surveys"),
           border: null,

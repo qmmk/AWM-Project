@@ -23,7 +23,7 @@ class DefaultApi {
         /// 
         ///
         /// Create survey
-        Future<Response<bool>>createSurvey(List<OpenapiSurvey> openapiSurvey,{ CancelToken cancelToken, Map<String, String> headers,}) async {
+        Future<Response<List<OpenapiSurvey>>>createSurvey(List<OpenapiSurvey> openapiSurvey,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
         String _path = "/service/addSurveyEntity";
 
@@ -57,10 +57,11 @@ class DefaultApi {
             cancelToken: cancelToken,
             ).then((response) {
 
-        var serializer = _serializers.serializerForType(bool);
-        var data = _serializers.deserializeWith<bool>(serializer, response.data is String ? jsonDecode(response.data) : response.data);
+                final FullType type = const FullType(BuiltList, const [const FullType(OpenapiSurvey)]);
+                BuiltList<OpenapiSurvey> dataList = _serializers.deserialize(response.data is String ? jsonDecode(response.data) : response.data, specifiedType: type);
+                var data = dataList.toList();
 
-            return Response<bool>(
+            return Response<List<OpenapiSurvey>>(
                 data: data,
                 headers: response.headers,
                 request: response.request,

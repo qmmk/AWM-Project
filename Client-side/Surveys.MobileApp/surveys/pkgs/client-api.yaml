@@ -281,9 +281,11 @@ paths:
         200:
           description: "Success."
           content:
-            text/plain:
+            application/json:
               schema:
-                type: boolean
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenapiSurvey"
 
   /service/getSurveyDetails:
     get:
@@ -303,5 +305,3 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/OpenapiSurveyDetail"
-    
-
