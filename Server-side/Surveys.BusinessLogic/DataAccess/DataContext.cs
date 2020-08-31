@@ -422,9 +422,12 @@ namespace Surveys.BusinessLogic.DataAccess
         public ServiceResponse<List<SurveyEntity>> InsertOrUpdateSurveyEntity(List<SurveyEntity> lse)
         {
             ServiceResponse<List<SurveyEntity>> sr = new ServiceResponse<List<SurveyEntity>>();
+            sr.Data = new List<SurveyEntity>();
             foreach (SurveyEntity se in lse)
             {
                 ServiceResponse<SurveyEntity> sre = new ServiceResponse<SurveyEntity>();
+                sre.Data = new SurveyEntity();
+                sre.Data.surveyDetails = new List<SurveyDetail>();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("Command", "IU_SE"));
                 parameters.Add(new SqlParameter("SEID", se.SEID));
@@ -445,22 +448,37 @@ namespace Surveys.BusinessLogic.DataAccess
                     {
                         if (result[1][0] != 0)
                         {
-                            sre.Data = null;
-                            sre.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                            sre.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
-                            sre.Success = false;
+                            sr.Data = null;
+                            sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            sr.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", se.SEID);
+                            sr.Success = false;
                             return sr;
                         }
                         else
                         {
-                            var res = result[0][0] as SurveyEntity;
+                            sre.Data = result[0].Select(x => new SurveyEntity
+                            {
+                                SEID = x.SEID,
+                                Title = x.Title,
+                                Descr = x.Descr,
+                                CustomField01 = x.CustomField01,
+                                IsOpen = x.IsOpen,
+                                CustomField03 = x.CustomField03
+                            }).ToList().FirstOrDefault();
+
                             foreach (SurveyDetail sd in se.surveyDetails)
                             {
-                                sd.SEID = res.SEID;
+                                sd.SEID = sre.Data.SEID;
                             }
                         }
                     }
 
+                    var output = InsertOrUpdateSurveyDetail(se.surveyDetails);
+                    if (output.Success)
+                    {
+                        sre.Data.surveyDetails = output.Data;
+                        sr.Data.Add(sre.Data);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -470,13 +488,7 @@ namespace Surveys.BusinessLogic.DataAccess
                     sre.Success = false;
                 }
 
-                var output = InsertOrUpdateSurveyDetail(se.surveyDetails);
-                if (output.Success) {
-                    sre.Data.surveyDetails = output.Data;
-                    continue; 
-                }
 
-                sr.Data.Add(sre.Data);
             }
 
             sr.Error = DbErrorCode.SUCCESS.ToString();
@@ -534,6 +546,7 @@ namespace Surveys.BusinessLogic.DataAccess
         public ServiceResponse<List<SurveyDetail>> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd)
         {
             ServiceResponse<List<SurveyDetail>> final = new ServiceResponse<List<SurveyDetail>>();
+            final.Data = new List<SurveyDetail>();
             foreach (SurveyDetail sd in lsd)
             {
                 ServiceResponse<SurveyDetail> sr = new ServiceResponse<SurveyDetail>();
@@ -567,7 +580,9 @@ namespace Surveys.BusinessLogic.DataAccess
                                     CustomField02 = x.CustomField02,
                                     CustomField03 = x.CustomField03
                                 }).ToList().FirstOrDefault();
-                                continue;
+
+                                final.Data.Add(sr.Data);
+                                break;
                             case 8:
                                 final.Data = null;
                                 final.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
@@ -591,7 +606,7 @@ namespace Surveys.BusinessLogic.DataAccess
                     final.Success = false;
                 }
 
-                final.Data.Add(sr.Data);
+                //final.Data.Add(sr.Data);
             }
 
             final.Error = DbErrorCode.SUCCESS.ToString();
