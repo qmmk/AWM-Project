@@ -4,6 +4,7 @@ import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/services/survey_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
+import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/user_model.dart';
 
@@ -78,5 +79,16 @@ class UserAndCollectionProvider extends BaseProvider {
     }
 
     return false;
+  }
+
+  Future<void> loadDetails({@required int index, @required bool isPersonal}) async {
+    List<SurveyDetail> details =
+        await _surveyService.getSurveyDetails(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+    if (isPersonal)
+      _userSurveys[index].details = details;
+    else
+      _othersSurveys[index].details = details;
+    
+    notifyListeners();
   }
 }

@@ -82,10 +82,6 @@ class _VotePageState extends State<VotePage> {
                   ],
                 ),
               )
-            : Column(
-                children: [
-                  _content(),
-                ],
-              ));
+            : _content());
   }
 }

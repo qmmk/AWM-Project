@@ -60,6 +60,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addSurveyEntity | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
+*DefaultApi* | [**getSurveyDetails**](doc\/DefaultApi.md#getsurveydetails) | **get** /service/getSurveyDetails | 
 *DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadAllSurveysByUser | 
 *DefaultApi* | [**loadAllSurveysExceptUser**](doc\/DefaultApi.md#loadallsurveysexceptuser) | **get** /service/loadAllSurveysExceptUser | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
