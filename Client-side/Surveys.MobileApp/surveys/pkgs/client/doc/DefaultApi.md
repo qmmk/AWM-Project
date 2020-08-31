@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addSurveyEntity | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
+[**getSurveyDetails**](DefaultApi.md#getSurveyDetails) | **get** /service/getSurveyDetails | 
 [**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadAllSurveysByUser | 
 [**loadAllSurveysExceptUser**](DefaultApi.md#loadAllSurveysExceptUser) | **get** /service/loadAllSurveysExceptUser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
@@ -101,6 +102,49 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json, text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getSurveyDetails**
+> List<OpenapiSurveyDetail> getSurveyDetails(seid)
+
+
+
+Gets the specified survey's entries
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var seid = 56; // int | 
+
+try { 
+    var result = api_instance.getSurveyDetails(seid);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->getSurveyDetails: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **seid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+[**List<OpenapiSurveyDetail>**](OpenapiSurveyDetail.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

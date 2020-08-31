@@ -13,6 +13,8 @@ class SurveysPage extends StatefulWidget {
 }
 
 class _SurveysPageState extends State<SurveysPage> {
+  bool _isWaitingForServer = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,9 +26,19 @@ class _SurveysPageState extends State<SurveysPage> {
     return Card(
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () {
+        onTap: () async {
+          if (userProvider.othersSurveys[index].details == null) {
+            setState(() {
+              _isWaitingForServer = true;
+            });
+            await userProvider.loadDetails(index: index, isPersonal: false);
+          }
+
           Navigator.of(context)
               .pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.othersSurveys[index]});
+          setState(() {
+            _isWaitingForServer = false;
+          });
         },
         onLongPress: () {
           Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
@@ -39,6 +51,23 @@ class _SurveysPageState extends State<SurveysPage> {
     );
   }
 
+  Widget _content() => FutureBuilder(
+        future: Provider.of<UserAndCollectionProvider>(context).initOthersSurveys(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done)
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
+
+          return ListView.separated(
+              itemBuilder: (context, index) => _surveyElement(index),
+              separatorBuilder: (context, index) => SizedBox(
+                    height: 10,
+                  ),
+              itemCount: Provider.of<UserAndCollectionProvider>(context).othersSurveys.length);
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -47,21 +76,18 @@ class _SurveysPageState extends State<SurveysPage> {
           middle: Text("Explore surveys"),
           border: null,
         ),
-        child: FutureBuilder(
-          future: Provider.of<UserAndCollectionProvider>(context).initOthersSurveys(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-
-            return ListView.separated(
-                itemBuilder: (context, index) => _surveyElement(index),
-                separatorBuilder: (context, index) => SizedBox(
-                      height: 10,
-                    ),
-                itemCount: Provider.of<UserAndCollectionProvider>(context).othersSurveys.length);
-          },
-        ));
+        child: _isWaitingForServer
+            ? Stack(
+                children: [
+                  Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  Opacity(
+                    opacity: 0.25,
+                    child: _content(),
+                  )
+                ],
+              )
+            : _content());
   }
 }

@@ -56,16 +56,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
     } else {
       _titleController.text = "";
       _descriptionController.text = "";
-      _survey = Survey(id: -1, details: [
-        SurveyDetail(id: 0, surveyId: -1, description: "John Biden"),
-        SurveyDetail(id: 1, surveyId: -1, description: "Donald Trump"),
-        SurveyDetail(id: 2, surveyId: -1, description: "John Biden"),
-        SurveyDetail(id: 3, surveyId: -1, description: "Donald Trump"),
-        SurveyDetail(id: 4, surveyId: -1, description: "John Biden"),
-        SurveyDetail(id: 5, surveyId: -1, description: "Donald Trump"),
-        SurveyDetail(id: 6, surveyId: -1, description: "John Biden"),
-        SurveyDetail(id: 7, surveyId: -1, description: "Donald Trump")
-      ]);
+      _survey = Survey(id: -1, details: []);
       _open = false;
     }
     super.initState();

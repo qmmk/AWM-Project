@@ -28,6 +28,14 @@ class SurveyService extends BaseService {
     return openapiSurveyDetailBuilder.build();
   }
 
+  SurveyDetail _convertOpenapiSurveyDetailToSurveyDetail(OpenapiSurveyDetail openapiSurveyDetail) => SurveyDetail(
+      id: openapiSurveyDetail.sdid,
+      surveyId: openapiSurveyDetail.seid,
+      description: openapiSurveyDetail.descr,
+      customField01: openapiSurveyDetail.customField01,
+      customField02: openapiSurveyDetail.customField02,
+      customField03: openapiSurveyDetail.customField03);
+
   Future<List<Survey>> loadAllSurveysByUser({@required int pid}) async {
     Response<List<OpenapiSurvey>> response = await client.getDefaultApi().loadAllSurveysByUser(pid: pid);
     return response.data.map(_convertOpenapiSurveyToSurvey).toList();
@@ -55,5 +63,10 @@ class SurveyService extends BaseService {
     openapiSurvey = openapiSurveyBuilder.build();
     Response<bool> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
     return response.data;
+  }
+
+  Future<List<SurveyDetail>> getSurveyDetails({@required int seid}) async {
+    Response<List<OpenapiSurveyDetail>> response = await client.getDefaultApi().getSurveyDetails(seid: seid);
+    return response.data.map(_convertOpenapiSurveyDetailToSurveyDetail).toList();
   }
 }

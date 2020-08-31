@@ -285,3 +285,23 @@ paths:
               schema:
                 type: boolean
 
+  /service/getSurveyDetails:
+    get:
+      operationId: "getSurveyDetails"
+      description: "Gets the specified survey's entries"
+      parameters:
+        - in: query
+          name: seid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenapiSurveyDetail"
+    
+
