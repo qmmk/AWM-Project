@@ -192,7 +192,10 @@ namespace Surveys.WebAPIService.Controllers
         public ActionResult Logout([FromBody] OnlyPidParameter body)
         {
             var res = _manager.Logout(body.pid);
-            return Ok(res);
+            if (res.Success)
+                return Ok(res.Message);
+            else
+                return Ok(res.Message);
         }
         #endregion
     }

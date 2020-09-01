@@ -431,7 +431,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("Command", "IU_SE"));
                 parameters.Add(new SqlParameter("SEID", se.SEID));
-                parameters.Add(new SqlParameter("SDID", 0));
+                parameters.Add(new SqlParameter("SDID", se.surveyDetails.Count));
                 parameters.Add(new SqlParameter("Title", se.Title));
                 parameters.Add(new SqlParameter("Descr", se.Descr));
                 parameters.Add(new SqlParameter("CustomField01", se.CustomField01));
@@ -765,7 +765,7 @@ namespace Surveys.BusinessLogic.DataAccess
                 {
                     sr.Data = result[0][0];
                     sr.Error = DbErrorCode.SUCCESS.ToString();
-                    sr.Message = "Invalidate the refresh token.";
+                    sr.Message = "Logout successed. Invalidate the refresh token.";
                     sr.Success = true;
                 }
             }
