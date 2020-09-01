@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
-import 'package:surveys/models/user_model.dart';
 
 class AccountSettingsPage extends StatefulWidget {
   AccountSettingsPage({Key key}) : super(key: key);

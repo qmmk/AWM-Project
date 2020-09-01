@@ -39,25 +39,31 @@ class UserAndCollectionProvider extends BaseProvider {
       _user = null;
       _userSurveys = null;
       return true;
-    } on DioError catch (e) {
+    } on DioError {
       return false;
     }
   }
 
-  Future<void> initPersonalSurveys() async {
+  Future<void> loadPersonalSurveys() async {
     if (_userSurveys != null) return;
 
+    loading();
     _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.pid);
+    done();
+    notifyListeners();
   }
 
-  Future<void> initOthersSurveys() async {
+  Future<void> loadOthersSurveys() async {
     if (_othersSurveys != null) return;
 
+    loading();
     _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.pid);
+    done();
+    notifyListeners();
   }
 
   Future<void> modifySurvey(int index, Survey survey) async {
-    if (index < 0 || index >= _userSurveys.length || survey.id == null) return Future.value(false);
+    if (index < 0 || index >= _userSurveys.length || survey.id == null) return;
 
     Survey updated = await _surveyService.createSurvey(survey: survey);
     _userSurveys[index] = updated;
@@ -72,23 +78,27 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> loadDetails({@required int index, @required bool isPersonal}) async {
+    if ((isPersonal ? _userSurveys[index].details : _othersSurveys[index].details) != null) return;
+
+    loading();
     List<SurveyDetail> details =
         await _surveyService.getSurveyDetails(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
     if (isPersonal)
       _userSurveys[index].details = details;
     else
       _othersSurveys[index].details = details;
-
+    done();
     notifyListeners();
   }
 
-  Future<void> deleteSurvey({@required int index, @required bool isPersonal}) async {
+  Future<void> removeSurvey({@required int index, @required bool isPersonal}) async {
+    loading();
     await _surveyService.deleteSurvey(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
     if (isPersonal)
       _userSurveys.removeAt(index);
     else
       _othersSurveys.removeAt(index);
-
+    done();
     notifyListeners();
   }
 }

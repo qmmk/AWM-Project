@@ -1,8 +1,10 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class PersonalAreaPage extends StatefulWidget {
@@ -12,9 +14,7 @@ class PersonalAreaPage extends StatefulWidget {
   _PersonalAreaPageState createState() => _PersonalAreaPageState();
 }
 
-class _PersonalAreaPageState extends State<PersonalAreaPage> {
-  bool _isWaitingForServer = false;
-
+class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMixin {
   @override
   void initState() {
     super.initState();
@@ -29,15 +29,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
             actions: [
               CupertinoActionSheetAction(
                   onPressed: () async {
-                    if (userProvider.userSurveys[index].details == null) {
-                      setState(() {
-                        _isWaitingForServer = true;
-                      });
-                    }
                     await userProvider.loadDetails(index: index, isPersonal: true);
-                    setState(() {
-                      _isWaitingForServer = false;
-                    });
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(Routes.createSurvey,
                         arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
@@ -70,7 +62,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
                               ],
                             )).then((removeIt) async {
                       if (removeIt ?? false) {
-                        await userProvider.deleteSurvey(index: index, isPersonal: true);
+                        await userProvider.removeSurvey(index: index, isPersonal: true);
                         Navigator.of(context).pop();
                       }
                     });
@@ -94,15 +86,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () async {
-        if (userProvider.userSurveys[index].details == null) {
-          setState(() {
-            _isWaitingForServer = true;
-          });
-        }
         await userProvider.loadDetails(index: index, isPersonal: true);
-        setState(() {
-          _isWaitingForServer = false;
-        });
         Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.userSurveys[index]});
       },
       onLongPress: () async {
@@ -115,20 +99,10 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
     );
   }
 
-  Widget _content() => FutureBuilder(
-        future: Provider.of<UserAndCollectionProvider>(context).initPersonalSurveys(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done)
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-
-          return ListView.separated(
-              itemBuilder: (context, index) => _surveyElement(index),
-              separatorBuilder: (context, index) => Divider(),
-              itemCount: Provider.of<UserAndCollectionProvider>(context).userSurveys.length);
-        },
-      );
+  Widget _content() => ListView.separated(
+      itemBuilder: (context, index) => _surveyElement(index),
+      separatorBuilder: (context, index) => Divider(),
+      itemCount: Provider.of<UserAndCollectionProvider>(context).userSurveys?.length ?? 0);
 
   @override
   Widget build(BuildContext context) {
@@ -146,8 +120,11 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
             child: Icon(CupertinoIcons.settings),
           ),
         ),
-        child: _isWaitingForServer
-            ? Stack(
+        child: StreamBuilder(
+          stream: Provider.of<UserAndCollectionProvider>(context).clientEventsStream.stream,
+          builder: (context, snapshot) {
+            if (snapshot.data != ConnectionEvents.done)
+              return Stack(
                 children: [
                   Center(
                     child: CupertinoActivityIndicator(),
@@ -157,7 +134,15 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
                     child: _content(),
                   )
                 ],
-              )
-            : _content());
+              );
+
+            return _content();
+          },
+        ));
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    Provider.of<UserAndCollectionProvider>(context, listen: false).loadPersonalSurveys();
   }
 }

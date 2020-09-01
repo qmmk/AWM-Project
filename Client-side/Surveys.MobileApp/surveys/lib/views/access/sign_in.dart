@@ -104,7 +104,7 @@ class _SignInPageState extends State<SignInPage> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),
                                   ModalRoute.withName(Routes.root));
-                            } on DioError catch (e) {
+                            } on DioError {
                               _incorrectLogin = true;
                               _formKey.currentState.validate();
                               _incorrectLogin = false;
