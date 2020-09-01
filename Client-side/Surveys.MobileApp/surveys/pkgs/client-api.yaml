@@ -6,7 +6,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://192.168.1.9:45455
+  - url: https://192.168.1.206:45455
 
 components:
   securitySchemes:
@@ -178,7 +178,7 @@ paths:
         400:
           description: "Incorrect data"
           content:
-            text/plain:
+            application/json:
               schema:
                 type: string
 
@@ -305,3 +305,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/OpenapiSurveyDetail"
+
+  /service/deleteSurvey:
+    delete:
+      operationId: "deleteSurvey"
+      description: "Deletes a survey"
+      parameters:
+        - in: query
+          name: seid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."

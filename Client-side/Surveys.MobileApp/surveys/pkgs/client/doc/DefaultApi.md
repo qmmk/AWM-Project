@@ -5,11 +5,12 @@
 import 'package:survey_client/api.dart';
 ```
 
-All URIs are relative to *https://192.168.1.9:45455*
+All URIs are relative to *https://192.168.1.206:45455*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addSurveyEntity | 
+[**deleteSurvey**](DefaultApi.md#deleteSurvey) | **delete** /service/deleteSurvey | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
 [**getSurveyDetails**](DefaultApi.md#getSurveyDetails) | **get** /service/getSurveyDetails | 
 [**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadAllSurveysByUser | 
@@ -62,6 +63,48 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **deleteSurvey**
+> deleteSurvey(seid)
+
+
+
+Deletes a survey
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var seid = 56; // int | 
+
+try { 
+    api_instance.deleteSurvey(seid);
+} catch (e) {
+    print("Exception when calling DefaultApi->deleteSurvey: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **seid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **fastLogin**
 > LoginResponse fastLogin(fastLoginRequestBody)
 
@@ -101,7 +144,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json, text/plain
+ - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -54,11 +54,12 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://192.168.1.9:45455*
+All URIs are relative to *https://192.168.1.206:45455*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addSurveyEntity | 
+*DefaultApi* | [**deleteSurvey**](doc\/DefaultApi.md#deletesurvey) | **delete** /service/deleteSurvey | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
 *DefaultApi* | [**getSurveyDetails**](doc\/DefaultApi.md#getsurveydetails) | **get** /service/getSurveyDetails | 
 *DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadAllSurveysByUser | 

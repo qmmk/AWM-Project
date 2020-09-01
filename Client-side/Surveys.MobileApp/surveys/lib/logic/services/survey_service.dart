@@ -70,4 +70,9 @@ class SurveyService extends BaseService {
     Response<List<OpenapiSurveyDetail>> response = await client.getDefaultApi().getSurveyDetails(seid: seid);
     return response.data.map(_convertOpenapiSurveyDetailToSurveyDetail).toList();
   }
+
+  Future deleteSurvey({@required int seid}) async {
+    var response = await client.getDefaultApi().deleteSurvey(seid: seid);
+    return response.data;
+  }
 }

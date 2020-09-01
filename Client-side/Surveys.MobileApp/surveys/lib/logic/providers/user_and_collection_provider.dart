@@ -81,4 +81,14 @@ class UserAndCollectionProvider extends BaseProvider {
 
     notifyListeners();
   }
+
+  Future<void> deleteSurvey({@required int index, @required bool isPersonal}) async {
+    await _surveyService.deleteSurvey(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+    if (isPersonal)
+      _userSurveys.removeAt(index);
+    else
+      _othersSurveys.removeAt(index);
+
+    notifyListeners();
+  }
 }

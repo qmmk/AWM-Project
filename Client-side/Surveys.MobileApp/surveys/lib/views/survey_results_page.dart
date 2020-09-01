@@ -74,7 +74,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          border: null,
+          border: null, 
           backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),

@@ -20,6 +20,74 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
     super.initState();
   }
 
+  void _loadMenu(int index) {
+    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+            title: Text("${userProvider.userSurveys[index].title}"),
+            actions: [
+              CupertinoActionSheetAction(
+                  onPressed: () async {
+                    if (userProvider.userSurveys[index].details == null) {
+                      setState(() {
+                        _isWaitingForServer = true;
+                      });
+                    }
+                    await userProvider.loadDetails(index: index, isPersonal: true);
+                    setState(() {
+                      _isWaitingForServer = false;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(Routes.createSurvey,
+                        arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
+                      if (survey != null) userProvider.modifySurvey(index, survey);
+                    });
+                  },
+                  child: Text("Edit")),
+              CupertinoActionSheetAction(
+                  isDestructiveAction: true,
+                  onPressed: () async {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                              title: Text("Are you sure to remove this survey?"),
+                              content: Text("This will also remove its entries and votes"),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  child: Text("Yes"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    child: Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    })
+                              ],
+                            )).then((removeIt) async {
+                      if (removeIt ?? false) {
+                        await userProvider.deleteSurvey(index: index, isPersonal: true);
+                        Navigator.of(context).pop();
+                      }
+                    });
+                  },
+                  child: Text("Remove"))
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",
+                  style: TextStyle(
+                    color: Colors.red,
+                  )),
+            )));
+  }
+
   Widget _surveyElement(int index) {
     UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
 
@@ -38,19 +106,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> {
         Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.userSurveys[index]});
       },
       onLongPress: () async {
-        if (userProvider.userSurveys[index].details == null) {
-          setState(() {
-            _isWaitingForServer = true;
-          });
-        }
-        await userProvider.loadDetails(index: index, isPersonal: true);
-        setState(() {
-          _isWaitingForServer = false;
-        });
-        Navigator.of(context)
-            .pushNamed(Routes.createSurvey, arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
-          if (survey != null) userProvider.modifySurvey(index, survey);
-        });
+        _loadMenu(index);
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
