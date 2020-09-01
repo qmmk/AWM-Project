@@ -13,7 +13,7 @@ class SurveyService extends BaseService {
       description: openapiSurvey.descr,
       isOpen: openapiSurvey.isOpen == "1",
       title: openapiSurvey.title,
-      customField03: openapiSurvey.customField03,
+      pid: openapiSurvey.customField03,
       details: openapiSurvey.surveyDetails?.map(_convertOpenapiSurveyDetailToSurveyDetail)?.toList());
 
   OpenapiSurveyDetail _convertSurveyDetailToOpenapiSurveyDetail(SurveyDetail surveyDetail) {
@@ -60,7 +60,7 @@ class SurveyService extends BaseService {
       ..descr = survey.description
       ..surveyDetails = listBuilder
       ..isOpen = survey.isOpen ? "1" : "0"
-      ..customField03 = survey.customField03;
+      ..customField03 = survey.pid;
     openapiSurvey = openapiSurveyBuilder.build();
     Response<List<OpenapiSurvey>> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
     return _convertOpenapiSurveyToSurvey(response.data[0]);

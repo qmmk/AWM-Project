@@ -71,9 +71,9 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> createSurvey({@required Survey survey}) async {
-    survey.customField03 = _user.pid.toString();
+    survey.pid = _user.pid.toString();
     Survey created = await _surveyService.createSurvey(survey: survey);
-    _userSurveys.add(created);
+    if (_userSurveys != null) _userSurveys.add(created);
     notifyListeners();
   }
 
