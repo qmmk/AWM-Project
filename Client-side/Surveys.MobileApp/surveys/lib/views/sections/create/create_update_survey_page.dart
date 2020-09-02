@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 
@@ -148,17 +149,29 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
               ],
             ),
           ),
-          /*CupertinoButton.filled(
-              child: Text("Confirm"),
-              onPressed: () {
-                _survey
-                  ..title = _titleController.text
-                  ..description = _descriptionController.text
-                  ..isOpen = _open;
-                if (_isModifying) Navigator.of(context).pop(_survey);
-              }),*/
         ],
       );
+
+  void _submit() async {
+    if (!_formKey.currentState.validate()) return;
+
+    _survey
+      ..title = _titleController.text
+      ..description = _descriptionController.text
+      ..isOpen = _open;
+
+    if (_isModifying) {
+      Navigator.of(context).pop(_survey);
+      return;
+    }
+
+    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    await userProvider.createSurvey(survey: _survey);
+
+    _titleController.text = "";
+    _descriptionController.text = "";
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,25 +183,19 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
           middle: widget.survey != null ? Text("Update survey") : Text("Create a survey"),
           border: null,
           trailing: GestureDetector(
-              onTap: () async {
-                if (!_formKey.currentState.validate()) return;
-
-                _survey
-                  ..title = _titleController.text
-                  ..description = _descriptionController.text
-                  ..isOpen = _open;
-
+              onTap: () {
                 if (_isModifying) {
-                  Navigator.of(context).pop(_survey);
-                  return;
-                }
-
-                UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
-                await userProvider.createSurvey(survey: _survey);
-
-                _titleController.text = "";
-                _descriptionController.text = "";
-                FocusScope.of(context).requestFocus(FocusNode());
+                  MenuUtils.showConfirmationDialog(
+                          context: context,
+                          title: "Are you sure to modify this survey?",
+                          subtitle: "This will remove all the votes registered so far")
+                      .then((yes) async {
+                    if (yes) {
+                      _submit();
+                    }
+                  });
+                } else
+                  _submit();
               },
               child: Icon(
                 CupertinoIcons.check_mark,

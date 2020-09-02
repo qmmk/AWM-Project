@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
+import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class PersonalAreaPage extends StatefulWidget {
@@ -40,27 +41,11 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
               CupertinoActionSheetAction(
                   isDestructiveAction: true,
                   onPressed: () async {
-                    showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                              title: Text("Are you sure to remove this survey?"),
-                              content: Text("This will also remove its entries and votes"),
-                              actions: <Widget>[
-                                CupertinoDialogAction(
-                                  isDestructiveAction: true,
-                                  child: Text("Yes"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                    isDefaultAction: true,
-                                    child: Text("No"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop(false);
-                                    })
-                              ],
-                            )).then((removeIt) async {
+                    MenuUtils.showConfirmationDialog(
+                            context: context,
+                            title: "Are you sure to remove this survey?",
+                            subtitle: "This will remove also its entries and the registered votes")
+                        .then((removeIt) async {
                       if (removeIt ?? false) {
                         await userProvider.removeSurvey(index: index, isPersonal: true);
                         Navigator.of(context).pop();
