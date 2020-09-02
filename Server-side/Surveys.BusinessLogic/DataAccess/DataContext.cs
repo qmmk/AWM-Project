@@ -536,66 +536,79 @@ namespace Surveys.BusinessLogic.DataAccess
         {
             ServiceResponse<List<SurveyDetail>> final = new ServiceResponse<List<SurveyDetail>>();
             final.Data = new List<SurveyDetail>();
+
+            DataTable dtDetails = new DataTable("SurveyDetailType");
+            DataColumn dcSEID = new DataColumn("SEID", typeof(int));
+            DataColumn dcSDID = new DataColumn("SDID", typeof(int));
+            DataColumn dcDescr = new DataColumn("Descr", typeof(string));
+            DataColumn dcCustomField01 = new DataColumn("CustomField01", typeof(string));
+            DataColumn dcCustomField02 = new DataColumn("CustomField02", typeof(string));
+            DataColumn dcCustomField03 = new DataColumn("CustomField03", typeof(string));
+            dtDetails.Columns.Add(dcSEID);
+            dtDetails.Columns.Add(dcSDID);
+            dtDetails.Columns.Add(dcDescr);
+            dtDetails.Columns.Add(dcCustomField01);
+            dtDetails.Columns.Add(dcCustomField02);
+            dtDetails.Columns.Add(dcCustomField03);
+
             foreach (SurveyDetail sd in lsd)
             {
-                ServiceResponse<SurveyDetail> sr = new ServiceResponse<SurveyDetail>();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("Command", "IU_SD"));
-                parameters.Add(new SqlParameter("SEID", sd.SEID));
-                parameters.Add(new SqlParameter("SDID", sd.SDID));
-                parameters.Add(new SqlParameter("Title", null));
-                parameters.Add(new SqlParameter("Descr", sd.Descr));
-                parameters.Add(new SqlParameter("CustomField01", sd.CustomField01));
-                parameters.Add(new SqlParameter("CustomField02", sd.CustomField02));
-                parameters.Add(new SqlParameter("CustomField03", sd.CustomField03));
-                parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
-                    ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+                dtDetails.Rows.Add(sd.SEID, sd.SDID, sd.Descr, sd.CustomField01, sd.CustomField02, sd.CustomField03);
+            }
 
-                try
+            ServiceResponse<SurveyDetail> sr = new ServiceResponse<SurveyDetail>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            SqlParameter _details = new SqlParameter("@SurveyDetails", dtDetails);
+            _details.SqlDbType = SqlDbType.Structured;
+            _details.TypeName = "SurveyDetailType";
+
+            parameters.Add(new SqlParameter("Command", "IU_SD"));
+            parameters.Add(_details);
+
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyDetail), typeof(Int32));
+
+                if (result.Count == 2)
                 {
-                    var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyDetail), typeof(Int32));
-                    
-                    if(result.Count == 2)
+                    switch (result[1][0])
                     {
-                        switch (result[1][0])
-                        {
-                            case 0:
-                                sr.Data = result[0].Select(x => new SurveyDetail
-                                {
-                                    SEID = x.SEID,
-                                    SDID = x.SDID,
-                                    Descr = x.Descr,
-                                    CustomField01 = x.CustomField01,
-                                    CustomField02 = x.CustomField02,
-                                    CustomField03 = x.CustomField03
-                                }).ToList().FirstOrDefault();
-
-                                final.Data.Add(sr.Data);
-                                break;
-                            case 8:
-                                final.Data = null;
-                                final.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
-                                final.Message = string.Format("Survey {0} not exists", sd.SEID);
-                                final.Success = false;
-                                return final;
-                            default:
-                                final.Data = null;
-                                final.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                                final.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", sd.SEID);
-                                final.Success = false;
-                                return final;
-                        }
+                        case 0:
+                            final.Data = result[0].Select(x => new SurveyDetail
+                            {
+                                SEID = x.SEID,
+                                SDID = x.SDID,
+                                Descr = x.Descr,
+                                CustomField01 = x.CustomField01,
+                                CustomField02 = x.CustomField02,
+                                CustomField03 = x.CustomField03
+                            }).ToList();
+                            break;
+                        case 8:
+                            final.Data = null;
+                            final.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                            final.Message = string.Format("Survey {0} not exists", final.Data.FirstOrDefault().SEID);
+                            final.Success = false;
+                            return final;
+                        default:
+                            final.Data = null;
+                            final.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                            final.Message = string.Format("Error occur during insert or update {0} Survey Entity Id", final.Data.FirstOrDefault().SEID);
+                            final.Success = false;
+                            return final;
                     }
                 }
-                catch (Exception ex)
-                {
-                    final.Data = null;
-                    final.Error = DbErrorCode.EXCEPTION.ToString();
-                    final.Message = ex.Message;
-                    final.Success = false;
-                }
-
-                //final.Data.Add(sr.Data);
+            }
+            catch (Exception ex)
+            {
+                final.Data = null;
+                final.Error = DbErrorCode.EXCEPTION.ToString();
+                final.Message = ex.Message;
+                final.Success = false;
             }
 
             final.Error = DbErrorCode.SUCCESS.ToString();
