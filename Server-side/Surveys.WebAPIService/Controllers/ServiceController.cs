@@ -127,22 +127,31 @@ namespace Surveys.WebAPIService.Controllers
         [HttpGet]
         public ActionResult LoadAllSurveys()
         {
-            var surveyItems = _manager.LoadAllSurveys();
-            return Ok(surveyItems.Data);
+            var res = _manager.LoadAllSurveys();
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpGet]
         public ActionResult LoadAllSurveysByUser([FromQuery] int pid)
         {
-            var surveyItems = _manager.LoadAllSurveysByUser(pid);
-            return Ok(surveyItems.Data);
+            var res = _manager.LoadAllSurveysByUser(pid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpGet]
         public ActionResult LoadAllSurveysExceptUser([FromQuery] int pid)
         {
-            var surveyItems = _manager.LoadAllSurveysExceptUser(pid);
-            return Ok(surveyItems.Data);
+            var res = _manager.LoadAllSurveysExceptUser(pid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpDelete]
@@ -158,29 +167,41 @@ namespace Surveys.WebAPIService.Controllers
         [HttpGet]
         public ActionResult GetSurveyDetails([FromQuery] int seid)
         {
-            var surveyDetails = _manager.GetSurveyDetails(seid);
-            return Ok(surveyDetails.Data);
+            var res = _manager.GetSurveyDetails(seid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpPost]
         public ActionResult AddSurveyEntity([FromBody] List<SurveyEntity> lse)
         {
             var res = _manager.InsertOrUpdateSurveyEntity(lse);
-            return Ok(res.Data);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpPost]
         public ActionResult AddSurveyDetails([FromBody] List<SurveyDetail> lsd)
         {
             var res = _manager.InsertOrUpdateSurveyDetail(lsd);
-            return Ok(res.Success);
+            if (res.Success)
+                return Ok(res.Message);
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpPost]
         public ActionResult InsertActualVote([FromBody] List<ActualVote> lav)
         {
             var res = _manager.InsertActualVote(lav);
-            return Ok(res.Success);
+            if (res.Success)
+                return Ok(res.Message);
+            else
+                return BadRequest(res.Message);
         }
 
         public class OnlyPidParameter 
@@ -195,7 +216,7 @@ namespace Surveys.WebAPIService.Controllers
             if (res.Success)
                 return Ok(res.Message);
             else
-                return Ok(res.Message);
+                return BadRequest(res.Message);
         }
         #endregion
     }

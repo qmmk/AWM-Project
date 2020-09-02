@@ -1,25 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
 using Microsoft.Data.SqlClient;
-using System.Dynamic;
-using System.IO;
 using System.Linq;
 using System.Data;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using System.ComponentModel;
-using Surveys.BusinessLogic.Core;
 using static Surveys.BusinessLogic.Core.EnumTypes;
-using System.Reflection.Emit;
-using System.Dynamic;
-using System.Runtime.CompilerServices;
 
 namespace Surveys.BusinessLogic.DataAccess
 {
