@@ -15,6 +15,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(OpenapiSurvey.serializer)
       ..add(OpenapiSurveyDetail.serializer)
       ..add(OpenapiUser.serializer)
+      ..add(OpenapiVote.serializer)
       ..add(RefreshToken.serializer)
       ..addBuilderFactory(
           const FullType(

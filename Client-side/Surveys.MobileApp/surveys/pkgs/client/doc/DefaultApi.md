@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**deleteSurvey**](DefaultApi.md#deleteSurvey) | **delete** /service/deleteSurvey | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
 [**getSurveyDetails**](DefaultApi.md#getSurveyDetails) | **get** /service/getSurveyDetails | 
+[**insertActualVote**](DefaultApi.md#insertActualVote) | **post** /service/insertActualVote | 
 [**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadAllSurveysByUser | 
 [**loadAllSurveysExceptUser**](DefaultApi.md#loadAllSurveysExceptUser) | **get** /service/loadAllSurveysExceptUser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
@@ -188,6 +189,48 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **insertActualVote**
+> insertActualVote(openapiVote)
+
+
+
+Inserts a vote
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var openapiVote = [new List&lt;OpenapiVote&gt;()]; // List<OpenapiVote> | votes
+
+try { 
+    api_instance.insertActualVote(openapiVote);
+} catch (e) {
+    print("Exception when calling DefaultApi->insertActualVote: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **openapiVote** | [**List&lt;OpenapiVote&gt;**](OpenapiVote.md)| votes | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

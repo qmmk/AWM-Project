@@ -3,9 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
+import 'package:survey_client/model/openapi_vote.dart';
 import 'package:surveys/logic/services/base_service.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
+import 'package:surveys/models/vote_model.dart';
 
 class SurveyService extends BaseService {
   Survey _convertOpenapiSurveyToSurvey(OpenapiSurvey openapiSurvey) => Survey(
@@ -13,7 +15,7 @@ class SurveyService extends BaseService {
       description: openapiSurvey.descr,
       isOpen: openapiSurvey.isOpen == "1",
       title: openapiSurvey.title,
-      pid: openapiSurvey.customField03,
+      userId: openapiSurvey.customField03,
       details: openapiSurvey.surveyDetails?.map(_convertOpenapiSurveyDetailToSurveyDetail)?.toList());
 
   OpenapiSurveyDetail _convertSurveyDetailToOpenapiSurveyDetail(SurveyDetail surveyDetail) {
@@ -27,6 +29,18 @@ class SurveyService extends BaseService {
       ..customField03 = surveyDetail.customField03;
 
     return openapiSurveyDetailBuilder.build();
+  }
+
+  OpenapiVote _convertVoteToOpenapiVote(Vote vote) {
+    OpenapiVoteBuilder openapiVoteBuilder = OpenapiVoteBuilder();
+    openapiVoteBuilder
+      ..avid = vote.id
+      ..sdid = vote.surveyDetailId
+      ..pid = vote.userId
+      ..customField01 = vote.customField01
+      ..customField02 = vote.customField02
+      ..customField03 = vote.customField03;
+    return openapiVoteBuilder.build();
   }
 
   SurveyDetail _convertOpenapiSurveyDetailToSurveyDetail(OpenapiSurveyDetail openapiSurveyDetail) => SurveyDetail(
@@ -60,7 +74,7 @@ class SurveyService extends BaseService {
       ..descr = survey.description
       ..surveyDetails = listBuilder
       ..isOpen = survey.isOpen ? "1" : "0"
-      ..customField03 = survey.pid;
+      ..customField03 = survey.userId;
     openapiSurvey = openapiSurveyBuilder.build();
     Response<List<OpenapiSurvey>> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
     return _convertOpenapiSurveyToSurvey(response.data[0]);
@@ -73,6 +87,17 @@ class SurveyService extends BaseService {
 
   Future deleteSurvey({@required int seid}) async {
     var response = await client.getDefaultApi().deleteSurvey(seid: seid);
+    return response.data;
+  }
+
+  Future registerVote({@required int sdid, @required int pid}) async {
+    OpenapiVote openapiVote = OpenapiVote();
+    OpenapiVoteBuilder openapiVoteBuilder = openapiVote.toBuilder();
+    openapiVoteBuilder
+      ..sdid = sdid
+      ..pid = pid;
+    openapiVote = openapiVoteBuilder.build();
+    var response = await client.getDefaultApi().insertActualVote([openapiVote]);
     return response.data;
   }
 }

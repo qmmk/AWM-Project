@@ -130,6 +130,24 @@ components:
           items:
             $ref: "#/components/schemas/OpenapiSurveyDetail"
 
+    OpenapiVote:
+      type: object
+      properties:
+        avid:
+          type: integer
+        pid:
+          type: integer
+        sdid:
+          type: integer
+        registeredOn:
+          type: string
+        customField01:
+          type: string
+        customField02:
+          type: string
+        customField03:
+          type: string
+
 paths:
   /service/login:
     post:
@@ -315,6 +333,23 @@ paths:
           name: seid
           schema:
             type: integer
+      responses:
+        200:
+          description: "Success."
+
+  /service/insertActualVote:
+    post:
+      operationId: "insertActualVote"
+      description: "Inserts a vote"
+      requestBody:
+        description: "votes"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/OpenapiVote"
       responses:
         200:
           description: "Success."

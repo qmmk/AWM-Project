@@ -8,7 +8,7 @@ class Survey {
   bool isOpen; //
   List<SurveyDetail> details;
   String customField01;
-  String pid; //should be CustomField03 in requests
+  String userId; //should be CustomField03 in requests
 
-  Survey({@required this.id, this.title, this.description, this.isOpen, this.details, this.pid});
+  Survey({@required this.id, this.title, this.description, this.isOpen, this.details, this.userId});
 }

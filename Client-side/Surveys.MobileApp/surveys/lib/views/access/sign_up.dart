@@ -102,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
 
                               Provider.of<UserAndCollectionProvider>(context, listen: false)
-                                  .setUser(User(pid: response.pid, username: username));
+                                  .setUser(User(id: response.pid, username: username));
 
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),

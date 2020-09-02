@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/models/survey_model.dart';
 
 class VotePage extends StatefulWidget {
@@ -62,10 +64,21 @@ class _VotePageState extends State<VotePage> {
           trailing: _notAccessible || _noEntries
               ? Container()
               : GestureDetector(
+                  onTap: () async {
+                    UserAndCollectionProvider userAndCollectionProvider =
+                        Provider.of<UserAndCollectionProvider>(context, listen: false);
+
+                    int surveyIndex =
+                        userAndCollectionProvider.othersSurveys.indexWhere((element) => element.id == widget.survey.id);
+
+                    bool success =
+                        await userAndCollectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
+                    if (success) Navigator.of(context).pop();
+                  },
                   child: Icon(
-                  CupertinoIcons.check_mark,
-                  size: 43,
-                )),
+                    CupertinoIcons.check_mark,
+                    size: 43,
+                  )),
         ),
         child: _notAccessible || _noEntries
             ? Center(
@@ -76,9 +89,9 @@ class _VotePageState extends State<VotePage> {
                       CupertinoIcons.flag,
                       size: 70,
                     ),
-                    Text(_noEntries
-                        ? "Sorry, there are no entries for this survey!"
-                        : "Sorry, this survey hasn't already been opened!")
+                    Text(_notAccessible
+                        ? "Sorry, this survey hasn't already been opened!"
+                        : "Sorry, there are no entries for this survey!")
                   ],
                 ),
               )

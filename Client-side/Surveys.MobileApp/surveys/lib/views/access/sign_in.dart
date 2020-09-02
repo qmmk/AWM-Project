@@ -100,7 +100,7 @@ class _SignInPageState extends State<SignInPage> {
                               HttpUtils.registerToken(response.accessToken);
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
                               Provider.of<UserAndCollectionProvider>(context, listen: false)
-                                  .setUser(User(pid: response.pid, username: response.userName));
+                                  .setUser(User(id: response.pid, username: response.userName));
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),
                                   ModalRoute.withName(Routes.root));

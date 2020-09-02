@@ -1,7 +1,7 @@
 class User {
-  int pid;
+  int id;
   String username;
   String roleID;
 
-  User({this.pid, this.username, this.roleID});
+  User({this.id, this.username, this.roleID});
 }

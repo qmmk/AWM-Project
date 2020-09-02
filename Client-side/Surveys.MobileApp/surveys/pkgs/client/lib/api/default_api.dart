@@ -10,6 +10,7 @@ import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/logout_response.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:survey_client/model/openapi_vote.dart';
 import 'package:survey_client/model/openapi_user.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
@@ -204,6 +205,43 @@ class DefaultApi {
                 extra: response.extra,
             );
             });
+            }
+        /// 
+        ///
+        /// Inserts a vote
+        Future<Response>insertActualVote(List<OpenapiVote> openapiVote,{ CancelToken cancelToken, Map<String, String> headers,}) async {
+
+        String _path = "/service/insertActualVote";
+
+        Map<String, dynamic> queryParams = {};
+        Map<String, String> headerParams = Map.from(headers ?? {});
+        dynamic bodyData;
+
+        queryParams.removeWhere((key, value) => value == null);
+        headerParams.removeWhere((key, value) => value == null);
+
+        List<String> contentTypes = ["application/json"];
+
+
+            final type = const FullType(BuiltList, const [const FullType(OpenapiVote)]);
+            var serializedBody = _serializers.serialize(BuiltList<OpenapiVote>.from(openapiVote), specifiedType: type);
+            var jsonopenapiVote = json.encode(serializedBody);
+            bodyData = jsonopenapiVote;
+
+            return _dio.request(
+            _path,
+            queryParameters: queryParams,
+            data: bodyData,
+            options: Options(
+            method: 'post'.toUpperCase(),
+            headers: headerParams,
+            extra: {
+                'secure': [],
+            },
+            contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
+            ),
+            cancelToken: cancelToken,
+            );
             }
         /// 
         ///

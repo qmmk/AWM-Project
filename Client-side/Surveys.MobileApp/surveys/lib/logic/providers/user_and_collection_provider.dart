@@ -34,7 +34,7 @@ class UserAndCollectionProvider extends BaseProvider {
 
   Future<bool> logout() async {
     try {
-      await _accessService.logout(pid: _user.pid);
+      await _accessService.logout(pid: _user.id);
       await HttpUtils.invalidateTokens();
       _user = null;
       _userSurveys = null;
@@ -48,7 +48,7 @@ class UserAndCollectionProvider extends BaseProvider {
     if (_userSurveys != null) return;
 
     loading();
-    _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.pid);
+    _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.id);
     done();
     notifyListeners();
   }
@@ -57,7 +57,7 @@ class UserAndCollectionProvider extends BaseProvider {
     if (_othersSurveys != null) return;
 
     loading();
-    _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.pid);
+    _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.id);
     done();
     notifyListeners();
   }
@@ -71,7 +71,7 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> createSurvey({@required Survey survey}) async {
-    survey.pid = _user.pid.toString();
+    survey.userId = _user.id.toString();
     Survey created = await _surveyService.createSurvey(survey: survey);
     if (_userSurveys != null) _userSurveys.add(created);
     notifyListeners();
@@ -100,5 +100,20 @@ class UserAndCollectionProvider extends BaseProvider {
       _othersSurveys.removeAt(index);
     done();
     notifyListeners();
+  }
+
+  Future<bool> registerVote({@required int index, @required detailsIndex}) async {
+    try {
+      loading();
+      await _surveyService.registerVote(sdid: _othersSurveys[index].details[detailsIndex].id, pid: _user.id);
+      //should also register that the user has actually voted for that survey
+      done();
+      notifyListeners();
+      return true;
+    } on DioError {
+      done();
+      notifyListeners();
+      return false;
+    }
   }
 }
