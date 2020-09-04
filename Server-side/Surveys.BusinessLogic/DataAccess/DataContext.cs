@@ -173,31 +173,21 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManagePrincipal", parameters.ToArray(), typeof(Principal), typeof(Int32));
 
-                if(result.Count == 2)
+                if(result.Count == 2 && result[1][0] == 0)
                 {
-                    if (result[1][0] == 0)
+                    sr.Data = result[0].Select(x => new Principal
                     {
-                        sr.Data = result[0].Select(x => new Principal
-                        {
-                            PID = x.PID,
-                            UserName = x.UserName,
-                            CustomField01 = x.CustomField01,
-                            CustomField02 = x.CustomField02,
-                            CustomField03 = x.CustomField03,
-                            RoleID = x.RoleID
-                        }).ToList().FirstOrDefault();
+                        PID = x.PID,
+                        UserName = x.UserName,
+                        CustomField01 = x.CustomField01,
+                        CustomField02 = x.CustomField02,
+                        CustomField03 = x.CustomField03,
+                        RoleID = x.RoleID
+                    }).ToList().FirstOrDefault();
 
-                        sr.Error = DbErrorCode.SUCCESS.ToString();
-                        sr.Message = "Returned the user just created.";
-                        sr.Success = true;
-                    }
-                    else if (result[1][0] == 5)
-                    {
-                        sr.Data = null;
-                        sr.Error = DbErrorCode.USER_ALREADY_EXISTS.ToString();
-                        sr.Message = "The user already exists.";
-                        sr.Success = true;
-                    }
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = "Returned the user just created.";
+                    sr.Success = true;
                 }
             }
             catch(Exception ex)
@@ -817,6 +807,84 @@ namespace Surveys.BusinessLogic.DataAccess
             catch (Exception ex)
             {
                 sr.Data = (int)DbErrorCode.EXCEPTION;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
+
+        public ServiceResponse<List<int>> GetUserSubmittedSurveys(int pid)
+        {
+            ServiceResponse<List<int>> sr = new ServiceResponse<List<int>>();
+            sr.Data = new List<int>();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("Command", "GET_SS"));
+            parameters.Add(new SqlParameter("PID", pid));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManagePrincipal", parameters.ToArray(), typeof(Chart), typeof(Int32));
+
+                if (result.Count == 2 && result[1][0] == 0)
+                {
+                    result[0].AsEnumerable().ToList().ForEach(x => {
+                        sr.Data.Add(x.SEID);
+                    });
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = string.Format("All surveys already voted from user pid {0}.", pid);
+                    sr.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
+
+        public ServiceResponse<List<ChartMobile>> GetActualVotes(int seid)
+        {
+            ServiceResponse<List<ChartMobile>> sr = new ServiceResponse<List<ChartMobile>>();
+
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Command", "GET_RTD_API"));
+            parameters.Add(new SqlParameter("PID", null));
+            parameters.Add(new SqlParameter("SDID", null));
+            parameters.Add(new SqlParameter("SEID", seid));
+            parameters.Add(new SqlParameter("CustomField01", null));
+            parameters.Add(new SqlParameter("CustomField02", null));
+            parameters.Add(new SqlParameter("CustomField03", null));
+            parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
+                ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
+
+            try
+            {
+                var result = ExecuteMultipleResults("dbo.usp_ManageActualVote", parameters.ToArray(), typeof(ChartMobile), typeof(Int32));
+
+                if (result.Count == 2 && result[1][0] == 0)
+                {
+                    sr.Data = result[0].Select(x => new ChartMobile
+                    {
+                          SDID = x.SDID,
+                          votes = x.votes
+                    }).ToList();
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = "Get real time data of survey";
+                    sr.Success = true;                 
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
                 sr.Error = DbErrorCode.EXCEPTION.ToString();
                 sr.Message = ex.Message;
                 sr.Success = false;

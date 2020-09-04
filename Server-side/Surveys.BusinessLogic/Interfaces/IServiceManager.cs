@@ -34,5 +34,9 @@ namespace Surveys.BusinessLogic.Interfaces
         ServiceResponse<int> Logout(int pid);
 
         ServiceResponse<int> DeleteSurvey(int seid);
+
+        ServiceResponse<List<int>> GetUserSubmittedSurveys(int pid);
+
+        ServiceResponse<List<ChartMobile>> GetActualVotes(int seid);
     }
 }

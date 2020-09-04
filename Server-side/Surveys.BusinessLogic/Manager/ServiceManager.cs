@@ -125,6 +125,16 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.DeleteSurvey(seid);
         }
+
+        public ServiceResponse<List<int>> GetUserSubmittedSurveys(int pid)
+        {
+            return _context.GetUserSubmittedSurveys(pid);
+        }
+
+        public ServiceResponse<List<ChartMobile>> GetActualVotes(int seid)
+        {
+            return _context.GetActualVotes(seid);
+        }
         #endregion
     }
 }

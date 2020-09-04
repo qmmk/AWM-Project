@@ -21,4 +21,11 @@ namespace Surveys.BusinessLogic.DataAccess
         public string Descr { get; set; }
         public int count { get; set; }
     }
+
+    public class ChartMobile
+    {
+        public int SDID { get; set; }
+        public int votes { get; set; }
+    }
+
 }

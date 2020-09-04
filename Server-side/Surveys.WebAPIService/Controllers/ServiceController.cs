@@ -218,6 +218,26 @@ namespace Surveys.WebAPIService.Controllers
             else
                 return BadRequest(res.Message);
         }
+
+        [HttpGet]
+        public ActionResult GetUserSubmittedSurveys ([FromQuery] int pid)
+        {
+            var res = _manager.GetUserSubmittedSurveys(pid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
+        }
+
+        [HttpGet]
+        public ActionResult GetActualVotes ([FromQuery] int seid)
+        {
+            var res = _manager.GetActualVotes(seid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
+        }
         #endregion
     }
 }
