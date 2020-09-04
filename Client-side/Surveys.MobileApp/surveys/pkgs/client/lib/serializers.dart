@@ -15,6 +15,7 @@ import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
 import 'package:survey_client/model/openapi_user.dart';
 import 'package:survey_client/model/openapi_vote.dart';
+import 'package:survey_client/model/openapi_vote_amount.dart';
 import 'package:survey_client/model/refresh_token.dart';
 
 
@@ -30,6 +31,7 @@ OpenapiSurvey,
 OpenapiSurveyDetail,
 OpenapiUser,
 OpenapiVote,
+OpenapiVoteAmount,
 RefreshToken,
 
 ])
@@ -63,6 +65,9 @@ const FullType(BuiltList, const [const FullType(OpenapiUser)]),
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(OpenapiVote)]),
 () => new ListBuilder<OpenapiVote>())
+..addBuilderFactory(
+const FullType(BuiltList, const [const FullType(OpenapiVoteAmount)]),
+() => new ListBuilder<OpenapiVoteAmount>())
 ..addBuilderFactory(
 const FullType(BuiltList, const [const FullType(RefreshToken)]),
 () => new ListBuilder<RefreshToken>())

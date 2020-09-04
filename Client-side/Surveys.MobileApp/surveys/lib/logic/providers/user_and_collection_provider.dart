@@ -7,6 +7,7 @@ import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/user_model.dart';
+import 'package:surveys/models/vote_amount_model.dart';
 
 class UserAndCollectionProvider extends BaseProvider {
   AccessService _accessService = AccessService();
@@ -120,4 +121,12 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   bool hasAlreadyVotedFor({@required int index}) => _alreadySubmittedSurveysIds.contains(_othersSurveys[index].id);
+
+  Future<List<VoteAmount>> getSurveyVotes({@required int index, @required bool isPersonal}) async {
+    loading();
+    List<VoteAmount> votes =
+        await _surveyService.getSurveyVotes(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+    done();
+    return votes;
+  }
 }

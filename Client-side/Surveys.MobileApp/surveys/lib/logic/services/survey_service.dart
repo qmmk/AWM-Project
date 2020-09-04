@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
 import 'package:survey_client/model/openapi_vote.dart';
+import 'package:survey_client/model/openapi_vote_amount.dart';
 import 'package:surveys/logic/services/base_service.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
+import 'package:surveys/models/survey_vote_model.dart';
+import 'package:surveys/models/vote_amount_model.dart';
 import 'package:surveys/models/vote_model.dart';
 
 class SurveyService extends BaseService {
@@ -104,5 +107,14 @@ class SurveyService extends BaseService {
   Future<List<int>> getUserSubmittedSurveys({@required int pid}) async {
     Response<List<int>> response = await client.getDefaultApi().getUserSubmittedSurveys(pid: pid);
     return response.data;
+  }
+
+  VoteAmount _convertOpenapiVoteAmountToVoteAmount(OpenapiVoteAmount openapiVoteAmount) => VoteAmount(
+      amount: openapiVoteAmount.votes,
+      vote: SurveyVote(id: null, surveyDetailId: openapiVoteAmount.sdid, surveyId: null));
+
+  Future<List<VoteAmount>> getSurveyVotes({@required int seid}) async {
+    Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
+    return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
   }
 }

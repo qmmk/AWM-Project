@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addSurveyEntity | 
 [**deleteSurvey**](DefaultApi.md#deleteSurvey) | **delete** /service/deleteSurvey | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
+[**getActualVotes**](DefaultApi.md#getActualVotes) | **get** /service/getActualVotes | 
 [**getSurveyDetails**](DefaultApi.md#getSurveyDetails) | **get** /service/getSurveyDetails | 
 [**getUserSubmittedSurveys**](DefaultApi.md#getUserSubmittedSurveys) | **get** /service/getUserSubmittedSurveys | 
 [**insertActualVote**](DefaultApi.md#insertActualVote) | **post** /service/insertActualVote | 
@@ -146,6 +147,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getActualVotes**
+> List<OpenapiVoteAmount> getActualVotes(seid)
+
+
+
+Gets all the votes for a specified survey
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var seid = 56; // int | 
+
+try { 
+    var result = api_instance.getActualVotes(seid);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->getActualVotes: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **seid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+[**List<OpenapiVoteAmount>**](OpenapiVoteAmount.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -61,6 +61,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addSurveyEntity | 
 *DefaultApi* | [**deleteSurvey**](doc\/DefaultApi.md#deletesurvey) | **delete** /service/deleteSurvey | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
+*DefaultApi* | [**getActualVotes**](doc\/DefaultApi.md#getactualvotes) | **get** /service/getActualVotes | 
 *DefaultApi* | [**getSurveyDetails**](doc\/DefaultApi.md#getsurveydetails) | **get** /service/getSurveyDetails | 
 *DefaultApi* | [**getUserSubmittedSurveys**](doc\/DefaultApi.md#getusersubmittedsurveys) | **get** /service/getUserSubmittedSurveys | 
 *DefaultApi* | [**insertActualVote**](doc\/DefaultApi.md#insertactualvote) | **post** /service/insertActualVote | 
@@ -82,6 +83,7 @@ Class | Method | HTTP request | Description
  - [OpenapiSurveyDetail](doc\/OpenapiSurveyDetail.md)
  - [OpenapiUser](doc\/OpenapiUser.md)
  - [OpenapiVote](doc\/OpenapiVote.md)
+ - [OpenapiVoteAmount](doc\/OpenapiVoteAmount.md)
  - [RefreshToken](doc\/RefreshToken.md)
 
 

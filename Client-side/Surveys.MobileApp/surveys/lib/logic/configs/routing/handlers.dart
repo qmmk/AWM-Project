@@ -44,7 +44,11 @@ class Handlers {
                 ));
 
       case Routes.surveyResults:
-        return CupertinoPageRoute(builder: (context) => SurveyResultsPage(survey: arguments["survey"]));
+        return CupertinoPageRoute(
+            builder: (context) => SurveyResultsPage(
+                  survey: arguments["survey"],
+                  votes: arguments["votes"],
+                ));
 
       case Routes.vote:
         return CupertinoPageRoute(builder: (context) => VotePage(survey: arguments["survey"]));

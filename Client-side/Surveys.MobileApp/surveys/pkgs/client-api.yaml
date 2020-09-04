@@ -148,6 +148,14 @@ components:
         customField03:
           type: string
 
+    OpenapiVoteAmount:
+      type: object
+      properties:
+        sdid:
+          type: integer
+        votes:
+          type: integer
+
 paths:
   /service/login:
     post:
@@ -368,3 +376,22 @@ paths:
                 type: array
                 items:
                   type: integer
+
+  /service/getActualVotes:
+    get:
+      operationId: "getActualVotes"
+      description: "Gets all the votes for a specified survey"
+      parameters:
+        - in: query
+          name: seid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenapiVoteAmount'

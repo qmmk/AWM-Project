@@ -22,9 +22,15 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
       behavior: HitTestBehavior.translucent,
       onTap: () async {
         await userProvider.loadDetails(index: index, isPersonal: false);
-        Navigator.of(context).pushNamed(
-            userProvider.hasAlreadyVotedFor(index: index) ? Routes.surveyResults : Routes.vote,
-            arguments: {"survey": userProvider.othersSurveys[index]});
+        bool alreadyVoted = userProvider.hasAlreadyVotedFor(index: index);
+
+        if (alreadyVoted)
+          Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {
+            "survey": userProvider.othersSurveys[index],
+            "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false)
+          });
+        else
+          Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
