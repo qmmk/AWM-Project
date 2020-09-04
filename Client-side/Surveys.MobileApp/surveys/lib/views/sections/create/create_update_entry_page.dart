@@ -19,7 +19,7 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
   @override
   void initState() {
     super.initState();
-    _surveyDetail = widget.surveyDetail ?? SurveyDetail(id: 0, surveyId: -1);
+    _surveyDetail = widget.surveyDetail ?? SurveyDetail(id: null, surveyId: null);
     _descriptionController = widget.surveyDetail == null
         ? TextEditingController()
         : TextEditingController(text: widget.surveyDetail.description);

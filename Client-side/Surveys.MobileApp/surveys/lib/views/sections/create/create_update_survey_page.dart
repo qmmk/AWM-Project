@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
@@ -31,7 +33,14 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   void initState() {
     _isModifying = widget.survey != null;
     if (_isModifying) {
-      _survey = widget.survey;
+      _survey = Survey(
+          id: widget.survey.id,
+          description: widget.survey.description,
+          details: List.from(widget.survey.details),
+          isOpen: widget.survey.isOpen,
+          title: widget.survey.title,
+          userId: widget.survey.userId);
+
       if (_survey.details == null) _survey.details = [];
       _titleController.text = _survey.title;
       _descriptionController.text = _survey.description;
@@ -44,6 +53,8 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
     }
     super.initState();
   }
+
+  bool _hasModifiedEntries() => DeepCollectionEquality().equals(_survey.details, widget.survey.details);
 
   Widget _entryList() => SizedBox(
         height: 150,
@@ -125,7 +136,12 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                           setState(() {
                             int id = (_survey.details?.length ?? 0) == 0
                                 ? 0
-                                : _survey.details.map((e) => e.id).toList().reduce(max) + 1;
+                                : ((_isModifying ? widget.survey : _survey)
+                                        .details
+                                        .map((e) => e.id)
+                                        .toList()
+                                        .reduce(max)) +
+                                    1; // Use the original survey in order not to use an already-used id
 
                             _survey.details.add(SurveyDetail(
                                 id: id,
@@ -168,8 +184,11 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
     UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
     await userProvider.createSurvey(survey: _survey);
 
-    _titleController.text = "";
-    _descriptionController.text = "";
+    setState(() {
+      _titleController.text = "";
+      _descriptionController.text = "";
+      _survey.details = [];
+    });
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -184,11 +203,11 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
           border: null,
           trailing: GestureDetector(
               onTap: () {
-                if (_isModifying) {
+                if (_isModifying && _hasModifiedEntries()) {
                   MenuUtils.showConfirmationDialog(
                           context: context,
                           title: "Are you sure to modify this survey?",
-                          subtitle: "This will remove all the votes registered so far")
+                          subtitle: "All the votes for the removed entries will be deleted")
                       .then((yes) async {
                     if (yes) {
                       _submit();

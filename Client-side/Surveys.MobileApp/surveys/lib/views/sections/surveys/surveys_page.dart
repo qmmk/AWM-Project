@@ -22,8 +22,9 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
       behavior: HitTestBehavior.translucent,
       onTap: () async {
         await userProvider.loadDetails(index: index, isPersonal: false);
-        Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
-        //Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.othersSurveys[index]});
+        Navigator.of(context).pushNamed(
+            userProvider.hasAlreadyVotedFor(index: index) ? Routes.surveyResults : Routes.vote,
+            arguments: {"survey": userProvider.othersSurveys[index]});
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -69,6 +70,6 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Provider.of<UserAndCollectionProvider>(context, listen: false).loadOthersSurveys();
+    Provider.of<UserAndCollectionProvider>(context, listen: false).loadOthersAndAlreadySubmittedSurveys();
   }
 }

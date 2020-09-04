@@ -8,7 +8,6 @@ import 'package:built_value/serializer.dart';
 import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
-import 'package:survey_client/model/logout_response.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:survey_client/model/openapi_vote.dart';
 import 'package:survey_client/model/openapi_user.dart';
@@ -208,6 +207,55 @@ class DefaultApi {
             }
         /// 
         ///
+        /// Gets user submitted surveys
+        Future<Response<List<int>>>getUserSubmittedSurveys({ int pid,CancelToken cancelToken, Map<String, String> headers,}) async {
+
+        String _path = "/service/getUserSubmittedSurveys";
+
+        Map<String, dynamic> queryParams = {};
+        Map<String, String> headerParams = Map.from(headers ?? {});
+        dynamic bodyData;
+
+                queryParams[r'pid'] = pid;
+        queryParams.removeWhere((key, value) => value == null);
+        headerParams.removeWhere((key, value) => value == null);
+
+        List<String> contentTypes = [];
+
+
+
+            return _dio.request(
+            _path,
+            queryParameters: queryParams,
+            data: bodyData,
+            options: Options(
+            method: 'get'.toUpperCase(),
+            headers: headerParams,
+            extra: {
+                'secure': [],
+            },
+            contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
+            ),
+            cancelToken: cancelToken,
+            ).then((response) {
+
+                final FullType type = const FullType(BuiltList, const [const FullType(int)]);
+                BuiltList<int> dataList = _serializers.deserialize(response.data is String ? jsonDecode(response.data) : response.data, specifiedType: type);
+                var data = dataList.toList();
+
+            return Response<List<int>>(
+                data: data,
+                headers: response.headers,
+                request: response.request,
+                redirects: response.redirects,
+                statusCode: response.statusCode,
+                statusMessage: response.statusMessage,
+                extra: response.extra,
+            );
+            });
+            }
+        /// 
+        ///
         /// Inserts a vote
         Future<Response>insertActualVote(List<OpenapiVote> openapiVote,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
@@ -394,7 +442,7 @@ class DefaultApi {
         /// 
         ///
         /// Logout
-        Future<Response<LogoutResponse>>logout(OnlyPidParameter onlyPidParameter,{ CancelToken cancelToken, Map<String, String> headers,}) async {
+        Future<Response>logout(OnlyPidParameter onlyPidParameter,{ CancelToken cancelToken, Map<String, String> headers,}) async {
 
         String _path = "/service/logout";
 
@@ -425,21 +473,7 @@ class DefaultApi {
             contentType: contentTypes.isNotEmpty ? contentTypes[0] : "application/json",
             ),
             cancelToken: cancelToken,
-            ).then((response) {
-
-        var serializer = _serializers.serializerForType(LogoutResponse);
-        var data = _serializers.deserializeWith<LogoutResponse>(serializer, response.data is String ? jsonDecode(response.data) : response.data);
-
-            return Response<LogoutResponse>(
-                data: data,
-                headers: response.headers,
-                request: response.request,
-                redirects: response.redirects,
-                statusCode: response.statusCode,
-                statusMessage: response.statusMessage,
-                extra: response.extra,
             );
-            });
             }
         /// 
         ///

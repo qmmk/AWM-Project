@@ -45,14 +45,14 @@ class AccessService extends BaseService {
     return response.data;
   }
 
-  Future<LogoutResponse> logout({@required int pid}) async {
+  Future logout({@required int pid}) async {
     OnlyPidParameter onlyPidParameter = OnlyPidParameter();
     OnlyPidParameterBuilder onlyPidParameterBuilder = onlyPidParameter.toBuilder();
 
     onlyPidParameterBuilder.pid = pid;
     onlyPidParameter = onlyPidParameterBuilder.build();
 
-    Response<LogoutResponse> response = await client.getDefaultApi().logout(onlyPidParameter);
+    var response = await client.getDefaultApi().logout(onlyPidParameter);
     return response.data;
   }
 }

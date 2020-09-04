@@ -100,4 +100,9 @@ class SurveyService extends BaseService {
     var response = await client.getDefaultApi().insertActualVote([openapiVote]);
     return response.data;
   }
+
+  Future<List<int>> getUserSubmittedSurveys({@required int pid}) async {
+    Response<List<int>> response = await client.getDefaultApi().getUserSubmittedSurveys(pid: pid);
+    return response.data;
+  }
 }

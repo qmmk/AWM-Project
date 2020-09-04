@@ -239,10 +239,6 @@ paths:
       responses:
         200:
           description: "Success."
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LogoutResponse"
 
   /service/loadAllSurveysByUser:
     get:
@@ -353,3 +349,22 @@ paths:
       responses:
         200:
           description: "Success."
+
+  /service/getUserSubmittedSurveys:
+    get:
+      operationId: "getUserSubmittedSurveys"
+      description: "Gets user submitted surveys"
+      parameters:
+        - in: query
+          name: pid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer

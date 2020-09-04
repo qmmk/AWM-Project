@@ -15,6 +15,7 @@ class UserAndCollectionProvider extends BaseProvider {
   User _user = User();
   List<Survey> _userSurveys;
   List<Survey> _othersSurveys;
+  List<int> _alreadySubmittedSurveysIds;
 
   User get user => _user;
   List<Survey> get userSurveys => _userSurveys;
@@ -53,11 +54,12 @@ class UserAndCollectionProvider extends BaseProvider {
     notifyListeners();
   }
 
-  Future<void> loadOthersSurveys() async {
-    if (_othersSurveys != null) return;
+  Future<void> loadOthersAndAlreadySubmittedSurveys() async {
+    if (_othersSurveys != null && _alreadySubmittedSurveysIds != null) return;
 
     loading();
     _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.id);
+    _alreadySubmittedSurveysIds = await _surveyService.getUserSubmittedSurveys(pid: _user.id);
     done();
     notifyListeners();
   }
@@ -106,7 +108,7 @@ class UserAndCollectionProvider extends BaseProvider {
     try {
       loading();
       await _surveyService.registerVote(sdid: _othersSurveys[index].details[detailsIndex].id, pid: _user.id);
-      //should also register that the user has actually voted for that survey
+      _alreadySubmittedSurveysIds.add(_othersSurveys[index].id);
       done();
       notifyListeners();
       return true;
@@ -116,4 +118,6 @@ class UserAndCollectionProvider extends BaseProvider {
       return false;
     }
   }
+
+  bool hasAlreadyVotedFor({@required int index}) => _alreadySubmittedSurveysIds.contains(_othersSurveys[index].id);
 }

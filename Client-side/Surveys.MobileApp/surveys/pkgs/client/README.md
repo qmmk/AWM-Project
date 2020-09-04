@@ -62,6 +62,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**deleteSurvey**](doc\/DefaultApi.md#deletesurvey) | **delete** /service/deleteSurvey | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
 *DefaultApi* | [**getSurveyDetails**](doc\/DefaultApi.md#getsurveydetails) | **get** /service/getSurveyDetails | 
+*DefaultApi* | [**getUserSubmittedSurveys**](doc\/DefaultApi.md#getusersubmittedsurveys) | **get** /service/getUserSubmittedSurveys | 
 *DefaultApi* | [**insertActualVote**](doc\/DefaultApi.md#insertactualvote) | **post** /service/insertActualVote | 
 *DefaultApi* | [**loadAllSurveysByUser**](doc\/DefaultApi.md#loadallsurveysbyuser) | **get** /service/loadAllSurveysByUser | 
 *DefaultApi* | [**loadAllSurveysExceptUser**](doc\/DefaultApi.md#loadallsurveysexceptuser) | **get** /service/loadAllSurveysExceptUser | 

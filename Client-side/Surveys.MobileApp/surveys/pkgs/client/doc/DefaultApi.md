@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**deleteSurvey**](DefaultApi.md#deleteSurvey) | **delete** /service/deleteSurvey | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
 [**getSurveyDetails**](DefaultApi.md#getSurveyDetails) | **get** /service/getSurveyDetails | 
+[**getUserSubmittedSurveys**](DefaultApi.md#getUserSubmittedSurveys) | **get** /service/getUserSubmittedSurveys | 
 [**insertActualVote**](DefaultApi.md#insertActualVote) | **post** /service/insertActualVote | 
 [**loadAllSurveysByUser**](DefaultApi.md#loadAllSurveysByUser) | **get** /service/loadAllSurveysByUser | 
 [**loadAllSurveysExceptUser**](DefaultApi.md#loadAllSurveysExceptUser) | **get** /service/loadAllSurveysExceptUser | 
@@ -180,6 +181,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List<OpenapiSurveyDetail>**](OpenapiSurveyDetail.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getUserSubmittedSurveys**
+> List<int> getUserSubmittedSurveys(pid)
+
+
+
+Gets user submitted surveys
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var pid = 56; // int | 
+
+try { 
+    var result = api_instance.getUserSubmittedSurveys(pid);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->getUserSubmittedSurveys: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pid** | **int**|  | [optional] [default to null]
+
+### Return type
+
+**List<int>**
 
 ### Authorization
 
@@ -364,7 +408,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **logout**
-> LogoutResponse logout(onlyPidParameter)
+> logout(onlyPidParameter)
 
 
 
@@ -378,8 +422,7 @@ var api_instance = new DefaultApi();
 var onlyPidParameter = new OnlyPidParameter(); // OnlyPidParameter | pid
 
 try { 
-    var result = api_instance.logout(onlyPidParameter);
-    print(result);
+    api_instance.logout(onlyPidParameter);
 } catch (e) {
     print("Exception when calling DefaultApi->logout: $e\n");
 }
@@ -393,7 +436,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**LogoutResponse**](LogoutResponse.md)
+void (empty response body)
 
 ### Authorization
 
@@ -402,7 +445,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
