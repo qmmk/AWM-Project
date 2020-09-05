@@ -27,7 +27,8 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
         if (alreadyVoted)
           Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {
             "survey": userProvider.othersSurveys[index],
-            "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false)
+            "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false),
+            "isPersonal": false
           });
         else
           Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});

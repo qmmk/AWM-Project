@@ -48,6 +48,7 @@ class Handlers {
             builder: (context) => SurveyResultsPage(
                   survey: arguments["survey"],
                   votes: arguments["votes"],
+                  isPersonal: arguments["isPersonal"],
                 ));
 
       case Routes.vote:

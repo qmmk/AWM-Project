@@ -16,11 +16,11 @@ dependencies:
   get_it: ^4.0.4
   flutter_secure_storage: ^3.3.3
   after_layout: ^1.0.7+2
-  email_validator: ^1.0.5
   cupertino_icons: ^0.1.3
   dio: ^3.0.9
   built_collection: ^4.3.2
   collection: any
+  pull_to_refresh: ^1.6.1
   survey_client:
     path: pkgs/client
 
