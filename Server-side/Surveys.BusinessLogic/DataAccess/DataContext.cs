@@ -160,6 +160,7 @@ namespace Surveys.BusinessLogic.DataAccess
             List<SqlParameter> parameters = new List<SqlParameter>();
 
             parameters.Add(new SqlParameter("Command", "ADD"));
+            parameters.Add(new SqlParameter("PID", p.PID));
             parameters.Add(new SqlParameter("Username", p.UserName));
             parameters.Add(new SqlParameter("HashedPwd", hasher.HashPassword(p, p.Password)));
             parameters.Add(new SqlParameter("CustomField01", p.CustomField01));

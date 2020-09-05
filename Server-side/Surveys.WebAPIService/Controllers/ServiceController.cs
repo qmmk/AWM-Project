@@ -116,7 +116,7 @@ namespace Surveys.WebAPIService.Controllers
             var res = _manager.InsertOrUpdatePrincipal(p);
 
             if (res.Success)
-                return Ok(res.Success);
+                return Ok(res.Data);
             else
                 return BadRequest(res.Success);
         }

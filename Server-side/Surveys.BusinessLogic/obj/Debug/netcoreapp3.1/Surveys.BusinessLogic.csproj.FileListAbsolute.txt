@@ -21,4 +21,3 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.BusinessLogic\o
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.BusinessLogic\obj\Debug\netcoreapp3.1\Surveys.BusinessLogic.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.BusinessLogic\obj\Debug\netcoreapp3.1\Surveys.BusinessLogic.pdb
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.BusinessLogic\obj\Debug\netcoreapp3.1\Surveys.BusinessLogic.genruntimeconfig.cache
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.BusinessLogic\obj\Debug\netcoreapp3.1\Surveys.BusinessLogic.csprojAssemblyReference.cache
