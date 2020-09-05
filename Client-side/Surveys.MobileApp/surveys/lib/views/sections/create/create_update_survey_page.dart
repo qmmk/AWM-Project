@@ -54,7 +54,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
     super.initState();
   }
 
-  bool _hasModifiedEntries() => DeepCollectionEquality().equals(_survey.details, widget.survey.details);
+  bool _hasModifiedEntries() => !DeepCollectionEquality().equals(_survey.details, widget.survey.details);
 
   Widget _entryList() => SizedBox(
         height: 150,
@@ -177,6 +177,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       ..isOpen = _open;
 
     if (_isModifying) {
+      await MenuUtils.showAlertDialog(context: context, title: "Survey successfully updated!");
       Navigator.of(context).pop(_survey);
       return;
     }
@@ -190,6 +191,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       _survey.details = [];
     });
     FocusScope.of(context).requestFocus(FocusNode());
+    await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
   }
 
   @override

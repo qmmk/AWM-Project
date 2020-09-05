@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/user_model.dart';
 
 class AccountSettingsPage extends StatefulWidget {
@@ -138,6 +139,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                                     _confirmPasswordController.text = "";
                                     _isWaitingForServer = false;
                                   });
+                                  MenuUtils.showAlertDialog(
+                                      context: context, title: "Data successfully updated!", subtitle: null);
                                 })
                       ],
                     ),

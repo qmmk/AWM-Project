@@ -34,7 +34,9 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(Routes.createSurvey,
                         arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
-                      if (survey != null) userProvider.modifySurvey(index, survey);
+                      if (survey != null) {
+                        userProvider.modifySurvey(index, survey);
+                      }
                     });
                   },
                   child: Text("Edit")),
