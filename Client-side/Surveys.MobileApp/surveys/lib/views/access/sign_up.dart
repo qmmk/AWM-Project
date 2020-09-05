@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               setState(() {
                                 _isWaitingForServer = true;
                               });
-                              await _accessService.signUp(username: username, password: password);
+                              await _accessService.addUser(username: username, password: password);
                               LoginResponse response =
                                   await _accessService.login(username: username, password: password);
                               HttpUtils.registerToken(response.accessToken);

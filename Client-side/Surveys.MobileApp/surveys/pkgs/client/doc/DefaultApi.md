@@ -5,10 +5,11 @@
 import 'package:survey_client/api.dart';
 ```
 
-All URIs are relative to *https://192.168.1.206:45455*
+All URIs are relative to *https://192.168.1.207:45455*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**addUser**](DefaultApi.md#addUser) | **post** /service/addUser | 
 [**createSurvey**](DefaultApi.md#createSurvey) | **post** /service/addSurveyEntity | 
 [**deleteSurvey**](DefaultApi.md#deleteSurvey) | **delete** /service/deleteSurvey | 
 [**fastLogin**](DefaultApi.md#fastLogin) | **post** /service/fastLogin | 
@@ -20,8 +21,49 @@ Method | HTTP request | Description
 [**loadAllSurveysExceptUser**](DefaultApi.md#loadAllSurveysExceptUser) | **get** /service/loadAllSurveysExceptUser | 
 [**login**](DefaultApi.md#login) | **post** /service/login | 
 [**logout**](DefaultApi.md#logout) | **post** /service/logout | 
-[**signUp**](DefaultApi.md#signUp) | **post** /service/signUp | 
 
+
+# **addUser**
+> addUser(openapiUser)
+
+
+
+Adds or updates a user
+
+### Example 
+```dart
+import 'package:survey_client/api.dart';
+
+var api_instance = new DefaultApi();
+var openapiUser = new OpenapiUser(); // OpenapiUser | Username, Password and RoleID
+
+try { 
+    api_instance.addUser(openapiUser);
+} catch (e) {
+    print("Exception when calling DefaultApi->addUser: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **openapiUser** | [**OpenapiUser**](OpenapiUser.md)| Username, Password and RoleID | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/plain
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **createSurvey**
 > List<OpenapiSurvey> createSurvey(openapiSurvey)
@@ -490,49 +532,6 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: Not defined
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **signUp**
-> bool signUp(openapiUser)
-
-
-
-Sign up
-
-### Example 
-```dart
-import 'package:survey_client/api.dart';
-
-var api_instance = new DefaultApi();
-var openapiUser = new OpenapiUser(); // OpenapiUser | Username, Password and RoleID
-
-try { 
-    var result = api_instance.signUp(openapiUser);
-    print(result);
-} catch (e) {
-    print("Exception when calling DefaultApi->signUp: $e\n");
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **openapiUser** | [**OpenapiUser**](OpenapiUser.md)| Username, Password and RoleID | 
-
-### Return type
-
-**bool**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: text/plain
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

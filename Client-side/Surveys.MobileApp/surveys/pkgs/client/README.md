@@ -41,23 +41,23 @@ import 'package:survey_client/api.dart';
 
 
 var api_instance = new DefaultApi();
-var openapiSurvey = [new List&lt;OpenapiSurvey&gt;()]; // List<OpenapiSurvey> | survey
+var openapiUser = new OpenapiUser(); // OpenapiUser | Username, Password and RoleID
 
 try {
-    var result = api_instance.createSurvey(openapiSurvey);
-    print(result);
+    api_instance.addUser(openapiUser);
 } catch (e) {
-    print("Exception when calling DefaultApi->createSurvey: $e\n");
+    print("Exception when calling DefaultApi->addUser: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://192.168.1.206:45455*
+All URIs are relative to *https://192.168.1.207:45455*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**addUser**](doc\/DefaultApi.md#adduser) | **post** /service/addUser | 
 *DefaultApi* | [**createSurvey**](doc\/DefaultApi.md#createsurvey) | **post** /service/addSurveyEntity | 
 *DefaultApi* | [**deleteSurvey**](doc\/DefaultApi.md#deletesurvey) | **delete** /service/deleteSurvey | 
 *DefaultApi* | [**fastLogin**](doc\/DefaultApi.md#fastlogin) | **post** /service/fastLogin | 
@@ -69,7 +69,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**loadAllSurveysExceptUser**](doc\/DefaultApi.md#loadallsurveysexceptuser) | **get** /service/loadAllSurveysExceptUser | 
 *DefaultApi* | [**login**](doc\/DefaultApi.md#login) | **post** /service/login | 
 *DefaultApi* | [**logout**](doc\/DefaultApi.md#logout) | **post** /service/logout | 
-*DefaultApi* | [**signUp**](doc\/DefaultApi.md#signup) | **post** /service/signUp | 
 
 
 ## Documentation For Models

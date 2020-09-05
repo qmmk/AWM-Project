@@ -27,6 +27,14 @@ class UserAndCollectionProvider extends BaseProvider {
     notifyListeners();
   }
 
+  Future<void> updateUser({@required User user, @required String password}) async {
+    int pid = _user.id;
+    _user = user;
+    _user.id = pid;
+    await _accessService.addUser(pid: pid, username: _user.username, password: password);
+    notifyListeners();
+  }
+
   void setUsername(String username) {
     _user.username = username;
     notifyListeners();
@@ -40,6 +48,8 @@ class UserAndCollectionProvider extends BaseProvider {
       await HttpUtils.invalidateTokens();
       _user = null;
       _userSurveys = null;
+      _othersSurveys = null;
+      _alreadySubmittedSurveysIds = null;
       return true;
     } on DioError {
       return false;

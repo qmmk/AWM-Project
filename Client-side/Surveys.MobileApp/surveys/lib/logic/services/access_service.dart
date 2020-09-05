@@ -31,17 +31,18 @@ class AccessService extends BaseService {
     return response.data;
   }
 
-  Future<bool> signUp({@required String username, @required String password, String roleID = "0"}) async {
+  Future addUser({int pid, @required String username, @required String password, String roleID = "0"}) async {
     OpenapiUser user = OpenapiUser();
     OpenapiUserBuilder userBuilder = user.toBuilder();
 
     userBuilder
+      ..pid = pid
       ..userName = username
       ..password = password
       ..roleID = roleID;
     user = userBuilder.build();
 
-    Response<bool> response = await client.getDefaultApi().signUp(user);
+    var response = await client.getDefaultApi().addUser(user);
     return response.data;
   }
 

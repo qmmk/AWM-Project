@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/models/user_model.dart';
 
 class AccountSettingsPage extends StatefulWidget {
   AccountSettingsPage({Key key}) : super(key: key);
@@ -17,6 +18,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+
+  bool _isWaitingForServer = false;
 
   void _showErrorDialog() {
     showDialog(
@@ -105,18 +108,37 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                             ),
                           ),
                         ),
-                        CupertinoButton(
-                            child: Text(
-                              "Update account",
-                            ),
-                            onPressed: () async {
-                              if (!_formKey.currentState.validate()) return;
+                        _isWaitingForServer
+                            ? Center(
+                                child: CupertinoActivityIndicator(
+                                  animating: true,
+                                  radius: 20,
+                                ),
+                              )
+                            : CupertinoButton(
+                                child: Text(
+                                  "Update account",
+                                ),
+                                onPressed: () async {
+                                  if (!_formKey.currentState.validate()) return;
 
-                              String username = _usernameController.text;
-                              String password = _passwordController.text;
+                                  String username = _usernameController.text;
+                                  String password = _passwordController.text;
 
-                              Provider.of<UserAndCollectionProvider>(context, listen: false).setUsername(username);
-                            })
+                                  UserAndCollectionProvider provider =
+                                      Provider.of<UserAndCollectionProvider>(context, listen: false);
+
+                                  setState(() {
+                                    _isWaitingForServer = true;
+                                  });
+                                  await provider.updateUser(
+                                      user: User(username: username, id: provider.user.id), password: password);
+                                  setState(() {
+                                    _passwordController.text = "";
+                                    _confirmPasswordController.text = "";
+                                    _isWaitingForServer = false;
+                                  });
+                                })
                       ],
                     ),
                   ),
