@@ -4,9 +4,6 @@ export class Principal {
   PID: number;
   UserName: string;
   HashedPwd: string;
-  CustomField01: string;
-  CustomField02: string;
-  CustomField03: string;
   RoleID: string;
   AccessToken: string;
   RefreshToken: RefreshToken;

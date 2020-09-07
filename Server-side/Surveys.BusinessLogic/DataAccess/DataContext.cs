@@ -163,9 +163,7 @@ namespace Surveys.BusinessLogic.DataAccess
             parameters.Add(new SqlParameter("PID", p.PID));
             parameters.Add(new SqlParameter("Username", p.UserName));
             parameters.Add(new SqlParameter("HashedPwd", hasher.HashPassword(p, p.Password)));
-            parameters.Add(new SqlParameter("CustomField01", p.CustomField01));
-            parameters.Add(new SqlParameter("CustomField02", p.CustomField02));
-            parameters.Add(new SqlParameter("CustomField03", p.CustomField03));
+
             parameters.Add(new SqlParameter("RoleID", p.RoleID));
             parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                 ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
@@ -180,9 +178,6 @@ namespace Surveys.BusinessLogic.DataAccess
                     {
                         PID = x.PID,
                         UserName = x.UserName,
-                        CustomField01 = x.CustomField01,
-                        CustomField02 = x.CustomField02,
-                        CustomField03 = x.CustomField03,
                         RoleID = x.RoleID
                     }).ToList().FirstOrDefault();
 
@@ -377,9 +372,8 @@ namespace Surveys.BusinessLogic.DataAccess
                             SEID = x.SEID,
                             Title = x.Title,
                             Descr = x.Descr,
-                            CustomField01 = x.CustomField01,
                             IsOpen = x.IsOpen,
-                            CustomField03 = x.CustomField03
+                            CreatedBy = x.CreatedBy
                         }).ToList();
 
                         sr.Error = DbErrorCode.SUCCESS.ToString();
@@ -414,9 +408,8 @@ namespace Surveys.BusinessLogic.DataAccess
                 parameters.Add(new SqlParameter("SDID", se.surveyDetails.Count));
                 parameters.Add(new SqlParameter("Title", se.Title));
                 parameters.Add(new SqlParameter("Descr", se.Descr));
-                parameters.Add(new SqlParameter("CustomField01", se.CustomField01));
-                parameters.Add(new SqlParameter("CustomField02", se.IsOpen));
-                parameters.Add(new SqlParameter("CustomField03", se.CustomField03));
+                parameters.Add(new SqlParameter("IsOpen", se.IsOpen));
+                parameters.Add(new SqlParameter("CreatedBy", se.CreatedBy));
                 parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                     ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 
@@ -441,9 +434,8 @@ namespace Surveys.BusinessLogic.DataAccess
                                 SEID = x.SEID,
                                 Title = x.Title,
                                 Descr = x.Descr,
-                                CustomField01 = x.CustomField01,
                                 IsOpen = x.IsOpen,
-                                CustomField03 = x.CustomField03
+                                CreatedBy = x.CreatedBy
                             }).ToList().FirstOrDefault();
 
                             foreach (SurveyDetail sd in se.surveyDetails)
@@ -500,10 +492,7 @@ namespace Surveys.BusinessLogic.DataAccess
                         {
                             SEID = x.SEID,
                             SDID = x.SDID,
-                            Descr = x.Descr,
-                            CustomField01 = x.CustomField01,
-                            CustomField02 = x.CustomField02,
-                            CustomField03 = x.CustomField03
+                            Descr = x.Descr
                         }).ToList();
 
                         sr.Error = DbErrorCode.SUCCESS.ToString();
@@ -532,19 +521,13 @@ namespace Surveys.BusinessLogic.DataAccess
             DataColumn dcSEID = new DataColumn("SEID", typeof(int));
             DataColumn dcSDID = new DataColumn("SDID", typeof(int));
             DataColumn dcDescr = new DataColumn("Descr", typeof(string));
-            DataColumn dcCustomField01 = new DataColumn("CustomField01", typeof(string));
-            DataColumn dcCustomField02 = new DataColumn("CustomField02", typeof(string));
-            DataColumn dcCustomField03 = new DataColumn("CustomField03", typeof(string));
             dtDetails.Columns.Add(dcSEID);
             dtDetails.Columns.Add(dcSDID);
             dtDetails.Columns.Add(dcDescr);
-            dtDetails.Columns.Add(dcCustomField01);
-            dtDetails.Columns.Add(dcCustomField02);
-            dtDetails.Columns.Add(dcCustomField03);
 
             foreach (SurveyDetail sd in lsd)
             {
-                dtDetails.Rows.Add(sd.SEID, sd.SDID, sd.Descr, sd.CustomField01, sd.CustomField02, sd.CustomField03);
+                dtDetails.Rows.Add(sd.SEID, sd.SDID, sd.Descr);
             }
 
             ServiceResponse<SurveyDetail> sr = new ServiceResponse<SurveyDetail>();
@@ -573,10 +556,7 @@ namespace Surveys.BusinessLogic.DataAccess
                             {
                                 SEID = x.SEID,
                                 SDID = x.SDID,
-                                Descr = x.Descr,
-                                CustomField01 = x.CustomField01,
-                                CustomField02 = x.CustomField02,
-                                CustomField03 = x.CustomField03
+                                Descr = x.Descr
                             }).ToList();
                             break;
                         case 8:
@@ -620,9 +600,6 @@ namespace Surveys.BusinessLogic.DataAccess
                 parameters.Add(new SqlParameter("Command", "IU_AV"));
                 parameters.Add(new SqlParameter("PID", av.PID));
                 parameters.Add(new SqlParameter("SDID", av.SDID));
-                parameters.Add(new SqlParameter("CustomField01", av.CustomField01));
-                parameters.Add(new SqlParameter("CustomField02", av.CustomField02));
-                parameters.Add(new SqlParameter("CustomField03", av.CustomField03));
                 parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                     ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 

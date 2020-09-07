@@ -23,15 +23,5 @@ namespace Surveys.BusinessLogic.DataAccess
 
         [DataMember]
         public virtual DateTime? RegisteredOn { get; set; }
-
-        [DataMember]
-        public virtual string CustomField01 { get; set; }
-
-        [DataMember]
-        public virtual string CustomField02 { get; set; }
-
-        [DataMember]
-        public virtual string CustomField03 { get; set; }
-
     }
 }

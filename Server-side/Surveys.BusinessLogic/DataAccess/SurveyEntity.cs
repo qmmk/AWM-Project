@@ -23,13 +23,10 @@ namespace Surveys.BusinessLogic.DataAccess
         public virtual string Descr { get; set; }
 
         [DataMember]
-        public virtual string CustomField01 { get; set; }
+        public virtual bool IsOpen { get; set; }
 
         [DataMember]
-        public virtual string IsOpen { get; set; }
-
-        [DataMember]
-        public virtual string CustomField03 { get; set; }
+        public virtual int CreatedBy { get; set; }
 
         [DataMember]
         public virtual List<SurveyDetail> surveyDetails { get; set; }

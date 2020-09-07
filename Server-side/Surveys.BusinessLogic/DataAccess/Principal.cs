@@ -33,15 +33,6 @@ namespace Surveys.BusinessLogic.DataAccess
         public virtual RefreshToken RefreshToken { get; set; }
 
         [DataMember]
-        public virtual string CustomField01 { get; set; }
-
-        [DataMember]
-        public virtual string CustomField02 { get; set; }
-
-        [DataMember]
-        public virtual string CustomField03 { get; set; }
-
-        [DataMember]
         public virtual string RoleID { get; set; }
     }
 }

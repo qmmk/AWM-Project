@@ -4,9 +4,8 @@ export class SurveyEntity {
   seid: number;
   title: string;
   descr: string;
-  customField01: string;
-  isOpen: string;
-  customField03: string;
+  isOpen: boolean;
+  createdBy: number;
   surveyDetails?: SurveyDetail;
 
   constructor(init?: Partial<SurveyEntity>) {

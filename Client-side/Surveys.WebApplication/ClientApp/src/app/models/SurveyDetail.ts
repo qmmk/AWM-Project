@@ -2,9 +2,6 @@ export class SurveyDetail {
   seid: number;
   sdid: number;
   descr: string;
-  customField01: string;
-  customField02: string;
-  customField03: string;
 
   constructor(init?: Partial<SurveyDetail>) {
     Object.assign(this, init);

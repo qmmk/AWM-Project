@@ -22,12 +22,12 @@
           <td>{{ survey.title }}</td>
           <td>{{ survey.tescr }}</td>
           <td style="width:60px">
-            <div *ngIf="survey.customField02 == 0; then closeBlock else openBlock"></div>
+            <div *ngIf="survey.isOpen; then openBlock else closeBlock"></div>
             <ng-template #closeBlock><span class="circle" style="background-color:red"></span></ng-template>
             <ng-template #openBlock><span class="circle" style="background-color:limegreen"></span></ng-template>
           </td>
           <td style="width:40px">
-            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid, i)" [disabled]="survey.customField02 == 0">Detail</button>
+            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid, i)" [disabled]="survey.isOpen">Detail</button>
           </td>
         </ng-template>
         <ng-template #disBlock>
