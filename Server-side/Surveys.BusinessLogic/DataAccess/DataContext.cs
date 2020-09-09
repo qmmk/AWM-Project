@@ -668,9 +668,6 @@ namespace Surveys.BusinessLogic.DataAccess
             parameters.Add(new SqlParameter("Command", "GET_RTD"));
             parameters.Add(new SqlParameter("PID", null));
             parameters.Add(new SqlParameter("SDID", null));
-            parameters.Add(new SqlParameter("CustomField01", null));
-            parameters.Add(new SqlParameter("CustomField02", null));
-            parameters.Add(new SqlParameter("CustomField03", null));
             parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                 ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 
@@ -838,9 +835,6 @@ namespace Surveys.BusinessLogic.DataAccess
             parameters.Add(new SqlParameter("PID", null));
             parameters.Add(new SqlParameter("SDID", null));
             parameters.Add(new SqlParameter("SEID", seid));
-            parameters.Add(new SqlParameter("CustomField01", null));
-            parameters.Add(new SqlParameter("CustomField02", null));
-            parameters.Add(new SqlParameter("CustomField03", null));
             parameters.Add(new SqlParameter("ReturnCode", SqlDbType.Int, 10,
                 ParameterDirection.InputOutput, true, 0, 0, "", DataRowVersion.Current, -1));
 
