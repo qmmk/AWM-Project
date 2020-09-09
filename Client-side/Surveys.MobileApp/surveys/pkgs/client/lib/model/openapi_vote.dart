@@ -21,18 +21,6 @@ abstract class OpenapiVote implements Built<OpenapiVote, OpenapiVoteBuilder> {
         @nullable
     @BuiltValueField(wireName: r'registeredOn')
     String get registeredOn;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField01')
-    String get customField01;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField02')
-    String get customField02;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField03')
-    String get customField03;
 
     // Boilerplate code needed to wire-up generated code
     OpenapiVote._();

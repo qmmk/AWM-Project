@@ -51,12 +51,6 @@ components:
           $ref: "#/components/schemas/RefreshToken"
         roleID:
           type: string
-        customField01:
-          type: string
-        customField02:
-          type: string
-        customField03:
-          type: string
 
     FastLoginRequestBody:
       type: object
@@ -103,12 +97,6 @@ components:
           type: integer
         descr:
           type: string
-        CustomField01:
-          type: string
-        CustomField02:
-          type: string
-        CustomField03:
-          type: string
 
     OpenapiSurvey:
       type: object
@@ -119,12 +107,10 @@ components:
           type: string
         descr:
           type: string
-        customField01:
-          type: string
         isOpen:
-          type: string
-        customField03:
-          type: string
+          type: boolean
+        createdBy:
+          type: integer
         surveyDetails:
           type: array
           items:
@@ -140,12 +126,6 @@ components:
         sdid:
           type: integer
         registeredOn:
-          type: string
-        customField01:
-          type: string
-        customField02:
-          type: string
-        customField03:
           type: string
 
     OpenapiVoteAmount:

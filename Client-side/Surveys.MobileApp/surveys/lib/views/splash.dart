@@ -33,8 +33,12 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
             .then((value) => Navigator.of(context).pushReplacementNamed(Routes.accessHub));
       else {
         AccessService accessService = AccessService();
-        try {
-          accessService.fastLogin(refreshToken: refreshToken).then((LoginResponse response) {
+        accessService.fastLogin(refreshToken: refreshToken).then((LoginResponse response) {
+          if (response == null) {
+            HttpUtils.invalidateTokens().then((_) {
+              Navigator.of(context).pushReplacementNamed(Routes.accessHub);
+            });
+          } else {
             Provider.of<UserAndCollectionProvider>(context, listen: false)
                 .setUser(User(id: response.pid, username: response.userName));
 
@@ -42,10 +46,8 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
             HttpUtils.storeRefreshToken(response.refreshToken.rToken).then((_) {
               Navigator.of(context).pushReplacementNamed(Routes.home);
             });
-          });
-        } on DioError {
-          Navigator.of(context).pushReplacementNamed(Routes.accessHub);
-        }
+          }
+        });
       }
     });
   }

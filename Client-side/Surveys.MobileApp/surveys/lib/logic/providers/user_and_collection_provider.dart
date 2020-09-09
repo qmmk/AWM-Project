@@ -84,7 +84,7 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> createSurvey({@required Survey survey}) async {
-    survey.userId = _user.id.toString();
+    survey.userId = _user.id;
     Survey created = await _surveyService.createSurvey(survey: survey);
     if (_userSurveys != null) _userSurveys.add(created);
     notifyListeners();

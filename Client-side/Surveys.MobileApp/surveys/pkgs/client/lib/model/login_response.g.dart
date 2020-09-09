@@ -55,24 +55,6 @@ class _$LoginResponseSerializer implements StructuredSerializer<LoginResponse> {
         ..add(serializers.serialize(object.roleID,
             specifiedType: const FullType(String)));
     }
-    if (object.customField01 != null) {
-      result
-        ..add('customField01')
-        ..add(serializers.serialize(object.customField01,
-            specifiedType: const FullType(String)));
-    }
-    if (object.customField02 != null) {
-      result
-        ..add('customField02')
-        ..add(serializers.serialize(object.customField02,
-            specifiedType: const FullType(String)));
-    }
-    if (object.customField03 != null) {
-      result
-        ..add('customField03')
-        ..add(serializers.serialize(object.customField03,
-            specifiedType: const FullType(String)));
-    }
     return result;
   }
 
@@ -112,18 +94,6 @@ class _$LoginResponseSerializer implements StructuredSerializer<LoginResponse> {
           result.roleID = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'customField01':
-          result.customField01 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'customField02':
-          result.customField02 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'customField03':
-          result.customField03 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
       }
     }
 
@@ -144,12 +114,6 @@ class _$LoginResponse extends LoginResponse {
   final RefreshToken refreshToken;
   @override
   final String roleID;
-  @override
-  final String customField01;
-  @override
-  final String customField02;
-  @override
-  final String customField03;
 
   factory _$LoginResponse([void Function(LoginResponseBuilder) updates]) =>
       (new LoginResponseBuilder()..update(updates)).build();
@@ -160,10 +124,7 @@ class _$LoginResponse extends LoginResponse {
       this.userName,
       this.hashedPwd,
       this.refreshToken,
-      this.roleID,
-      this.customField01,
-      this.customField02,
-      this.customField03})
+      this.roleID})
       : super._();
 
   @override
@@ -182,10 +143,7 @@ class _$LoginResponse extends LoginResponse {
         userName == other.userName &&
         hashedPwd == other.hashedPwd &&
         refreshToken == other.refreshToken &&
-        roleID == other.roleID &&
-        customField01 == other.customField01 &&
-        customField02 == other.customField02 &&
-        customField03 == other.customField03;
+        roleID == other.roleID;
   }
 
   @override
@@ -193,17 +151,11 @@ class _$LoginResponse extends LoginResponse {
     return $jf($jc(
         $jc(
             $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc($jc(0, accessToken.hashCode), pid.hashCode),
-                                userName.hashCode),
-                            hashedPwd.hashCode),
-                        refreshToken.hashCode),
-                    roleID.hashCode),
-                customField01.hashCode),
-            customField02.hashCode),
-        customField03.hashCode));
+                $jc($jc($jc(0, accessToken.hashCode), pid.hashCode),
+                    userName.hashCode),
+                hashedPwd.hashCode),
+            refreshToken.hashCode),
+        roleID.hashCode));
   }
 
   @override
@@ -214,10 +166,7 @@ class _$LoginResponse extends LoginResponse {
           ..add('userName', userName)
           ..add('hashedPwd', hashedPwd)
           ..add('refreshToken', refreshToken)
-          ..add('roleID', roleID)
-          ..add('customField01', customField01)
-          ..add('customField02', customField02)
-          ..add('customField03', customField03))
+          ..add('roleID', roleID))
         .toString();
   }
 }
@@ -252,21 +201,6 @@ class LoginResponseBuilder
   String get roleID => _$this._roleID;
   set roleID(String roleID) => _$this._roleID = roleID;
 
-  String _customField01;
-  String get customField01 => _$this._customField01;
-  set customField01(String customField01) =>
-      _$this._customField01 = customField01;
-
-  String _customField02;
-  String get customField02 => _$this._customField02;
-  set customField02(String customField02) =>
-      _$this._customField02 = customField02;
-
-  String _customField03;
-  String get customField03 => _$this._customField03;
-  set customField03(String customField03) =>
-      _$this._customField03 = customField03;
-
   LoginResponseBuilder();
 
   LoginResponseBuilder get _$this {
@@ -277,9 +211,6 @@ class LoginResponseBuilder
       _hashedPwd = _$v.hashedPwd;
       _refreshToken = _$v.refreshToken?.toBuilder();
       _roleID = _$v.roleID;
-      _customField01 = _$v.customField01;
-      _customField02 = _$v.customField02;
-      _customField03 = _$v.customField03;
       _$v = null;
     }
     return this;
@@ -309,10 +240,7 @@ class LoginResponseBuilder
               userName: userName,
               hashedPwd: hashedPwd,
               refreshToken: _refreshToken?.build(),
-              roleID: roleID,
-              customField01: customField01,
-              customField02: customField02,
-              customField03: customField03);
+              roleID: roleID);
     } catch (_) {
       String _$failedField;
       try {

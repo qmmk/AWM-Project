@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:survey_client/model/fast_login_request_body.dart';
 import 'package:survey_client/model/login_request_body.dart';
 import 'package:survey_client/model/login_response.dart';
-import 'package:survey_client/model/logout_response.dart';
 import 'package:survey_client/model/only_pid_parameter.dart';
 import 'package:survey_client/model/openapi_user.dart';
 import 'package:surveys/logic/services/base_service.dart';
@@ -27,8 +26,12 @@ class AccessService extends BaseService {
     fastLoginRequestBodyBuilder.token = refreshToken;
     fastLoginRequestBody = fastLoginRequestBodyBuilder.build();
 
-    Response<LoginResponse> response = await client.getDefaultApi().fastLogin(fastLoginRequestBody);
-    return response.data;
+    try {
+      Response<LoginResponse> response = await client.getDefaultApi().fastLogin(fastLoginRequestBody);
+      return response.data;
+    } on Exception catch (e) {
+      return null;
+    }
   }
 
   Future addUser({int pid, @required String username, @required String password, String roleID = "0"}) async {

@@ -111,7 +111,7 @@ namespace Surveys.WebAPIService.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult SignUp([FromBody] Principal p)
+        public ActionResult AddUser([FromBody] Principal p)
         {
             var res = _manager.InsertOrUpdatePrincipal(p);
 

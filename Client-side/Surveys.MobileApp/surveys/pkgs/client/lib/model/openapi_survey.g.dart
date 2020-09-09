@@ -37,23 +37,17 @@ class _$OpenapiSurveySerializer implements StructuredSerializer<OpenapiSurvey> {
         ..add(serializers.serialize(object.descr,
             specifiedType: const FullType(String)));
     }
-    if (object.customField01 != null) {
-      result
-        ..add('customField01')
-        ..add(serializers.serialize(object.customField01,
-            specifiedType: const FullType(String)));
-    }
     if (object.isOpen != null) {
       result
         ..add('isOpen')
         ..add(serializers.serialize(object.isOpen,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(bool)));
     }
-    if (object.customField03 != null) {
+    if (object.createdBy != null) {
       result
-        ..add('customField03')
-        ..add(serializers.serialize(object.customField03,
-            specifiedType: const FullType(String)));
+        ..add('createdBy')
+        ..add(serializers.serialize(object.createdBy,
+            specifiedType: const FullType(int)));
     }
     if (object.surveyDetails != null) {
       result
@@ -89,17 +83,13 @@ class _$OpenapiSurveySerializer implements StructuredSerializer<OpenapiSurvey> {
           result.descr = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'customField01':
-          result.customField01 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'isOpen':
           result.isOpen = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(bool)) as bool;
           break;
-        case 'customField03':
-          result.customField03 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'createdBy':
+          result.createdBy = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'surveyDetails':
           result.surveyDetails.replace(serializers.deserialize(value,
@@ -122,11 +112,9 @@ class _$OpenapiSurvey extends OpenapiSurvey {
   @override
   final String descr;
   @override
-  final String customField01;
+  final bool isOpen;
   @override
-  final String isOpen;
-  @override
-  final String customField03;
+  final int createdBy;
   @override
   final BuiltList<OpenapiSurveyDetail> surveyDetails;
 
@@ -137,9 +125,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
       {this.seid,
       this.title,
       this.descr,
-      this.customField01,
       this.isOpen,
-      this.customField03,
+      this.createdBy,
       this.surveyDetails})
       : super._();
 
@@ -157,9 +144,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
         seid == other.seid &&
         title == other.title &&
         descr == other.descr &&
-        customField01 == other.customField01 &&
         isOpen == other.isOpen &&
-        customField03 == other.customField03 &&
+        createdBy == other.createdBy &&
         surveyDetails == other.surveyDetails;
   }
 
@@ -167,13 +153,9 @@ class _$OpenapiSurvey extends OpenapiSurvey {
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, seid.hashCode), title.hashCode),
-                        descr.hashCode),
-                    customField01.hashCode),
+            $jc($jc($jc($jc(0, seid.hashCode), title.hashCode), descr.hashCode),
                 isOpen.hashCode),
-            customField03.hashCode),
+            createdBy.hashCode),
         surveyDetails.hashCode));
   }
 
@@ -183,9 +165,8 @@ class _$OpenapiSurvey extends OpenapiSurvey {
           ..add('seid', seid)
           ..add('title', title)
           ..add('descr', descr)
-          ..add('customField01', customField01)
           ..add('isOpen', isOpen)
-          ..add('customField03', customField03)
+          ..add('createdBy', createdBy)
           ..add('surveyDetails', surveyDetails))
         .toString();
   }
@@ -207,19 +188,13 @@ class OpenapiSurveyBuilder
   String get descr => _$this._descr;
   set descr(String descr) => _$this._descr = descr;
 
-  String _customField01;
-  String get customField01 => _$this._customField01;
-  set customField01(String customField01) =>
-      _$this._customField01 = customField01;
+  bool _isOpen;
+  bool get isOpen => _$this._isOpen;
+  set isOpen(bool isOpen) => _$this._isOpen = isOpen;
 
-  String _isOpen;
-  String get isOpen => _$this._isOpen;
-  set isOpen(String isOpen) => _$this._isOpen = isOpen;
-
-  String _customField03;
-  String get customField03 => _$this._customField03;
-  set customField03(String customField03) =>
-      _$this._customField03 = customField03;
+  int _createdBy;
+  int get createdBy => _$this._createdBy;
+  set createdBy(int createdBy) => _$this._createdBy = createdBy;
 
   ListBuilder<OpenapiSurveyDetail> _surveyDetails;
   ListBuilder<OpenapiSurveyDetail> get surveyDetails =>
@@ -234,9 +209,8 @@ class OpenapiSurveyBuilder
       _seid = _$v.seid;
       _title = _$v.title;
       _descr = _$v.descr;
-      _customField01 = _$v.customField01;
       _isOpen = _$v.isOpen;
-      _customField03 = _$v.customField03;
+      _createdBy = _$v.createdBy;
       _surveyDetails = _$v.surveyDetails?.toBuilder();
       _$v = null;
     }
@@ -265,9 +239,8 @@ class OpenapiSurveyBuilder
               seid: seid,
               title: title,
               descr: descr,
-              customField01: customField01,
               isOpen: isOpen,
-              customField03: customField03,
+              createdBy: createdBy,
               surveyDetails: _surveyDetails?.build());
     } catch (_) {
       String _$failedField;

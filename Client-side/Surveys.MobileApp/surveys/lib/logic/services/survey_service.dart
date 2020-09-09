@@ -16,9 +16,9 @@ class SurveyService extends BaseService {
   Survey _convertOpenapiSurveyToSurvey(OpenapiSurvey openapiSurvey) => Survey(
       id: openapiSurvey.seid,
       description: openapiSurvey.descr,
-      isOpen: openapiSurvey.isOpen == "1",
+      isOpen: openapiSurvey.isOpen,
       title: openapiSurvey.title,
-      userId: openapiSurvey.customField03,
+      userId: openapiSurvey.createdBy,
       details: openapiSurvey.surveyDetails?.map(_convertOpenapiSurveyDetailToSurveyDetail)?.toList());
 
   OpenapiSurveyDetail _convertSurveyDetailToOpenapiSurveyDetail(SurveyDetail surveyDetail) {
@@ -26,10 +26,7 @@ class SurveyService extends BaseService {
     openapiSurveyDetailBuilder
       ..sdid = surveyDetail.id
       ..seid = surveyDetail.surveyId
-      ..descr = surveyDetail.description
-      ..customField01 = surveyDetail.customField01
-      ..customField02 = surveyDetail.customField02
-      ..customField03 = surveyDetail.customField03;
+      ..descr = surveyDetail.description;
 
     return openapiSurveyDetailBuilder.build();
   }
@@ -39,20 +36,15 @@ class SurveyService extends BaseService {
     openapiVoteBuilder
       ..avid = vote.id
       ..sdid = vote.surveyDetailId
-      ..pid = vote.userId
-      ..customField01 = vote.customField01
-      ..customField02 = vote.customField02
-      ..customField03 = vote.customField03;
+      ..pid = vote.userId;
     return openapiVoteBuilder.build();
   }
 
   SurveyDetail _convertOpenapiSurveyDetailToSurveyDetail(OpenapiSurveyDetail openapiSurveyDetail) => SurveyDetail(
-      id: openapiSurveyDetail.sdid,
-      surveyId: openapiSurveyDetail.seid,
-      description: openapiSurveyDetail.descr,
-      customField01: openapiSurveyDetail.customField01,
-      customField02: openapiSurveyDetail.customField02,
-      customField03: openapiSurveyDetail.customField03);
+        id: openapiSurveyDetail.sdid,
+        surveyId: openapiSurveyDetail.seid,
+        description: openapiSurveyDetail.descr,
+      );
 
   Future<List<Survey>> loadAllSurveysByUser({@required int pid}) async {
     Response<List<OpenapiSurvey>> response = await client.getDefaultApi().loadAllSurveysByUser(pid: pid);
@@ -76,8 +68,8 @@ class SurveyService extends BaseService {
       ..title = survey.title
       ..descr = survey.description
       ..surveyDetails = listBuilder
-      ..isOpen = survey.isOpen ? "1" : "0"
-      ..customField03 = survey.userId;
+      ..isOpen = survey.isOpen
+      ..createdBy = survey.userId;
     openapiSurvey = openapiSurveyBuilder.build();
     Response<List<OpenapiSurvey>> response = await client.getDefaultApi().createSurvey([openapiSurvey]);
     return _convertOpenapiSurveyToSurvey(response.data[0]);
@@ -114,7 +106,12 @@ class SurveyService extends BaseService {
       vote: SurveyVote(id: null, surveyDetailId: openapiVoteAmount.sdid, surveyId: null));
 
   Future<List<VoteAmount>> getSurveyVotes({@required int seid}) async {
-    Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
-    return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
+    
+    try {
+      Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
+      return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
+    } on Exception catch (e) {
+         return null;
+    }
   }
 }

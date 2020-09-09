@@ -21,16 +21,12 @@ abstract class OpenapiSurvey implements Built<OpenapiSurvey, OpenapiSurveyBuilde
     String get descr;
     
         @nullable
-    @BuiltValueField(wireName: r'customField01')
-    String get customField01;
-    
-        @nullable
     @BuiltValueField(wireName: r'isOpen')
-    String get isOpen;
+    bool get isOpen;
     
         @nullable
-    @BuiltValueField(wireName: r'customField03')
-    String get customField03;
+    @BuiltValueField(wireName: r'createdBy')
+    int get createdBy;
     
         @nullable
     @BuiltValueField(wireName: r'surveyDetails')

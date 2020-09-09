@@ -42,24 +42,6 @@ class _$OpenapiSurveyDetailSerializer
         ..add(serializers.serialize(object.descr,
             specifiedType: const FullType(String)));
     }
-    if (object.customField01 != null) {
-      result
-        ..add('CustomField01')
-        ..add(serializers.serialize(object.customField01,
-            specifiedType: const FullType(String)));
-    }
-    if (object.customField02 != null) {
-      result
-        ..add('CustomField02')
-        ..add(serializers.serialize(object.customField02,
-            specifiedType: const FullType(String)));
-    }
-    if (object.customField03 != null) {
-      result
-        ..add('CustomField03')
-        ..add(serializers.serialize(object.customField03,
-            specifiedType: const FullType(String)));
-    }
     return result;
   }
 
@@ -87,18 +69,6 @@ class _$OpenapiSurveyDetailSerializer
           result.descr = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'CustomField01':
-          result.customField01 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'CustomField02':
-          result.customField02 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'CustomField03':
-          result.customField03 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
       }
     }
 
@@ -113,25 +83,12 @@ class _$OpenapiSurveyDetail extends OpenapiSurveyDetail {
   final int seid;
   @override
   final String descr;
-  @override
-  final String customField01;
-  @override
-  final String customField02;
-  @override
-  final String customField03;
 
   factory _$OpenapiSurveyDetail(
           [void Function(OpenapiSurveyDetailBuilder) updates]) =>
       (new OpenapiSurveyDetailBuilder()..update(updates)).build();
 
-  _$OpenapiSurveyDetail._(
-      {this.sdid,
-      this.seid,
-      this.descr,
-      this.customField01,
-      this.customField02,
-      this.customField03})
-      : super._();
+  _$OpenapiSurveyDetail._({this.sdid, this.seid, this.descr}) : super._();
 
   @override
   OpenapiSurveyDetail rebuild(
@@ -148,20 +105,12 @@ class _$OpenapiSurveyDetail extends OpenapiSurveyDetail {
     return other is OpenapiSurveyDetail &&
         sdid == other.sdid &&
         seid == other.seid &&
-        descr == other.descr &&
-        customField01 == other.customField01 &&
-        customField02 == other.customField02 &&
-        customField03 == other.customField03;
+        descr == other.descr;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc($jc($jc($jc(0, sdid.hashCode), seid.hashCode), descr.hashCode),
-                customField01.hashCode),
-            customField02.hashCode),
-        customField03.hashCode));
+    return $jf($jc($jc($jc(0, sdid.hashCode), seid.hashCode), descr.hashCode));
   }
 
   @override
@@ -169,10 +118,7 @@ class _$OpenapiSurveyDetail extends OpenapiSurveyDetail {
     return (newBuiltValueToStringHelper('OpenapiSurveyDetail')
           ..add('sdid', sdid)
           ..add('seid', seid)
-          ..add('descr', descr)
-          ..add('customField01', customField01)
-          ..add('customField02', customField02)
-          ..add('customField03', customField03))
+          ..add('descr', descr))
         .toString();
   }
 }
@@ -193,21 +139,6 @@ class OpenapiSurveyDetailBuilder
   String get descr => _$this._descr;
   set descr(String descr) => _$this._descr = descr;
 
-  String _customField01;
-  String get customField01 => _$this._customField01;
-  set customField01(String customField01) =>
-      _$this._customField01 = customField01;
-
-  String _customField02;
-  String get customField02 => _$this._customField02;
-  set customField02(String customField02) =>
-      _$this._customField02 = customField02;
-
-  String _customField03;
-  String get customField03 => _$this._customField03;
-  set customField03(String customField03) =>
-      _$this._customField03 = customField03;
-
   OpenapiSurveyDetailBuilder();
 
   OpenapiSurveyDetailBuilder get _$this {
@@ -215,9 +146,6 @@ class OpenapiSurveyDetailBuilder
       _sdid = _$v.sdid;
       _seid = _$v.seid;
       _descr = _$v.descr;
-      _customField01 = _$v.customField01;
-      _customField02 = _$v.customField02;
-      _customField03 = _$v.customField03;
       _$v = null;
     }
     return this;
@@ -239,13 +167,7 @@ class OpenapiSurveyDetailBuilder
   @override
   _$OpenapiSurveyDetail build() {
     final _$result = _$v ??
-        new _$OpenapiSurveyDetail._(
-            sdid: sdid,
-            seid: seid,
-            descr: descr,
-            customField01: customField01,
-            customField02: customField02,
-            customField03: customField03);
+        new _$OpenapiSurveyDetail._(sdid: sdid, seid: seid, descr: descr);
     replace(_$result);
     return _$result;
   }

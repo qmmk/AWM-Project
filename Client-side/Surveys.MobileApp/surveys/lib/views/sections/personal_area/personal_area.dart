@@ -6,6 +6,7 @@ import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
+import 'package:surveys/models/vote_amount_model.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class PersonalAreaPage extends StatefulWidget {
@@ -74,7 +75,9 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
       behavior: HitTestBehavior.translucent,
       onTap: () async {
         await userProvider.loadDetails(index: index, isPersonal: true);
-        Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {"survey": userProvider.userSurveys[index]});
+        List<VoteAmount> amounts = await userProvider.getSurveyVotes(index: index, isPersonal: true);
+        Navigator.of(context).pushNamed(Routes.surveyResults,
+            arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
       },
       onLongPress: () async {
         _loadMenu(index);

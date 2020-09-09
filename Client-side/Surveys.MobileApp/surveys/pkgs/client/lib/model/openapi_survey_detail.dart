@@ -17,18 +17,6 @@ abstract class OpenapiSurveyDetail implements Built<OpenapiSurveyDetail, Openapi
         @nullable
     @BuiltValueField(wireName: r'descr')
     String get descr;
-    
-        @nullable
-    @BuiltValueField(wireName: r'CustomField01')
-    String get customField01;
-    
-        @nullable
-    @BuiltValueField(wireName: r'CustomField02')
-    String get customField02;
-    
-        @nullable
-    @BuiltValueField(wireName: r'CustomField03')
-    String get customField03;
 
     // Boilerplate code needed to wire-up generated code
     OpenapiSurveyDetail._();

@@ -47,7 +47,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     _votes.forEach((element) {
       totalVotes += element.amount;
     });
-    return votesForEntry / totalVotes;
+    return totalVotes == 0 ? 0 : votesForEntry / totalVotes;
   }
 
   Widget _content() {

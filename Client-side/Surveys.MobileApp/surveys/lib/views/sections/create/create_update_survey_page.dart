@@ -177,7 +177,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       ..isOpen = _open;
 
     if (_isModifying) {
-      await MenuUtils.showAlertDialog(context: context, title: "Survey successfully updated!");
+      //await MenuUtils.showAlertDialog(context: context, title: "Survey successfully updated!");
       Navigator.of(context).pop(_survey);
       return;
     }

@@ -30,18 +30,6 @@ abstract class LoginResponse implements Built<LoginResponse, LoginResponseBuilde
         @nullable
     @BuiltValueField(wireName: r'roleID')
     String get roleID;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField01')
-    String get customField01;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField02')
-    String get customField02;
-    
-        @nullable
-    @BuiltValueField(wireName: r'customField03')
-    String get customField03;
 
     // Boilerplate code needed to wire-up generated code
     LoginResponse._();
