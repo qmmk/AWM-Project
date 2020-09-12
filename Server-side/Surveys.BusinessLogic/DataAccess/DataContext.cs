@@ -484,21 +484,31 @@ namespace Surveys.BusinessLogic.DataAccess
             {
                 var result = ExecuteMultipleResults("dbo.usp_ManageSurvey", parameters.ToArray(), typeof(SurveyDetail), typeof(Int32));
 
-                if(result.Count == 2)
+                if(result.Count == 2 && result[1][0] == 0)
                 {
-                    if (result[1][0] == 0)
+                    sr.Data = result[0].Select(x => new SurveyDetail
                     {
-                        sr.Data = result[0].Select(x => new SurveyDetail
-                        {
-                            SEID = x.SEID,
-                            SDID = x.SDID,
-                            Descr = x.Descr
-                        }).ToList();
+                        SEID = x.SEID,
+                        SDID = x.SDID,
+                        Descr = x.Descr
+                    }).ToList();
 
-                        sr.Error = DbErrorCode.SUCCESS.ToString();
-                        sr.Message = "Returned all survey details";
-                        sr.Success = true;
-                    }
+                    sr.Error = DbErrorCode.SUCCESS.ToString();
+                    sr.Message = "Returned all survey details";
+                    sr.Success = true;
+                } 
+                else if(result[0][0] == (int)DbErrorCode.SURVEY_NOT_EXISTS) 
+                {
+                    sr.Data = null;
+                    sr.Error = DbErrorCode.SURVEY_NOT_EXISTS.ToString();
+                    sr.Message = "SurveyEntity not exists anymore.";
+                    sr.Success = false;
+                } else if (result[0][0] == (int)DbErrorCode.DETAIL_NOT_EXISTS)
+                {
+                    sr.Data = null;
+                    sr.Error = DbErrorCode.DETAIL_NOT_EXISTS.ToString();
+                    sr.Message = "SurveyDetail not exists anymore.";
+                    sr.Success = false;
                 }
             }
             catch (Exception ex)
