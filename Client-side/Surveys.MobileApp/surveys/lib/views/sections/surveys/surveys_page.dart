@@ -53,6 +53,13 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
           transitionBetweenRoutes: false,
           middle: Text("Explore surveys"),
           border: null,
+          trailing: GestureDetector(
+            onTap: () async {
+              await Provider.of<UserAndCollectionProvider>(context, listen: false)
+                  .loadOthersAndAlreadySubmittedSurveys();
+            },
+            child: Icon(CupertinoIcons.refresh),
+          ),
         ),
         child: StreamBuilder(
           stream: Provider.of<UserAndCollectionProvider>(context).clientEventsStream.stream,

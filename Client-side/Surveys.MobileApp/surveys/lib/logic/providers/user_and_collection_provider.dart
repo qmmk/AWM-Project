@@ -66,8 +66,6 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> loadOthersAndAlreadySubmittedSurveys() async {
-    if (_othersSurveys != null && _alreadySubmittedSurveysIds != null) return;
-
     loading();
     _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.id);
     _alreadySubmittedSurveysIds = await _surveyService.getUserSubmittedSurveys(pid: _user.id);

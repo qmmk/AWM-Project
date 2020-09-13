@@ -61,7 +61,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [Text(widget.survey.details[index].description), Text((perc * 100).toStringAsFixed(1) + "%")],
+                children: [Text(widget.survey.details[index].description), Text("${(perc * 100).toStringAsFixed(1)}%")],
               ),
               LinearProgressIndicator(
                 value: perc,
