@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +26,9 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
   bool _noEntries = false;
   List<VoteAmount> _votes;
 
+  bool _isPolling = true;
+  Timer _pollingTimer;
+
   RefreshController _refreshController = RefreshController(
     initialRefresh: false,
   );
@@ -35,7 +40,17 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     _notAccessible = !widget.survey.isOpen;
     _votes = widget.votes;
 
-    if (_notAccessible || _noEntries) return;
+    _startPollingVotes();
+  }
+
+  void _startPollingVotes() {
+    _pollingTimer = Timer.periodic(Duration(seconds: 5), (timer) async {
+      await _refreshVotes();
+    });
+  }
+
+  void _stopPollingVotes() {
+    _pollingTimer.cancel();
   }
 
   double calculateEntryPercentage({@required int detailId}) {
@@ -50,7 +65,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     return totalVotes == 0 ? 0 : votesForEntry / totalVotes;
   }
 
-  Widget _content() {
+  Widget _entries() {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
@@ -77,6 +92,46 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
         itemCount: widget.survey.details.length);
   }
 
+  Future<void> _refreshVotes() async {
+    UserAndCollectionProvider provider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    int index = (widget.isPersonal ? provider.userSurveys : provider.othersSurveys)
+        .indexWhere((element) => element.id == widget.survey.id);
+    List<VoteAmount> newVotes = await provider.getSurveyVotes(index: index, isPersonal: widget.isPersonal);
+    setState(() {
+      _votes = newVotes;
+      _refreshController.refreshCompleted();
+    });
+  }
+
+  Widget _content() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: _entries(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Text(
+                  "Survey's description",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(
+                  widget.survey.description,
+                  style: TextStyle(color: CupertinoColors.systemGrey),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -85,6 +140,18 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
           backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
+          trailing: GestureDetector(
+            onTap: () {
+              setState(() {
+                if (_isPolling)
+                  _stopPollingVotes();
+                else
+                  _startPollingVotes();
+                _isPolling = !_isPolling;
+              });
+            },
+            child: Icon(_isPolling ? CupertinoIcons.clock : CupertinoIcons.down_arrow),
+          ),
         ),
         child: _notAccessible || _noEntries
             ? Center(
@@ -102,48 +169,15 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
                 ),
               )
             : SafeArea(
-                child: SmartRefresher(
-                  onRefresh: () async {
-                    UserAndCollectionProvider provider = Provider.of<UserAndCollectionProvider>(context, listen: false);
-                    int index = (widget.isPersonal ? provider.userSurveys : provider.othersSurveys)
-                        .indexWhere((element) => element.id == widget.survey.id);
-                    List<VoteAmount> newVotes =
-                        await provider.getSurveyVotes(index: index, isPersonal: widget.isPersonal);
-                    setState(() {
-                      _votes = newVotes;
-                      _refreshController.refreshCompleted();
-                    });
-                  },
-                  controller: _refreshController,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: _content(),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: Text(
-                              "Survey's description",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              widget.survey.description,
-                              style: TextStyle(color: CupertinoColors.systemGrey),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: !_isPolling
+                    ? SmartRefresher(
+                        onRefresh: () async {
+                          await _refreshVotes();
+                        },
+                        controller: _refreshController,
+                        child: _content(),
+                      )
+                    : _content(),
               ));
   }
 }

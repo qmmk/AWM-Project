@@ -209,7 +209,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   MenuUtils.showConfirmationDialog(
                           context: context,
                           title: "Are you sure to modify this survey?",
-                          subtitle: "All the votes for the removed entries will be deleted")
+                          subtitle: "All the votes for the removed or modified entries will be deleted")
                       .then((yes) async {
                     if (yes) {
                       _submit();
