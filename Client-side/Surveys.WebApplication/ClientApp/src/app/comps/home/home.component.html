@@ -27,7 +27,7 @@
             <ng-template #openBlock><span class="circle" style="background-color:limegreen"></span></ng-template>
           </td>
           <td style="width:40px">
-            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid, i)" [disabled]="survey.isOpen">Detail</button>
+            <button class="btn btn-link" value="Detail" id="detail" (click)="onDetail(survey.seid, i)" [disabled]="!survey.isOpen">Detail</button>
           </td>
         </ng-template>
         <ng-template #disBlock>

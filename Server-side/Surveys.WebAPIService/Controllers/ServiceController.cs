@@ -96,17 +96,11 @@ namespace Surveys.WebAPIService.Controllers
         public ActionResult FastLogin([FromBody] LoginRefreshToken auth)
         {
             var res = _manager.CheckRefreshToken(auth.token);
-            if (res.Data == null)
-            {
-                return BadRequest(res.Message);
-            } 
+            if (res.Success)
+                return Ok(UserService.Instance.Authenticate(res.Data, 
+                    Encoding.ASCII.GetBytes(_opt.JwtTokenSecret)));
             else
-            {
-                var user = UserService.Instance.Authenticate(res.Data, 
-                    Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
-                return Ok(user);
-            }
-
+                return BadRequest(res.Message);
         }
 
         [HttpPost]
@@ -118,7 +112,7 @@ namespace Surveys.WebAPIService.Controllers
             if (res.Success)
                 return Ok(res.Data);
             else
-                return BadRequest(res.Success);
+                return BadRequest(res.Message);
         }
 
         #endregion

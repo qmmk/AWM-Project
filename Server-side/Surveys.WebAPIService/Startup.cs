@@ -1,28 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using Surveys.BusinessLogic.DataAccess;
 using Surveys.BusinessLogic.Interfaces;
 using Surveys.BusinessLogic.Manager;
@@ -48,28 +35,12 @@ namespace Surveys.WebAPIService
 
             services.AddControllers();
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            // AddSingleton = same for every request
-            // AddScoped = created once per client request
-            // Transient = new instance created every time
-
-            
             services.AddDbContext<DataContext>(options =>
                   options.UseSqlServer(appSettings.ConnectionString, o =>
                   {
                       o.EnableRetryOnFailure();
                   })
              );
-
-
-            //services.AddIdentityServer()
-            //    .AddAspNetIdentity<IdentityUser>()
-            //    .AddInMemoryApiResources(Configuration.GetApis())
-            //    .AddInMemoryIdentityResources(Configuration.GetIdentityResources())
-            //    .AddInMemoryClients(Configuration.GetClients())
-            //    .AddDeveloperSigningCredential();
-
 
             services.AddScoped<IServiceManager, ServiceManager>();
 
@@ -92,8 +63,7 @@ namespace Surveys.WebAPIService
                     ClockSkew = TimeSpan.Zero
                 };
 
-                // Evento handler del token signalr
-
+                // Event handler del token signalr
                 x.Events = new JwtBearerEvents()
                 {
                     OnMessageReceived = context =>
@@ -110,14 +80,7 @@ namespace Surveys.WebAPIService
                         return Task.CompletedTask;
                     }
                 };
-
-                //x.Events.OnAuthenticationFailed = async context => await AuthenticationFailed(context);
-                //x.Events.OnForbidden = async context => await AuthorizationFailed(context);
-                //x.Events.OnTokenValidated = async context => await ValidationSucceced(context);
             });
-
-            //WithOrigins("https://localhost:44301")
-            //Access to XMLHttpRequest at 'https://localhost:44350/hub/negotiate' from origin 'https://localhost:44301' has been blocked by CORS policy
 
             services.AddCors(options =>
             {
@@ -132,8 +95,6 @@ namespace Surveys.WebAPIService
             {
                 hubOptions.EnableDetailedErrors = true;
             });
-
-            //services.AddHostedService<WorkerService>();
 
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }
