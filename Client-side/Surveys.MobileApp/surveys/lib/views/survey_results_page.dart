@@ -21,7 +21,9 @@ class SurveyResultsPage extends StatefulWidget {
   _SurveyResultsPageState createState() => _SurveyResultsPageState();
 }
 
-class _SurveyResultsPageState extends State<SurveyResultsPage> {
+class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTickerProviderStateMixin {
+  final Duration updateInterval = Duration(seconds: 3);
+  
   bool _notAccessible = false;
   bool _noEntries = false;
   List<VoteAmount> _votes;
@@ -33,9 +35,12 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
     initialRefresh: false,
   );
 
+  AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     _noEntries = (widget?.survey?.details?.length ?? 0) <= 0;
     _notAccessible = !widget.survey.isOpen;
     _votes = widget.votes;
@@ -44,13 +49,15 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
   }
 
   void _startPollingVotes() {
-    _pollingTimer = Timer.periodic(Duration(seconds: 5), (timer) async {
+    _pollingTimer = Timer.periodic(updateInterval, (timer) async {
       await _refreshVotes();
     });
+    _animationController.reverse();
   }
 
   void _stopPollingVotes() {
     _pollingTimer.cancel();
+    _animationController.forward();
   }
 
   double calculateEntryPercentage({@required int detailId}) {
@@ -141,17 +148,20 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> {
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
           trailing: GestureDetector(
-            onTap: () {
-              setState(() {
-                if (_isPolling)
-                  _stopPollingVotes();
-                else
-                  _startPollingVotes();
-                _isPolling = !_isPolling;
-              });
-            },
-            child: Icon(_isPolling ? CupertinoIcons.clock : CupertinoIcons.down_arrow),
-          ),
+              onTap: () {
+                setState(() {
+                  if (_isPolling)
+                    _stopPollingVotes();
+                  else
+                    _startPollingVotes();
+                  _isPolling = !_isPolling;
+                });
+              },
+              child: AnimatedIcon(
+                color: CupertinoColors.activeBlue,
+                icon: AnimatedIcons.pause_play,
+                progress: _animationController,
+              )),
         ),
         child: _notAccessible || _noEntries
             ? Center(
