@@ -179,17 +179,7 @@ namespace Surveys.WebAPIService.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSurveyDetails([FromBody] List<SurveyDetail> lsd)
-        {
-            var res = _manager.InsertOrUpdateSurveyDetail(lsd);
-            if (res.Success)
-                return Ok(res.Message);
-            else
-                return BadRequest(res.Message);
-        }
-
-        [HttpPost]
-        public ActionResult InsertActualVote([FromBody] List<ActualVote> lav)
+        public ActionResult InsertActualVote ([FromBody] List<ActualVote> lav)
         {
             var res = _manager.InsertActualVote(lav);
             if (res.Success)
@@ -204,7 +194,7 @@ namespace Surveys.WebAPIService.Controllers
         }
 
         [HttpPost]
-        public ActionResult Logout([FromBody] OnlyPidParameter body)
+        public ActionResult Logout ([FromBody] OnlyPidParameter body)
         {
             var res = _manager.Logout(body.pid);
             if (res.Success)

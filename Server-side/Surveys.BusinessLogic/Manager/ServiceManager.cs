@@ -101,11 +101,6 @@ namespace Surveys.BusinessLogic.Manager
             return _context.GetSurveyDetails(seid);
         }
 
-        public ServiceResponse<List<SurveyDetail>> InsertOrUpdateSurveyDetail(List<SurveyDetail> lsd)
-        {
-            return _context.InsertOrUpdateSurveyDetail(lsd);
-        }
-
         public ServiceResponse<List<ChartModel>> GetRealTimeData()
         {
             return _context.GetRealTimeData();
