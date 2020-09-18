@@ -205,7 +205,7 @@ namespace Surveys.BusinessLogic.DataAccess
 
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
-                            sr.Data = dr.BindToList<int>();
+                            sr.Data = dr.BindToList<Submitted>().AsEnumerable().Select(x => x.SEID).ToList();
                         }
 
                         switch (Convert.ToInt32(cmd.Parameters["@ReturnCode"].Value))

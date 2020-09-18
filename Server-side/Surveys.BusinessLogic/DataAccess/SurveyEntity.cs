@@ -31,4 +31,9 @@ namespace Surveys.BusinessLogic.DataAccess
         [DataMember]
         public virtual List<SurveyDetail> surveyDetails { get; set; }
     }
+
+    public class Submitted
+    {
+        public virtual int SEID { get; set; }
+    }
 }
