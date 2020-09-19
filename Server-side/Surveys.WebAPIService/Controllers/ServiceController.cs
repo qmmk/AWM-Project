@@ -49,11 +49,9 @@ namespace Surveys.WebAPIService.Controllers
             // FIRST CHECK
             var res = _manager.Login(lrm.username, lrm.password);
 
-            if(res.Data == null)
-            {
-                return BadRequest("Username or password is incorrect");
-            }
-
+            if(!res.Success)
+                return BadRequest(res.Message);
+            
             // NEW LOGIN CRED
             var user = UserService.Instance.Authenticate(res.Data, 
                 Encoding.ASCII.GetBytes(_opt.JwtTokenSecret));
