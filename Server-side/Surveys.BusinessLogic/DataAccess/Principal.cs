@@ -35,4 +35,9 @@ namespace Surveys.BusinessLogic.DataAccess
         [DataMember]
         public virtual string RoleID { get; set; }
     }
+
+    public class Voted
+    {
+        public virtual string User { get; set; }
+    }
 }

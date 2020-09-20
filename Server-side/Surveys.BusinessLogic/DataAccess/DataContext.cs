@@ -237,6 +237,60 @@ namespace Surveys.BusinessLogic.DataAccess
             return sr;
         }
 
+        public ServiceResponse<List<string>> GetActualPrincipalForVotes(int seid)
+        {
+            ServiceResponse<List<string>> sr = new ServiceResponse<List<string>>();
+            sr.Data = new List<string>();
+
+            try
+            {
+                using (SqlConnection dbConn = new SqlConnection(_settings.ConnectionString))
+                {
+                    string sql = @"dbo.usp_ManagePrincipal";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, dbConn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue(@"Command", "GET_PV");
+                        cmd.Parameters.AddWithValue(@"SEID", seid);
+                        cmd.Parameters.Add("@ReturnCode", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                        dbConn.Open();
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            sr.Data = dr.BindToList<Voted>().AsEnumerable().Select(x => x.User).ToList();
+                        }
+
+                        switch (Convert.ToInt32(cmd.Parameters["@ReturnCode"].Value))
+                        {
+                            case (int)DbErrorCode.SUCCESS:
+                                sr.Error = DbErrorCode.SUCCESS.ToString();
+                                sr.Message = string.Format("All principal voted for survey {0}.", seid);
+                                sr.Success = true;
+                                break;
+                            case (int)DbErrorCode.TRANSACTION_ABORTED:
+                            default:
+                                sr.Data = null;
+                                sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
+                                sr.Message = "Error occur during get user submitted surveys.";
+                                sr.Success = false;
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sr.Data = null;
+                sr.Error = DbErrorCode.EXCEPTION.ToString();
+                sr.Message = ex.Message;
+                sr.Success = false;
+            }
+
+            return sr;
+        }
         #endregion
 
         #region RefreshToken
@@ -443,7 +497,7 @@ namespace Surveys.BusinessLogic.DataAccess
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue(@"Command", "DELETE");
-                        cmd.Parameters.AddWithValue(@"PID", pid);
+                        cmd.Parameters.AddWithValue(@"CreatedBy", pid);
                         cmd.Parameters.Add("@ReturnCode", SqlDbType.Int).Direction = ParameterDirection.Output;
 
                         dbConn.Open();

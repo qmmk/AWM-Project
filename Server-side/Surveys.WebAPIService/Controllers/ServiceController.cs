@@ -220,6 +220,16 @@ namespace Surveys.WebAPIService.Controllers
             else
                 return BadRequest(res.Message);
         }
+
+        [HttpGet]
+        public ActionResult GetActualPrincipalForVotes([FromQuery] int seid)
+        {
+            var res = _manager.GetActualPrincipalForVotes(seid);
+            if (res.Success)
+                return Ok(res.Data);
+            else
+                return BadRequest(res.Message);
+        }
         #endregion
     }
 }

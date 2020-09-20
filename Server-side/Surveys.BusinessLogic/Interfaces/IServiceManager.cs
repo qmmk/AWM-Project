@@ -36,5 +36,7 @@ namespace Surveys.BusinessLogic.Interfaces
         ServiceResponse<List<int>> GetUserSubmittedSurveys(int pid);
 
         ServiceResponse<List<ChartMobile>> GetActualVotes(int seid);
+
+        ServiceResponse<List<string>> GetActualPrincipalForVotes(int seid);
     }
 }

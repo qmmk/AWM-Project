@@ -130,6 +130,11 @@ namespace Surveys.BusinessLogic.Manager
         {
             return _context.GetActualVotes(seid);
         }
+
+        public ServiceResponse<List<string>> GetActualPrincipalForVotes(int seid)
+        {
+            return _context.GetActualPrincipalForVotes(seid);
+        }
         #endregion
     }
 }
