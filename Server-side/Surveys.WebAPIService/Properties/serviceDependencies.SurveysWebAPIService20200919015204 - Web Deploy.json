@@ -11,6 +11,12 @@
       "type": "mssql.azure",
       "connectionId": "AppSettings/ConnectionString",
       "secretStore": "AzureKeyVault"
+    },
+    "signalr1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/SurveySignalRService",
+      "type": "signalr.azure",
+      "connectionId": "Azure__SignalR__ConnectionString",
+      "secretStore": "AzureKeyVault"
     }
   }
 }

@@ -92,12 +92,8 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.runtimeconfig.dev.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Surveys.WebAPIService.pdb
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\AutoMapper.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\EntityFramework.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Web.Http.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
@@ -127,7 +123,6 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.CodeDom.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
@@ -167,5 +162,4 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\SurveysWebAPIService20200919015204 - Web Deploy\secrets1.arm.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Extensions.AspNetCore.Configuration.Secrets.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Security.KeyVault.Secrets.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.csproj.CoreCompileInputs.cache
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\AutoMapper.dll
