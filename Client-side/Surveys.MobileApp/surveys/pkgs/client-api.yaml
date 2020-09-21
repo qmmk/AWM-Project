@@ -6,7 +6,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://192.168.1.207:45455
+  - url: https://surveyswebapiservice20200919015204.azurewebsites.net:443
 
 components:
   securitySchemes:

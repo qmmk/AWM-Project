@@ -44,4 +44,26 @@ class MenuUtils {
       ),
     ]);
   }
+
+  static Future<void> showErrorDialog({@required BuildContext context, @required String title, String subtitle}) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+              title: title != null
+                  ? Text(
+                      title,
+                      style: TextStyle(color: CupertinoColors.systemRed),
+                    )
+                  : null,
+              content: subtitle != null ? Text(subtitle) : null,
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Ok"),
+                )
+              ],
+            ));
+  }
 }
