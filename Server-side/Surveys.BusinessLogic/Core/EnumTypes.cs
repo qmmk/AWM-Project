@@ -19,7 +19,8 @@ namespace Surveys.BusinessLogic.Core
             SURVEY_NOT_EXISTS = 8,
             RT_INVALID = 9,
             RT_NOT_EXISTS = 10,
-            DETAIL_NOT_EXISTS = 11
+            DETAIL_NOT_EXISTS = 11,
+            USER_ALREADY_VOTED = 12
         }
     }
 }

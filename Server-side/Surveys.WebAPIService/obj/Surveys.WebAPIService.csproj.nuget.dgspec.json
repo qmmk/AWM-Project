@@ -142,10 +142,6 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[8.0.1, )"
-            },
             "Azure.Extensions.AspNetCore.Configuration.Secrets": {
               "target": "Package",
               "version": "[1.0.0, )"
@@ -160,7 +156,7 @@
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[3.1.6, )"
+              "version": "[3.1.8, )"
             },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",

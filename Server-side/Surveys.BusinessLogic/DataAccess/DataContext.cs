@@ -916,13 +916,19 @@ namespace Surveys.BusinessLogic.DataAccess
                                     sr.Message = string.Format("Survey Detail {0} not exists", av.SDID);
                                     sr.Success = false;
                                     return sr;
+                                case (int)DbErrorCode.USER_ALREADY_VOTED:
+                                    sr.Data = (int)DbErrorCode.USER_ALREADY_VOTED;
+                                    sr.Error = DbErrorCode.USER_ALREADY_VOTED.ToString();
+                                    sr.Message = string.Format("User {0} already voted for that survey", av.PID);
+                                    sr.Success = false;
+                                    return sr;
                                 case (int)DbErrorCode.TRANSACTION_ABORTED:
                                 default:
                                     sr.Data = (int)DbErrorCode.TRANSACTION_ABORTED;
                                     sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
                                     sr.Message = string.Format("Error occur during insert actual vote.");
                                     sr.Success = false;
-                                    break;
+                                    return sr;
                             }
                         }
                     }
