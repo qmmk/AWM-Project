@@ -51,7 +51,7 @@ class UserAndCollectionProvider extends BaseProvider {
       _othersSurveys = null;
       _alreadySubmittedSurveysIds = null;
       return true;
-    } on DioError {
+    } on DioError catch (e) {
       return false;
     }
   }
@@ -88,18 +88,21 @@ class UserAndCollectionProvider extends BaseProvider {
     notifyListeners();
   }
 
-  Future<void> loadDetails({@required int index, @required bool isPersonal}) async {
-    if ((isPersonal ? _userSurveys[index].details : _othersSurveys[index].details) != null) return;
-
-    loading();
-    List<SurveyDetail> details =
-        await _surveyService.getSurveyDetails(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
-    if (isPersonal)
-      _userSurveys[index].details = details;
-    else
-      _othersSurveys[index].details = details;
-    done();
-    notifyListeners();
+  Future<bool> loadDetails({@required int index, @required bool isPersonal}) async {
+    try {
+      loading();
+      List<SurveyDetail> details =
+          await _surveyService.getSurveyDetails(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+      if (isPersonal)
+        _userSurveys[index].details = details;
+      else
+        _othersSurveys[index].details = details;
+      done();
+      notifyListeners();
+      return true;
+    } on Exception catch (e) {
+      return false;
+    }
   }
 
   Future<void> removeSurvey({@required int index, @required bool isPersonal}) async {

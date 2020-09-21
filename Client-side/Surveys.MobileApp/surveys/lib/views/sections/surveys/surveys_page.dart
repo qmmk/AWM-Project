@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
+import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class SurveysPage extends StatefulWidget {
@@ -21,17 +22,23 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () async {
-        await userProvider.loadDetails(index: index, isPersonal: false);
-        bool alreadyVoted = userProvider.hasAlreadyVotedFor(index: index);
+        bool success = await userProvider.loadDetails(index: index, isPersonal: false);
 
-        if (alreadyVoted)
-          Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {
-            "survey": userProvider.othersSurveys[index],
-            "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false),
-            "isPersonal": false
-          });
-        else
-          Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
+        if (success) {
+          bool alreadyVoted = userProvider.hasAlreadyVotedFor(index: index);
+
+          if (alreadyVoted)
+            Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {
+              "survey": userProvider.othersSurveys[index],
+              "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false),
+              "isPersonal": false
+            });
+          else
+            Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
+        } else {
+          MenuUtils.showErrorDialog(
+              context: context, title: "Details loading failed", subtitle: "Please try again later");
+        }
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),

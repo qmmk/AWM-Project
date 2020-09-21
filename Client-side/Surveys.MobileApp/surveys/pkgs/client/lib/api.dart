@@ -15,14 +15,14 @@ class SurveyClient {
 
     Dio dio;
     Serializers serializers;
-    String basePath = "https://192.168.1.9:45455";
+    String basePath = "https://192.168.1.206:45455";
 
     SurveyClient({this.dio, Serializers serializers, String basePathOverride, List<Interceptor> interceptors}) {
         if (dio == null) {
             BaseOptions options = new BaseOptions(
                 baseUrl: basePathOverride ?? basePath,
-                connectTimeout: 5000,
-                receiveTimeout: 3000,
+                connectTimeout: 15000,
+                receiveTimeout: 13000,
             );
             this.dio = new Dio(options);
         }
