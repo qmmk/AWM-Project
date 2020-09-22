@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { IdentityService } from './identity.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ConfigurationService {
@@ -15,6 +16,7 @@ export class ConfigurationService {
 
   constructor(private http: HttpClient,
     private storageService: StorageService,
+    private authService: AuthService,
     private identityService: IdentityService) { }
 
   load() {
@@ -37,27 +39,28 @@ export class ConfigurationService {
   }
 
   fast() {
-    //return new Promise((resolve, reject) => {
-    //  if (this.identityService.isLoggedIn) {
-    //    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return new Promise((resolve, reject) => {
+      if (this.identityService.isLoggedIn) {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    //    if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
-    //      let token = currentUser.refreshToken.rToken;
-    //      return this.http.post<any>(`${this.serverSettings.webApiServiceUrl}/FastLogin`, { token })
-    //        .subscribe(response => {
-    //          // login successful if there's a jwt token in the response
-    //          this.identityService.removeUser();
+        if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
+          let token = currentUser.refreshToken.rToken;
+          return this.http.post<any>(`${this.serverSettings.webApiServiceUrl}/FastLogin`, { token })
+            .subscribe(response => {
+              // login successful if there's a jwt token in the response
+              this.identityService.removeUser();
 
-    //          if (response && response.accessToken) {
-    //            this.identityService.setUser(response);
-    //          }
+              if (response && response.accessToken) {
+                this.identityService.setUser(response);
+              }
 
-    //          resolve(true);
-    //        });
-    //    }
-    //  } else {
-    //    resolve(true);
-    //  }
-    //});
+              resolve(true);
+            });
+        }
+      } else {
+        this.authService.logOut();
+        resolve(true);
+      }
+    });
   }
 }
