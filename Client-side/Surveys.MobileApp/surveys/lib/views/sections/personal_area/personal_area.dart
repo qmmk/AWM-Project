@@ -31,14 +31,18 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
             actions: [
               CupertinoActionSheetAction(
                   onPressed: () async {
-                    await userProvider.loadDetails(index: index, isPersonal: true);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(Routes.createSurvey,
-                        arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
-                      if (survey != null) {
-                        userProvider.modifySurvey(index, survey);
-                      }
-                    });
+                    bool success = await userProvider.loadDetails(index: index, isPersonal: true);
+                    if (success) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(Routes.createSurvey,
+                          arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
+                        if (survey != null) {
+                          userProvider.modifySurvey(index, survey);
+                        }
+                      });
+                    } else
+                      MenuUtils.showErrorDialog(
+                          context: context, title: "Details loading failed", subtitle: "Please try again later");
                   },
                   child: Text("Edit")),
               CupertinoActionSheetAction(
@@ -74,10 +78,14 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () async {
-        await userProvider.loadDetails(index: index, isPersonal: true);
-        List<VoteAmount> amounts = await userProvider.getSurveyVotes(index: index, isPersonal: true);
-        Navigator.of(context).pushNamed(Routes.surveyResults,
-            arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
+        bool success = await userProvider.loadDetails(index: index, isPersonal: true);
+        if (success) {
+          List<VoteAmount> amounts = await userProvider.getSurveyVotes(index: index, isPersonal: true);
+          Navigator.of(context).pushNamed(Routes.surveyResults,
+              arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
+        } else
+          MenuUtils.showErrorDialog(
+              context: context, title: "Details loading failed", subtitle: "Please try again later");
       },
       onLongPress: () async {
         _loadMenu(index);
