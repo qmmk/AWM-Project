@@ -56,8 +56,11 @@ export class SignalRService {
   public addTransferChartDataListener = (seid: number, i: number) => {
     this.hubConnection.on("RealTimeDataChart", (data) => {
       var r: any[] = [];
-      r.push(data[i]);
-      this.data[seid] = r;
+      
+      if (typeof data !== "undefined") {
+        r.push(data[i]);
+        this.data[seid] = r;
+      }
     });
   }
 

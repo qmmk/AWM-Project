@@ -58,8 +58,13 @@ namespace Surveys.BusinessLogic.Manager
                     Console.WriteLine("TRASFERISCO -->");
 
                     // ALL, GROUP, USER
-                    await Clients.All.SendAsync("RealTimeDataChart",
-                        _context.GetRealTimeData().Data);
+
+                    var r = _context.GetRealTimeData().Data;
+
+                    await Clients.All.SendAsync("RealTimeDataChart", r);
+
+
+                    Console.WriteLine(r);
 
                     // ASPETTO 5 SECONDI
                     await Task.Delay(5000);
