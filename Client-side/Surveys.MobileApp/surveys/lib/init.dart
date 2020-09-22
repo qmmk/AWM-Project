@@ -27,6 +27,7 @@ class CupertinoAppWithTheme extends StatelessWidget {
     debugPaintSizeEnabled = false;
 
     return CupertinoApp(
+      navigatorKey: globalAppNavigator,
       theme: CupertinoThemeData(
         brightness: Brightness.light,
       ),

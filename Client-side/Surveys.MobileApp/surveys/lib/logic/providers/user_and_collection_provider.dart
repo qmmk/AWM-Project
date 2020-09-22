@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/services/survey_service.dart';
@@ -22,6 +23,10 @@ class UserAndCollectionProvider extends BaseProvider {
   List<Survey> get userSurveys => _userSurveys;
   List<Survey> get othersSurveys => _othersSurveys;
 
+  UserAndCollectionProvider() {
+    GetIt.instance.registerSingleton(this, instanceName: "userAndCollectionProvider");
+  }
+
   void setUser(User user) {
     _user = user;
     notifyListeners();
@@ -42,9 +47,9 @@ class UserAndCollectionProvider extends BaseProvider {
 
   void setPassword(String password) {}
 
-  Future<bool> logout() async {
+  Future<bool> logout({bool onlyResetUserData = false}) async {
     try {
-      await _accessService.logout(pid: _user.id);
+      if (!onlyResetUserData) await _accessService.logout(pid: _user.id);
       await HttpUtils.invalidateTokens();
       _user = null;
       _userSurveys = null;
