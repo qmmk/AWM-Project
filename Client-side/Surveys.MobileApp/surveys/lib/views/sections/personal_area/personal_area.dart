@@ -37,12 +37,14 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
                       Navigator.of(context).pushNamed(Routes.createSurvey,
                           arguments: {"survey": userProvider.userSurveys[index]}).then((survey) {
                         if (survey != null) {
-                          userProvider.modifySurvey(index, survey);
+                          userProvider.modifySurvey(index, survey).then((success) {
+                            if (!success)
+                              MenuUtils.showErrorDialog(context: context, title: "Couldn't modify this survey");
+                          });
                         }
                       });
                     } else
-                      MenuUtils.showErrorDialog(
-                          context: context, title: "Details loading failed", subtitle: "Please try again later");
+                      MenuUtils.showErrorDialog(context: context, title: "Details loading failed");
                   },
                   child: Text("Edit")),
               CupertinoActionSheetAction(
@@ -54,8 +56,12 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
                             subtitle: "This will remove also its entries and the registered votes")
                         .then((removeIt) async {
                       if (removeIt ?? false) {
-                        await userProvider.removeSurvey(index: index, isPersonal: true);
-                        Navigator.of(context).pop();
+                        bool success = await userProvider.removeSurvey(index: index, isPersonal: true);
+                        if (!success)
+                          MenuUtils.showErrorDialog(context: context, title: "Couldn't remove this survey")
+                              .then((value) {
+                            Navigator.of(context).pop();
+                          });
                       }
                     });
                   },
@@ -81,11 +87,14 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
         bool success = await userProvider.loadDetails(index: index, isPersonal: true);
         if (success) {
           List<VoteAmount> amounts = await userProvider.getSurveyVotes(index: index, isPersonal: true);
-          Navigator.of(context).pushNamed(Routes.surveyResults,
-              arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
+          if (amounts == null)
+            MenuUtils.showErrorDialog(context: context, title: "Couldn't get votes for this survey");
+          else
+            Navigator.of(context).pushNamed(Routes.surveyResults,
+                arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
         } else
           MenuUtils.showErrorDialog(
-              context: context, title: "Details loading failed", subtitle: "Please try again later");
+              context: context, title: "Details loading failed");
       },
       onLongPress: () async {
         _loadMenu(index);
@@ -141,6 +150,10 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Provider.of<UserAndCollectionProvider>(context, listen: false).loadPersonalSurveys();
+    Provider.of<UserAndCollectionProvider>(context, listen: false).loadPersonalSurveys().then((success) {
+      if (!success)
+        MenuUtils.showErrorDialog(
+            context: context, title: "Couldn't load your surveys");
+    });
   }
 }

@@ -23,6 +23,8 @@ class HttpUtils {
   }
 
   static void registerToken(String token) {
+    SurveyClient surveyClient = GetIt.instance.get(instanceName: "surveyClient");
+
     GetIt.instance
         .get(instanceName: "surveyClient")
         .dio
@@ -31,9 +33,14 @@ class HttpUtils {
           options.headers["Authorization"] = 'Bearer $token';
         }, onError: (DioError error) async {
           if (error.response.statusCode == 401) {
+            surveyClient.dio.interceptors.requestLock.lock();
+            surveyClient.dio.interceptors.responseLock.lock();
+            
             UserAndCollectionProvider provider = GetIt.instance.get(instanceName: "userAndCollectionProvider");
             await provider.logout(onlyResetUserData: true); //Kick out the user, whatever the logout does
             globalAppNavigator.currentState.pushNamedAndRemoveUntil(Routes.accessHub, (Route<dynamic> route) => false);
+            surveyClient.dio.interceptors.requestLock.unlock();
+            surveyClient.dio.interceptors.responseLock.unlock();
           }
         }));
   }
