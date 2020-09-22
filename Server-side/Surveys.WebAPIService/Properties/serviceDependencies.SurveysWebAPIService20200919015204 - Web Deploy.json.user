@@ -1,42 +1,4 @@
 {
-  "dependencies": {
-    "signalr1": {
-      "restored": true,
-      "restoreTime": "2020-09-21T16:19:31.8230536Z"
-    },
-    "secrets1": {
-      "restored": true,
-      "restoreTime": "2020-09-19T07:20:52.7970489Z"
-    },
-    "mssql1": {
-      "restored": true,
-      "restoreTime": "2020-09-19T07:24:05.113275Z"
-    }
-  },
-  "parameters": {
-    "signalr1.resourceGroupName": {
-      "Type": "resourceGroup",
-      "Value": "AWM-Project"
-    },
-    "secrets1.resourceGroupName": {
-      "Type": "resourceGroup",
-      "Value": "AWM-Project"
-    },
-    "mssql1.subscriptionId": {
-      "Type": "subscription",
-      "Value": "418a8531-7783-42b2-8de4-7955db41d317"
-    },
-    "signalr1.subscriptionId": {
-      "Type": "subscription",
-      "Value": "418a8531-7783-42b2-8de4-7955db41d317"
-    },
-    "mssql1.resourceGroupName": {
-      "Type": "resourceGroup",
-      "Value": "AWM-Project"
-    },
-    "secrets1.subscriptionId": {
-      "Type": "subscription",
-      "Value": "418a8531-7783-42b2-8de4-7955db41d317"
-    }
-  }
+  "dependencies": {},
+  "parameters": {}
 }

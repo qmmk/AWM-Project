@@ -5,6 +5,7 @@ import { StorageService } from './storage.service';
 
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { IdentityService } from './identity.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class ConfigurationService {
@@ -15,6 +16,7 @@ export class ConfigurationService {
 
   constructor(private http: HttpClient,
     private storageService: StorageService,
+    private authService: AuthService,
     private identityService: IdentityService) { }
 
   load() {
@@ -56,6 +58,7 @@ export class ConfigurationService {
             });
         }
       } else {
+        this.authService.logOut();
         resolve(true);
       }
     });
