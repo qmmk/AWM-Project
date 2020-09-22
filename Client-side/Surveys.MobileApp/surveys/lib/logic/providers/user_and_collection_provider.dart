@@ -57,8 +57,6 @@ class UserAndCollectionProvider extends BaseProvider {
   }
 
   Future<void> loadPersonalSurveys() async {
-    if (_userSurveys != null) return;
-
     loading();
     _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.id);
     done();
