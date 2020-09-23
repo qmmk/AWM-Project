@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/survey_model.dart';
@@ -112,8 +113,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
         _votes = newVotes;
         _refreshController.refreshCompleted();
       });
-    }
-    else
+    } else
       MenuUtils.showErrorDialog(context: context, title: "Couldn't refresh votes");
   }
 
@@ -140,7 +140,15 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
                   widget.survey.description,
                   style: TextStyle(color: CupertinoColors.systemGrey),
                 ),
-              )
+              ),
+              Center(
+                child: CupertinoButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.surveyResultsVotes);
+                  },
+                  child: Text("Show votes"),
+                ),
+              ),
             ],
           ),
         ),
