@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IdentityService } from '../../services/identity.service';
 import { AuthService } from '../../services/auth.service';
+import { SurveyService } from '../../services/survey.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,7 +13,6 @@ export class NavMenuComponent {
 
   constructor(private identityService: IdentityService,
     private authService: AuthService) {
-
   }
 
   collapse() {
@@ -28,6 +28,6 @@ export class NavMenuComponent {
   }
 
   onClick() {
-    this.authService.logOut();
+    this.authService.logOut();    
   }
 }

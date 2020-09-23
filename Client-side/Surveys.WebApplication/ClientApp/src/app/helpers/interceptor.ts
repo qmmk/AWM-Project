@@ -4,19 +4,17 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
-import { ConfigurationService } from '../services/configuration.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService,
-    private config: ConfigurationService) { }
+  constructor(private authService: AuthService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(catchError(err => {
       if (err && err.status === 401) {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
-          this.config.fast();          
+          this.authService.fastIn();          
         }
         else {
           this.authService.logOut();

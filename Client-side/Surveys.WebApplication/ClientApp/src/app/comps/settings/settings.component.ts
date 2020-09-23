@@ -12,7 +12,6 @@ export class SettingsComponent implements OnInit {
   formGroup: FormGroup;
 
   constructor(formBuilder: FormBuilder,
-    private service: SurveyService,
     private signalr: SignalRService) {
     this.formGroup = formBuilder.group({
       acceptTerms: ['', Validators.required],
@@ -21,27 +20,26 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    var sysConfig = JSON.parse(localStorage.getItem('sysConfig'));
 
-    // LOAD SYSCONFIG
-    //this.service.LoadSysConfig();
-    /*
-    this.formGroup.patchValue({
-      acceptTerms: false,
-      enableRTD: true
-    });
-    */
+    if (typeof sysConfig !== 'undefined') {
+      this.formGroup.patchValue({
+        acceptTerms: sysConfig.acceptTerms,
+        enableRTD: sysConfig.enableRTD
+      });
+    }
   }
 
   get f() { return this.formGroup.controls; }
 
   onFormSubmit() {
-    //alert(JSON.stringify(this.formGroup.value, null, 2));
-    console.log("form submit", this.f.acceptTerms.value, this.f.enableRTD.value);
+    console.log("Form submit", this.formGroup.value);
+
+    localStorage.setItem('sysConfig', JSON.stringify(this.formGroup.value));
 
     if (this.f.enableRTD.value) {
       console.log("START RTD");
       this.signalr.realTimeDataChart();
     }
-    // SAVE SYSCONFIG
   }
 }

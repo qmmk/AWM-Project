@@ -8,6 +8,7 @@ import { IdentityService } from './identity.service';
 @Injectable()
 export class AuthService {
   serviceUrl: string;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -32,8 +33,32 @@ export class AuthService {
   }
 
   logOut() {
-    this.identityService.removeUser();
-    this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let pid = currentUser.PID;
+
+    return this.http.post<any>(`${this.serviceUrl}/Logout`, { pid })
+      .pipe(map(response => {
+
+        this.identityService.removeUser();
+        this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
+        return response;
+      }));
+  }
+
+  fastIn() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let token = currentUser.refreshToken.rToken;
+    return this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token })
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        this.identityService.removeUser();
+
+        if (user && user.accessToken) {
+          this.identityService.setUser(user);
+        }
+
+        return user;
+      }));
   }
 }
 

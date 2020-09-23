@@ -6,6 +6,7 @@ import { StorageService } from './storage.service';
 import { Observable, Subject, ReplaySubject } from 'rxjs';
 import { IdentityService } from './identity.service';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ConfigurationService {
@@ -15,9 +16,7 @@ export class ConfigurationService {
   isReady: boolean = false;
 
   constructor(private http: HttpClient,
-    private storageService: StorageService,
-    private authService: AuthService,
-    private identityService: IdentityService) { }
+    private storageService: StorageService) { }
 
   load() {
     const baseURI = document.baseURI.endsWith('/') ? document.baseURI : `${document.baseURI}/`;
@@ -35,32 +34,6 @@ export class ConfigurationService {
         this.OnSettingsLoaded.next();
         resolve(true);
       });
-    });
-  }
-
-  fast() {
-    return new Promise((resolve, reject) => {
-      if (this.identityService.isLoggedIn) {
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-        if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
-          let token = currentUser.refreshToken.rToken;
-          return this.http.post<any>(`${this.serverSettings.webApiServiceUrl}/FastLogin`, { token })
-            .subscribe(response => {
-              // login successful if there's a jwt token in the response
-              this.identityService.removeUser();
-
-              if (response && response.accessToken) {
-                this.identityService.setUser(response);
-              }
-
-              resolve(true);
-            });
-        }
-      } else {
-        this.authService.logOut();
-        resolve(true);
-      }
     });
   }
 }
