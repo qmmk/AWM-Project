@@ -6,6 +6,7 @@ import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
+import 'package:surveys/models/vote_amount_model.dart';
 import 'package:surveys/views/widgets/survey_entry.dart';
 
 class SurveysPage extends StatefulWidget {
@@ -27,17 +28,17 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
         if (success) {
           bool alreadyVoted = userProvider.hasAlreadyVotedFor(index: index);
 
-          if (alreadyVoted)
-            Navigator.of(context).pushNamed(Routes.surveyResults, arguments: {
-              "survey": userProvider.othersSurveys[index],
-              "votes": await userProvider.getSurveyVotes(index: index, isPersonal: false),
-              "isPersonal": false
-            });
-          else
+          if (alreadyVoted) {
+            List<VoteAmount> amounts = await userProvider.getSurveyVotes(index: index, isPersonal: false);
+            if (amounts != null) {
+              Navigator.of(context).pushNamed(Routes.surveyResults,
+                  arguments: {"survey": userProvider.othersSurveys[index], "votes": amounts, "isPersonal": false});
+            } else
+              MenuUtils.showErrorDialog(context: context, title: "Couldn't load votes");
+          } else
             Navigator.of(context).pushNamed(Routes.vote, arguments: {"survey": userProvider.othersSurveys[index]});
         } else {
-          MenuUtils.showErrorDialog(
-              context: context, title: "Details loading failed", subtitle: "Please try again later");
+          MenuUtils.showErrorDialog(context: context, title: "Details loading failed");
         }
       },
       child: Padding(
@@ -62,8 +63,9 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
           border: null,
           trailing: GestureDetector(
             onTap: () async {
-              await Provider.of<UserAndCollectionProvider>(context, listen: false)
+              bool success = await Provider.of<UserAndCollectionProvider>(context, listen: false)
                   .loadOthersAndAlreadySubmittedSurveys();
+              if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load the surveys");
             },
             child: Icon(CupertinoIcons.refresh),
           ),
@@ -91,6 +93,10 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Provider.of<UserAndCollectionProvider>(context, listen: false).loadOthersAndAlreadySubmittedSurveys();
+    Provider.of<UserAndCollectionProvider>(context, listen: false)
+        .loadOthersAndAlreadySubmittedSurveys()
+        .then((success) {
+      if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load the surveys");
+    });
   }
 }

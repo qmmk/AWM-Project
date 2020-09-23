@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/services/survey_service.dart';
@@ -22,6 +25,10 @@ class UserAndCollectionProvider extends BaseProvider {
   List<Survey> get userSurveys => _userSurveys;
   List<Survey> get othersSurveys => _othersSurveys;
 
+  UserAndCollectionProvider() {
+    GetIt.instance.registerSingleton(this, instanceName: "userAndCollectionProvider");
+  }
+
   void setUser(User user) {
     _user = user;
     notifyListeners();
@@ -42,9 +49,9 @@ class UserAndCollectionProvider extends BaseProvider {
 
   void setPassword(String password) {}
 
-  Future<bool> logout() async {
+  Future<bool> logout({bool onlyResetUserData = false}) async {
     try {
-      await _accessService.logout(pid: _user.id);
+      if (!onlyResetUserData) await _accessService.logout(pid: _user.id);
       await HttpUtils.invalidateTokens();
       _user = null;
       _userSurveys = null;
@@ -56,34 +63,60 @@ class UserAndCollectionProvider extends BaseProvider {
     }
   }
 
-  Future<void> loadPersonalSurveys() async {
-    loading();
-    _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.id);
-    done();
-    notifyListeners();
+  Future<bool> loadPersonalSurveys() async {
+    try {
+      loading();
+      _userSurveys = await _surveyService.loadAllSurveysByUser(pid: _user.id);
+      done();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      done();
+      notifyListeners();
+      return false;
+    }
   }
 
-  Future<void> loadOthersAndAlreadySubmittedSurveys() async {
-    loading();
-    _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.id);
-    _alreadySubmittedSurveysIds = await _surveyService.getUserSubmittedSurveys(pid: _user.id);
-    done();
-    notifyListeners();
+  Future<bool> loadOthersAndAlreadySubmittedSurveys() async {
+    try {
+      loading();
+      _othersSurveys = await _surveyService.loadAllSurveysExceptUser(pid: _user.id);
+      _alreadySubmittedSurveysIds = await _surveyService.getUserSubmittedSurveys(pid: _user.id);
+      done();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      done();
+      notifyListeners();
+      return false;
+    }
   }
 
-  Future<void> modifySurvey(int index, Survey survey) async {
-    if (index < 0 || index >= _userSurveys.length || survey.id == null) return;
+  Future<bool> modifySurvey(int index, Survey survey) async {
+    if (index < 0 || index >= _userSurveys.length || survey.id == null) return false;
 
-    Survey updated = await _surveyService.createSurvey(survey: survey);
-    _userSurveys[index] = updated;
-    notifyListeners();
+    try {
+      Survey updated = await _surveyService.createSurvey(survey: survey);
+      _userSurveys[index] = updated;
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      notifyListeners();
+      return false;
+    }
   }
 
-  Future<void> createSurvey({@required Survey survey}) async {
-    survey.userId = _user.id;
-    Survey created = await _surveyService.createSurvey(survey: survey);
-    if (_userSurveys != null) _userSurveys.add(created);
-    notifyListeners();
+  Future<bool> createSurvey({@required Survey survey}) async {
+    try {
+      survey.userId = _user.id;
+      Survey created = await _surveyService.createSurvey(survey: survey);
+      if (_userSurveys != null) _userSurveys.add(created);
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      notifyListeners();
+      return false;
+    }
   }
 
   Future<bool> loadDetails({@required int index, @required bool isPersonal}) async {
@@ -98,20 +131,29 @@ class UserAndCollectionProvider extends BaseProvider {
       done();
       notifyListeners();
       return true;
-    } on Exception catch (e) {
+    } on DioError catch (e) {
+      done();
+      notifyListeners();
       return false;
     }
   }
 
-  Future<void> removeSurvey({@required int index, @required bool isPersonal}) async {
-    loading();
-    await _surveyService.deleteSurvey(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
-    if (isPersonal)
-      _userSurveys.removeAt(index);
-    else
-      _othersSurveys.removeAt(index);
-    done();
-    notifyListeners();
+  Future<bool> removeSurvey({@required int index, @required bool isPersonal}) async {
+    try {
+      loading();
+      await _surveyService.deleteSurvey(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+      if (isPersonal)
+        _userSurveys.removeAt(index);
+      else
+        _othersSurveys.removeAt(index);
+      done();
+      notifyListeners();
+      return true;
+    } on DioError catch (e) {
+      done();
+      notifyListeners();
+      return false;
+    }
   }
 
   Future<bool> registerVote({@required int index, @required detailsIndex}) async {
@@ -132,10 +174,15 @@ class UserAndCollectionProvider extends BaseProvider {
   bool hasAlreadyVotedFor({@required int index}) => _alreadySubmittedSurveysIds.contains(_othersSurveys[index].id);
 
   Future<List<VoteAmount>> getSurveyVotes({@required int index, @required bool isPersonal}) async {
-    loading();
-    List<VoteAmount> votes =
-        await _surveyService.getSurveyVotes(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
-    done();
-    return votes;
+    try {
+      loading();
+      List<VoteAmount> votes =
+          await _surveyService.getSurveyVotes(seid: isPersonal ? _userSurveys[index].id : _othersSurveys[index].id);
+      done();
+      return votes;
+    } on DioError catch (e) {
+      done();
+      return Future.value(null);
+    }
   }
 }

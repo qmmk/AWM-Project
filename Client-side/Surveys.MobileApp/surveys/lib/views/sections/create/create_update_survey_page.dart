@@ -183,15 +183,17 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
     }
 
     UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
-    await userProvider.createSurvey(survey: _survey);
-
-    setState(() {
-      _titleController.text = "";
-      _descriptionController.text = "";
-      _survey.details = [];
-    });
-    FocusScope.of(context).requestFocus(FocusNode());
-    await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
+    bool success = await userProvider.createSurvey(survey: _survey);
+    if (success) {
+      setState(() {
+        _titleController.text = "";
+        _descriptionController.text = "";
+        _survey.details = [];
+      });
+      FocusScope.of(context).requestFocus(FocusNode());
+      await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
+    } else
+      MenuUtils.showErrorDialog(context: context, title: "Couldn't create the survey");
   }
 
   @override

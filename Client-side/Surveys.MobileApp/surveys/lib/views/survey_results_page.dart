@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/survey_vote_model.dart';
 import 'package:surveys/models/vote_amount_model.dart';
@@ -23,7 +25,7 @@ class SurveyResultsPage extends StatefulWidget {
 
 class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTickerProviderStateMixin {
   final Duration updateInterval = Duration(seconds: 3);
-  
+
   bool _notAccessible = false;
   bool _noEntries = false;
   List<VoteAmount> _votes;
@@ -106,10 +108,13 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
     int index = (widget.isPersonal ? provider.userSurveys : provider.othersSurveys)
         .indexWhere((element) => element.id == widget.survey.id);
     List<VoteAmount> newVotes = await provider.getSurveyVotes(index: index, isPersonal: widget.isPersonal);
-    setState(() {
-      _votes = newVotes;
-      _refreshController.refreshCompleted();
-    });
+    if (newVotes != null) {
+      setState(() {
+        _votes = newVotes;
+        _refreshController.refreshCompleted();
+      });
+    } else
+      MenuUtils.showErrorDialog(context: context, title: "Couldn't refresh votes");
   }
 
   Widget _content() => Padding(
@@ -135,7 +140,15 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
                   widget.survey.description,
                   style: TextStyle(color: CupertinoColors.systemGrey),
                 ),
-              )
+              ),
+              Center(
+                child: CupertinoButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.surveyResultsVotes);
+                  },
+                  child: Text("Show votes"),
+                ),
+              ),
             ],
           ),
         ),

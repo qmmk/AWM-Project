@@ -21,8 +21,8 @@ class SurveyClient {
         if (dio == null) {
             BaseOptions options = new BaseOptions(
                 baseUrl: basePathOverride ?? basePath,
-                connectTimeout: 15000,
-                receiveTimeout: 13000,
+                connectTimeout: 5000,
+                receiveTimeout: 3000,
             );
             this.dio = new Dio(options);
         }

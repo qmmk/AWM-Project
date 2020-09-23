@@ -45,7 +45,8 @@ class MenuUtils {
     ]);
   }
 
-  static Future<void> showErrorDialog({@required BuildContext context, @required String title, String subtitle}) {
+  static Future<void> showErrorDialog(
+      {@required BuildContext context, @required String title, String subtitle = "Please try again later"}) {
     return showCupertinoDialog(
         context: context,
         builder: (BuildContext context) => CupertinoAlertDialog(
