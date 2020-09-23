@@ -4,6 +4,7 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service'
 import { IdentityService } from './identity.service';
+import { SurveyService } from './survey.service';
 
 @Injectable()
 export class AuthService {
@@ -33,44 +34,22 @@ export class AuthService {
   }
 
   logOut() {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    let pid = currentUser.PID;
-
-    return this.http.post<any>(`${this.serviceUrl}/Logout`, { pid })
-      .pipe(map(response => {
-
-        this.identityService.removeUser();
-        this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
-        return response;
-      }));
-  }
-
-  fastIn() {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    let token = currentUser.refreshToken.rToken;
-    return this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token })
-      .pipe(map(user => {
-        // login successful if there's a jwt token in the response
-        this.identityService.removeUser();
-
-        if (user && user.accessToken) {
-          this.identityService.setUser(user);
-        }
-
-        return user;
-      }));
+    this.identityService.removeUser();
+    this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private identityService: IdentityService) { }
+  constructor(private router: Router,
+    private identityService: IdentityService,
+    private surveyService: SurveyService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.identityService.isLoggedIn) {
       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
       if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
-
+        this.surveyService.FastIn(currentUser.refreshToken.rToken)
         // logged in so return true
         return true;
       }

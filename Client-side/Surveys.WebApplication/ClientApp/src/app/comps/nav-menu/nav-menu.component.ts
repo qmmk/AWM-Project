@@ -12,6 +12,7 @@ export class NavMenuComponent {
   isExpanded = false;
 
   constructor(private identityService: IdentityService,
+    private surveyService: SurveyService,
     private authService: AuthService) {
   }
 
@@ -28,6 +29,8 @@ export class NavMenuComponent {
   }
 
   onClick() {
-    this.authService.logOut();    
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.surveyService.Logout(currentUser.pid);
+    return this.authService.logOut();    
   }
 }

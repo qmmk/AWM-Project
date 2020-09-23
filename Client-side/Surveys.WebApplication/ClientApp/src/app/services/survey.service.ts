@@ -21,4 +21,12 @@ export class SurveyService {
   public async GetSurveyDetails(seid: number) {
     return await this.http.get<SurveyDetail[]>(`${this.serviceUrl}/GetSurveyDetails?seid=${seid}`).toPromise<SurveyDetail[]>();
   }
+
+  public async Logout(n: number) {
+    return await this.http.post<any>(`${this.serviceUrl}/Logout`, {pid: n}).toPromise<any>();
+  }
+
+  public async FastIn(t: string) {
+    return await this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token: t }).toPromise<any>();
+  }
 }
