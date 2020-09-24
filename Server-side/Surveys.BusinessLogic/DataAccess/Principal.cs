@@ -39,5 +39,6 @@ namespace Surveys.BusinessLogic.DataAccess
     public class Voted
     {
         public virtual string User { get; set; }
+        public virtual int SDID { get; set; }
     }
 }

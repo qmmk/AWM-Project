@@ -29,6 +29,7 @@ export class IdentityService {
 
   removeUser() {
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('sysConfig');
     this.user = null;
     this.OnLoggedOut.next();
   }

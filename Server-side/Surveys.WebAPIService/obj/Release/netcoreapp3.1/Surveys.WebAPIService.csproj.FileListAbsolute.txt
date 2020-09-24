@@ -4,8 +4,6 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\serviceDependencies.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\serviceDependencies.local.json
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\serviceDependencies.SurveysWebAPIService20200919015204 - Web Deploy.json
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\SurveysWebAPIService20200919015204 - Web Deploy\profile.arm.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Surveys.WebAPIService.exe
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Surveys.WebAPIService.deps.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Surveys.WebAPIService.runtimeconfig.json
@@ -85,3 +83,4 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Microsoft.Azure.SignalR.Common.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Microsoft.Azure.SignalR.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Microsoft.Azure.SignalR.Protocols.dll
+C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\SurveysWebAPIService20200924114545 - Web Deploy\profile.arm.json

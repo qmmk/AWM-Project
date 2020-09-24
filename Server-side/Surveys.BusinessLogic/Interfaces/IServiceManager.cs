@@ -37,6 +37,6 @@ namespace Surveys.BusinessLogic.Interfaces
 
         ServiceResponse<List<ChartMobile>> GetActualVotes(int seid);
 
-        ServiceResponse<List<string>> GetActualPrincipalForVotes(int seid);
+        ServiceResponse<List<Voted>> GetActualPrincipalForVotes(int seid);
     }
 }

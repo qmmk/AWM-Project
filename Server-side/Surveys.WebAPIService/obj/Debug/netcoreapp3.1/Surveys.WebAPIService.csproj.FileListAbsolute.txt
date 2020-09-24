@@ -154,10 +154,8 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\o
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.pdb
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.genruntimeconfig.cache
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\SurveysWebAPIService20200919015204 - Web Deploy\profile.arm.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Core.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Identity.dll
-C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.SurveysWebAPIService20200919015204 - Web Deploy.json
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Extensions.AspNetCore.Configuration.Secrets.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Azure.Security.KeyVault.Secrets.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\AutoMapper.dll
@@ -167,3 +165,4 @@ C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\b
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Microsoft.Azure.SignalR.Protocols.dll
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.csproj.CoreCompileInputs.cache
 C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\obj\Debug\netcoreapp3.1\Surveys.WebAPIService.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\marmal\Documents\GitHub\AWM-Project\Server-side\Surveys.WebAPIService\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\SurveysWebAPIService20200924114545 - Web Deploy\profile.arm.json

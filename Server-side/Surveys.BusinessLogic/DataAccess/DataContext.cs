@@ -237,10 +237,10 @@ namespace Surveys.BusinessLogic.DataAccess
             return sr;
         }
 
-        public ServiceResponse<List<string>> GetActualPrincipalForVotes(int seid)
+        public ServiceResponse<List<Voted>> GetActualPrincipalForVotes(int seid)
         {
-            ServiceResponse<List<string>> sr = new ServiceResponse<List<string>>();
-            sr.Data = new List<string>();
+            ServiceResponse<List<Voted>> sr = new ServiceResponse<List<Voted>>();
+            sr.Data = new List<Voted>();
 
             try
             {
@@ -260,7 +260,12 @@ namespace Surveys.BusinessLogic.DataAccess
 
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
-                            sr.Data = dr.BindToList<Voted>().AsEnumerable().Select(x => x.User).ToList();
+                            dr.BindToList<Voted>().AsEnumerable().GroupBy(x => x.SDID).ToList().ForEach(x => {
+                                foreach (Voted v in x)
+                                {
+                                    sr.Data.Add(v);
+                                }
+                            });
                         }
 
                         switch (Convert.ToInt32(cmd.Parameters["@ReturnCode"].Value))

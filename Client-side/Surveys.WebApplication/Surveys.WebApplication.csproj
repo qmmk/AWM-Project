@@ -26,6 +26,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\comps\settings\settings.component.ts" />
     <None Remove="ClientApp\src\app\models\ChartModel.ts" />
+    <None Remove="ClientApp\src\app\services\notification.service.ts" />
     <None Remove="ClientApp\src\app\services\signalr.service.ts" />
   </ItemGroup>
 
@@ -36,6 +37,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\comps\settings\settings.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\ChartModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\notification.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\signalr.service.ts" />
   </ItemGroup>
 

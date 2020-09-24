@@ -20,6 +20,7 @@ import { AuthService, AuthGuardService } from './services/auth.service';
 import { SurveyService } from './services/survey.service';
 import { ErrorInterceptor, JwtInterceptor } from './helpers/interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { SignalRService } from './services/signalr.service';
 
 @NgModule({
@@ -54,6 +55,7 @@ import { SignalRService } from './services/signalr.service';
       }
     ]),
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     MatSlideToggleModule
   ],
   providers: [AuthService, ConfigurationService, StorageService, IdentityService, AuthGuardService, SurveyService, SignalRService,
