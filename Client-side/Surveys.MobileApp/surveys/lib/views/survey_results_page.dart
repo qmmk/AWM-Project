@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/services/survey_service.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/survey_vote_model.dart';
@@ -38,6 +39,8 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
   );
 
   AnimationController _animationController;
+
+  bool _isLoadingVotes = false;
 
   @override
   void initState() {
@@ -143,8 +146,20 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
               ),
               Center(
                 child: CupertinoButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.surveyResultsVotes);
+                  onPressed: () async {
+                    setState(() {
+                      _isLoadingVotes = true;
+                    });
+
+                    List<Map<String, dynamic>> preferences =
+                        await SurveyService().getUserPreferences(seid: widget.survey.id);
+
+                    setState(() {
+                      _isLoadingVotes = false;
+                    });
+
+                    Navigator.of(context).pushNamed(Routes.surveyResultsVotes,
+                        arguments: {"preferences": preferences, "survey": widget.survey});
                   },
                   child: Text("Show votes"),
                 ),
@@ -153,6 +168,33 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
           ),
         ),
       );
+
+  Widget _wholeContent() => _notAccessible || _noEntries
+      ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                CupertinoIcons.flag,
+                size: 70,
+              ),
+              Text(_noEntries
+                  ? "Sorry, there are no entries for this survey!"
+                  : "Sorry, this survey hasn't already been opened!")
+            ],
+          ),
+        )
+      : SafeArea(
+          child: !_isPolling
+              ? SmartRefresher(
+                  onRefresh: () async {
+                    await _refreshVotes();
+                  },
+                  controller: _refreshController,
+                  child: _content(),
+                )
+              : _content(),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -178,31 +220,18 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
                 progress: _animationController,
               )),
         ),
-        child: _notAccessible || _noEntries
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.flag,
-                      size: 70,
-                    ),
-                    Text(_noEntries
-                        ? "Sorry, there are no entries for this survey!"
-                        : "Sorry, this survey hasn't already been opened!")
-                  ],
-                ),
+        child: _isLoadingVotes
+            ? Stack(
+                children: [
+                  Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  Opacity(
+                    opacity: 0.25,
+                    child: _wholeContent(),
+                  )
+                ],
               )
-            : SafeArea(
-                child: !_isPolling
-                    ? SmartRefresher(
-                        onRefresh: () async {
-                          await _refreshVotes();
-                        },
-                        controller: _refreshController,
-                        child: _content(),
-                      )
-                    : _content(),
-              ));
+            : _wholeContent());
   }
 }

@@ -17,6 +17,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(OpenapiUser.serializer)
       ..add(OpenapiVote.serializer)
       ..add(OpenapiVoteAmount.serializer)
+      ..add(OpenapiVoteUser.serializer)
       ..add(RefreshToken.serializer)
       ..addBuilderFactory(const FullType(BuiltList, const [const FullType(OpenapiSurveyDetail)]),
           () => new ListBuilder<OpenapiSurveyDetail>())

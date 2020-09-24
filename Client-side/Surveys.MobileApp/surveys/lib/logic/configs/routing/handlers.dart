@@ -52,7 +52,11 @@ class Handlers {
                   isPersonal: arguments["isPersonal"],
                 ));
       case Routes.surveyResultsVotes:
-        return CupertinoPageRoute(builder: (context) => SurveyResultsVotePage());
+        return CupertinoPageRoute(
+            builder: (context) => SurveyResultsVotePage(
+                  preferences: arguments["preferences"],
+                  survey: arguments["survey"],
+                ));
 
       case Routes.vote:
         return CupertinoPageRoute(builder: (context) => VotePage(survey: arguments["survey"]));

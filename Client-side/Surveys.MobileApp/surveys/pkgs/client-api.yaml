@@ -136,6 +136,14 @@ components:
         votes:
           type: integer
 
+    OpenapiVoteUser:
+      type: object
+      properties:
+        sdid:
+          type: integer
+        user:
+          type: string
+
 paths:
   /service/login:
     post:
@@ -202,7 +210,7 @@ paths:
       responses:
         200:
           description: "Success."
-          
+
         400:
           description: "Couldn't sign up"
           content:
@@ -372,3 +380,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/OpenapiVoteAmount"
+
+  /service/getActualPrincipalForVotes:
+    get:
+      operationId: "getActualPrincipalForVotes"
+      description: "Gets all the votes expressed for a specific survey and who gave them"
+      parameters:
+        - in: query
+          name: seid
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenapiVoteUser"

@@ -2,28 +2,28 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/user_model.dart';
 import 'package:surveys/models/vote_model.dart';
 
-class SurveyResultsVotePage extends StatefulWidget {
-  final List<Map<String, dynamic>> voteCouples; //User - SurveyDetail couples
+final String userKey = "user";
+final String voteKey = "vote";
 
-  SurveyResultsVotePage({Key key, this.voteCouples}) : super(key: key);
+class SurveyResultsVotePage extends StatefulWidget {
+  final List<Map<String, dynamic>> preferences; //User - SurveyDetail couples
+  final Survey survey;
+
+  SurveyResultsVotePage({Key key, @required this.preferences, @required this.survey}) : super(key: key);
 
   @override
   _SurveyResultsVotePageState createState() => _SurveyResultsVotePageState();
 }
 
 class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> {
-  final String userKey = "user";
-  final String voteKey = "vote";
-
-  List<Map<String, dynamic>> _fakeVotes;
-
   @override
   void initState() {
-    //assert(!widget.voteCouples.any((element) => element[userKey] is! User || element[voteKey] is! Vote));
-    _fakeVotes = List.generate(
+    //assert(!widget.preferences.any((element) => element[userKey] is! User || element[voteKey] is! Vote));
+    /*_fakeVotes = List.generate(
         20,
         (index) => {
               "user": User(id: index, username: "pincopallo$index"),
@@ -31,9 +31,11 @@ class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> {
                 userId: index,
                 surveyDetailId: Random().nextInt(5),
               )
-            });
+            });*/
     super.initState();
   }
+
+  String _getDetailName(int sdid) => widget.survey.details.singleWhere((element) => element.id == sdid).description;
 
   @override
   Widget build(BuildContext context) {
@@ -46,40 +48,43 @@ class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> {
         ),
         child: SafeArea(
           child: ListView.separated(
-              padding: EdgeInsets.only(top: 10),
-              itemBuilder: (context, index) => Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      CircleAvatar(
-                        radius: 30,
-                        child: Icon(
-                          CupertinoIcons.person_solid,
-                          size: 50,
+              padding: EdgeInsets.only(top: 15),
+              itemBuilder: (context, index) => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 10,
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      RichText(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(style: TextStyle(fontSize: 16, color: Colors.black), children: [
-                          TextSpan(
-                              text: "${_fakeVotes[index]["user"].username}",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: " voted for "),
-                          TextSpan(
-                              text: "${_fakeVotes[index]["vote"].surveyDetailId}",
-                              style: TextStyle(fontWeight: FontWeight.bold))
-                        ]),
-                      )
-                    ],
+                        CircleAvatar(
+                          radius: 30,
+                          child: Icon(
+                            CupertinoIcons.person_solid,
+                            size: 50,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        RichText(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(style: TextStyle(fontSize: 16, color: Colors.black), children: [
+                            TextSpan(
+                                text: "${widget.preferences[index]["user"].trim()}",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: " voted for "),
+                            TextSpan(
+                                text: "${_getDetailName(widget.preferences[index]["vote"]).trim()}",
+                                style: TextStyle(fontWeight: FontWeight.bold))
+                          ]),
+                        )
+                      ],
+                    ),
                   ),
               separatorBuilder: (context, index) => Divider(),
-              itemCount: _fakeVotes.length),
+              itemCount: widget.preferences?.length ?? 0),
         ));
   }
 }

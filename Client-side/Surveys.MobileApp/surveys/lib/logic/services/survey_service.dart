@@ -5,6 +5,7 @@ import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
 import 'package:survey_client/model/openapi_vote.dart';
 import 'package:survey_client/model/openapi_vote_amount.dart';
+import 'package:survey_client/model/openapi_vote_user.dart';
 import 'package:surveys/logic/services/base_service.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
@@ -106,12 +107,16 @@ class SurveyService extends BaseService {
       vote: SurveyVote(id: null, surveyDetailId: openapiVoteAmount.sdid, surveyId: null));
 
   Future<List<VoteAmount>> getSurveyVotes({@required int seid}) async {
-    
     try {
       Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
       return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
     } on Exception catch (e) {
-         return null;
+      return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getUserPreferences({@required int seid}) async {
+    Response<List<OpenapiVoteUser>> response = await client.getDefaultApi().getActualPrincipalForVotes(seid: seid);
+    return response.data.map((e) => {"user": e.user, "vote": e.sdid}).toList();
   }
 }
