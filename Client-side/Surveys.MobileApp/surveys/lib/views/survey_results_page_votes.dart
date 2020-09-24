@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
-import 'package:surveys/models/user_model.dart';
-import 'package:surveys/models/vote_model.dart';
 
 final String userKey = "user";
 final String voteKey = "vote";
@@ -19,23 +16,62 @@ class SurveyResultsVotePage extends StatefulWidget {
   _SurveyResultsVotePageState createState() => _SurveyResultsVotePageState();
 }
 
-class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> {
+class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> with TickerProviderStateMixin {
+  TabController _tabController;
+
   @override
   void initState() {
-    //assert(!widget.preferences.any((element) => element[userKey] is! User || element[voteKey] is! Vote));
-    /*_fakeVotes = List.generate(
-        20,
-        (index) => {
-              "user": User(id: index, username: "pincopallo$index"),
-              "vote": Vote(
-                userId: index,
-                surveyDetailId: Random().nextInt(5),
-              )
-            });*/
+    _tabController = TabController(length: widget.survey.details.length, vsync: this);
     super.initState();
   }
 
-  String _getDetailName(int sdid) => widget.survey.details.singleWhere((element) => element.id == sdid).description;
+  List<Tab> _tabs() => widget.survey.details.map((e) {
+        List<Map<String, dynamic>> preferences =
+            widget.preferences.where((element) => element["vote"] == e.id).toList();
+
+        return Tab(
+          child: Text(
+            "${e.description} (${preferences.length})",
+            style: TextStyle(color: CupertinoColors.black),
+          ),
+        );
+      }).toList();
+
+  Widget _currentTab() {
+    SurveyDetail selectedDetail = widget.survey.details[_tabController.index];
+    List<Map<String, dynamic>> preferences =
+        widget.preferences.where((element) => element["vote"] == selectedDetail.id).toList();
+
+    return ListView.separated(
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: 15),
+        itemBuilder: (context, index) => Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                CircleAvatar(
+                  radius: 30,
+                  child: Icon(
+                    CupertinoIcons.person_solid,
+                    size: 50,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "${preferences[index]["user"].trim()}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: CupertinoColors.black),
+                ),
+              ],
+            ),
+        separatorBuilder: (context, index) => Divider(),
+        itemCount: preferences?.length ?? 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,44 +83,21 @@ class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> {
           previousPageTitle: "Survey",
         ),
         child: SafeArea(
-          child: ListView.separated(
-              padding: EdgeInsets.only(top: 15),
-              itemBuilder: (context, index) => SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        CircleAvatar(
-                          radius: 30,
-                          child: Icon(
-                            CupertinoIcons.person_solid,
-                            size: 50,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(style: TextStyle(fontSize: 16, color: Colors.black), children: [
-                            TextSpan(
-                                text: "${widget.preferences[index]["user"].trim()}",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: " voted for "),
-                            TextSpan(
-                                text: "${_getDetailName(widget.preferences[index]["vote"]).trim()}",
-                                style: TextStyle(fontWeight: FontWeight.bold))
-                          ]),
-                        )
-                      ],
-                    ),
-                  ),
-              separatorBuilder: (context, index) => Divider(),
-              itemCount: widget.preferences?.length ?? 0),
+          child: Material(
+            child: Column(
+              children: [
+                TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  tabs: _tabs(),
+                  onTap: (newIndex) {
+                    setState(() {});
+                  },
+                ),
+                _currentTab()
+              ],
+            ),
+          ),
         ));
   }
 }
