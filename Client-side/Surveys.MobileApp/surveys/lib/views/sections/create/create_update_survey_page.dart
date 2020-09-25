@@ -70,6 +70,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                         arguments: {"surveyDetail": _survey.details[index]}).then((surveyDetail) {
                       setState(() {
                         if (surveyDetail != null) _survey.details[index] = surveyDetail;
+                        FocusScope.of(context).requestFocus(FocusNode());
                       });
                     });
                   },
@@ -130,9 +131,16 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     decoration: InputDecoration(hintText: "Enter the survey's description"),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    "Preferences",
+                    style: TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
+                  ),
+                ),
                 if (_survey?.details != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 4),
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7),
@@ -146,7 +154,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "Please enter at least 2 entries",
+                      "Please enter at least 2 preferences",
                       style: TextStyle(color: CupertinoColors.systemRed, fontSize: 13),
                     ),
                   ),
@@ -196,6 +204,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   bool _atLeastTwoEntriesError = false;
 
   void _submit() async {
+    FocusScope.of(context).requestFocus(FocusNode());
     bool error = false;
 
     if (!_formKey.currentState.validate()) error = true;
@@ -234,7 +243,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         _descriptionController.text = "";
         _survey.details = [];
       });
-      FocusScope.of(context).requestFocus(FocusNode());
+      
       await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
     } else
       MenuUtils.showErrorDialog(context: context, title: "Couldn't create the survey");
