@@ -53,6 +53,7 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 10),
               child: Material(
+                color: Colors.transparent,
                 child: TextFormField(
                   validator: (s) {
                     if (s.trim().isEmpty) return "Please give a description to the entry";

@@ -64,6 +64,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _usernameController,
                               validator: (s) {
@@ -78,6 +79,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _passwordController,
                               validator: (s) {
@@ -95,6 +97,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _confirmPasswordController,
                               validator: (s) {

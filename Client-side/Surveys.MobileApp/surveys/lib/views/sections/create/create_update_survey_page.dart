@@ -29,6 +29,8 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   TextEditingController _descriptionController = TextEditingController(text: "description");
   GlobalKey<FormState> _formKey = GlobalKey();
 
+  bool _isWaitingForServer = false;
+
   @override
   void initState() {
     _isModifying = widget.survey != null;
@@ -98,6 +100,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: Material(
+                    color: Colors.transparent,
                     child: TextFormField(
                       controller: _titleController,
                       validator: (s) {
@@ -110,6 +113,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   ),
                 ),
                 Material(
+                  color: Colors.transparent,
                   child: TextFormField(
                     minLines: 3,
                     maxLines: 3,
@@ -171,14 +175,20 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   void _submit() async {
     if (!_formKey.currentState.validate()) return;
 
+    setState(() {
+      _isWaitingForServer = true;
+    });
+
     _survey
       ..title = _titleController.text
       ..description = _descriptionController.text
       ..isOpen = _open;
 
     if (_isModifying) {
-      //await MenuUtils.showAlertDialog(context: context, title: "Survey successfully updated!");
       Navigator.of(context).pop(_survey);
+      setState(() {
+        _isWaitingForServer = false;
+      });
       return;
     }
 
@@ -194,7 +204,20 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
     } else
       MenuUtils.showErrorDialog(context: context, title: "Couldn't create the survey");
+
+    setState(() {
+      _isWaitingForServer = false;
+    });
   }
+
+  Widget _contentDueToBug() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: widget.survey != null
+            ? _content()
+            : SingleChildScrollView(
+                child: Container(height: MediaQuery.of(context).size.height, child: _content()),
+              ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -225,13 +248,18 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 size: 43,
               )),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: widget.survey != null
-              ? _content()
-              : SingleChildScrollView(
-                  child: Container(height: MediaQuery.of(context).size.height, child: _content()),
-                ),
-        ));
+        child: _isWaitingForServer
+            ? Stack(
+                children: [
+                  Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  Opacity(
+                    opacity: 0.25,
+                    child: _contentDueToBug(),
+                  )
+                ],
+              )
+            : _contentDueToBug());
   }
 }

@@ -42,6 +42,8 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
 
   bool _isLoadingVotes = false;
 
+  bool get resultsAvailable => !_notAccessible && !_noEntries;
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +52,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
     _notAccessible = !widget.survey.isOpen;
     _votes = widget.votes;
 
-    _startPollingVotes();
+    if (resultsAvailable) _startPollingVotes();
   }
 
   void _startPollingVotes() {
@@ -204,21 +206,23 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
           backgroundColor: Colors.transparent,
           transitionBetweenRoutes: false,
           middle: Text(widget.survey.title),
-          trailing: GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (_isPolling)
-                    _stopPollingVotes();
-                  else
-                    _startPollingVotes();
-                  _isPolling = !_isPolling;
-                });
-              },
-              child: AnimatedIcon(
-                color: CupertinoColors.activeBlue,
-                icon: AnimatedIcons.pause_play,
-                progress: _animationController,
-              )),
+          trailing: resultsAvailable
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_isPolling)
+                        _stopPollingVotes();
+                      else
+                        _startPollingVotes();
+                      _isPolling = !_isPolling;
+                    });
+                  },
+                  child: AnimatedIcon(
+                    color: CupertinoColors.activeBlue,
+                    icon: AnimatedIcons.pause_play,
+                    progress: _animationController,
+                  ))
+              : null,
         ),
         child: _isLoadingVotes
             ? Stack(

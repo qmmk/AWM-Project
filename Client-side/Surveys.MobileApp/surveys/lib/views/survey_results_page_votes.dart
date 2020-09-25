@@ -84,6 +84,7 @@ class _SurveyResultsVotePageState extends State<SurveyResultsVotePage> with Tick
         ),
         child: SafeArea(
           child: Material(
+            color: Colors.transparent,
             child: Column(
               children: [
                 TabBar(

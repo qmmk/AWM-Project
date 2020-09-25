@@ -32,6 +32,7 @@ class _VotePageState extends State<VotePage> {
           return Row(
             children: [
               Material(
+                color: Colors.transparent,
                 child: Checkbox(
                   value: _chosenIndex == index,
                   onChanged: (active) {
@@ -65,15 +66,18 @@ class _VotePageState extends State<VotePage> {
               ? Container()
               : GestureDetector(
                   onTap: () async {
-                    UserAndCollectionProvider userAndCollectionProvider =
-                        Provider.of<UserAndCollectionProvider>(context, listen: false);
+                    if (_chosenIndex >= 0) {
+                      UserAndCollectionProvider userAndCollectionProvider =
+                          Provider.of<UserAndCollectionProvider>(context, listen: false);
 
-                    int surveyIndex =
-                        userAndCollectionProvider.othersSurveys.indexWhere((element) => element.id == widget.survey.id);
+                      int surveyIndex = userAndCollectionProvider.othersSurveys
+                          .indexWhere((element) => element.id == widget.survey.id);
 
-                    bool success =
-                        await userAndCollectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
-                    if (success) Navigator.of(context).pop();
+                      bool success =
+                          await userAndCollectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
+                      if (success) Navigator.of(context).pop();
+                    } else
+                      Navigator.of(context).pop();
                   },
                   child: Icon(
                     CupertinoIcons.check_mark,

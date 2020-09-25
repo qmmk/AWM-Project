@@ -45,6 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Material(
+                      color: Colors.transparent,
                       child: TextFormField(
                         controller: _usernameController,
                         validator: (s) {
@@ -60,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Material(
+                      color: Colors.transparent,
                       child: TextFormField(
                         controller: _passwordController,
                         validator: (s) {
