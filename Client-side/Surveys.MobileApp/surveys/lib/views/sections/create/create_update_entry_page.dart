@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 
 class CreateEntryPage extends StatefulWidget {
@@ -57,6 +58,8 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
                 child: TextFormField(
                   validator: (s) {
                     if (s.trim().isEmpty) return "Please give a description to the entry";
+                    if (s.trim().length > SurveysConstants.entryDescriptionLimit)
+                      return "Entries' description limit is ${SurveysConstants.entryDescriptionLimit} characters";
                     return null;
                   },
                   controller: _descriptionController,

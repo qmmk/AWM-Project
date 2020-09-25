@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
@@ -104,7 +105,9 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     child: TextFormField(
                       controller: _titleController,
                       validator: (s) {
-                        if (s.trim().isEmpty) return "Please enter the survey's name";
+                        if (s.trim().isEmpty) return "Please enter the survey's title";
+                        if (s.trim().length > SurveysConstants.surveyTitleLimit)
+                          return "Surveys' title limit is ${SurveysConstants.surveyTitleLimit} characters";
 
                         return null;
                       },
@@ -115,6 +118,12 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 Material(
                   color: Colors.transparent,
                   child: TextFormField(
+                    validator: (s) {
+                      if (s.trim().length > SurveysConstants.surveyDescriptionLimit)
+                        return "Surveys' description limit is ${SurveysConstants.surveyDescriptionLimit} characters";
+
+                      return null;
+                    },
                     minLines: 3,
                     maxLines: 3,
                     controller: _descriptionController,
@@ -127,9 +136,21 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7),
-                            border: Border.all(color: CupertinoColors.systemBlue)),
+                            border: Border.all(
+                                color:
+                                    _atLeastTwoEntriesError ? CupertinoColors.systemRed : CupertinoColors.systemBlue)),
                         child: _entryList()),
                   ),
+                Visibility(
+                  visible: _atLeastTwoEntriesError,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      "Please enter at least 2 entries",
+                      style: TextStyle(color: CupertinoColors.systemRed, fontSize: 13),
+                    ),
+                  ),
+                ),
                 CupertinoButton(
                     child: Text(
                       "Add entry",
@@ -172,10 +193,23 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         ],
       );
 
+  bool _atLeastTwoEntriesError = false;
+
   void _submit() async {
-    if (!_formKey.currentState.validate()) return;
+    bool error = false;
+
+    if (!_formKey.currentState.validate()) error = true;
+    if (_survey.details.length < 2) {
+      setState(() {
+        _atLeastTwoEntriesError = true;
+      });
+      error = true;
+    }
+
+    if (error) return;
 
     setState(() {
+      _atLeastTwoEntriesError = false;
       _isWaitingForServer = true;
     });
 
