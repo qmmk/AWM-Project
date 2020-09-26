@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class SurveyDetail {
-  final int id;
+  int id;
   final int surveyId;
   String description;
 

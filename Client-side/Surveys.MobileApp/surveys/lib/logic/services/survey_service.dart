@@ -56,12 +56,17 @@ class SurveyService extends BaseService {
     return response.data.map(_convertOpenapiSurveyToSurvey).toList();
   }
 
-  Future<Survey> createSurvey({@required Survey survey}) async {
+  Future<Survey> createSurvey({@required Survey survey, @required creating}) async {
     OpenapiSurvey openapiSurvey = OpenapiSurvey();
     OpenapiSurveyBuilder openapiSurveyBuilder = openapiSurvey.toBuilder();
 
     ListBuilder<OpenapiSurveyDetail> listBuilder = ListBuilder<OpenapiSurveyDetail>([]);
     listBuilder.addAll(survey.details.map(_convertSurveyDetailToOpenapiSurveyDetail).toList());
+    if (creating)
+    {
+      for (int i = 0; i < survey.details.length; i++)
+        survey.details[i].id = null;
+    }
 
     openapiSurveyBuilder
       ..seid = survey.id

@@ -75,7 +75,7 @@ class CollectionProvider extends BaseProvider {
     if (index < 0 || index >= _userSurveys.length || survey.id == null) return false;
 
     try {
-      Survey updated = await _surveyService.createSurvey(survey: survey);
+      Survey updated = await _surveyService.createSurvey(survey: survey, creating: false);
       _userSurveys[index] = updated;
       notifyListeners();
       return true;
@@ -88,7 +88,7 @@ class CollectionProvider extends BaseProvider {
   Future<bool> createSurvey({@required Survey survey}) async {
     try {
       survey.userId = userProvider.user.id;
-      Survey created = await _surveyService.createSurvey(survey: survey);
+      Survey created = await _surveyService.createSurvey(survey: survey, creating: true);
       if (_userSurveys != null) _userSurveys.add(created);
       notifyListeners();
       return true;

@@ -69,7 +69,8 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     Navigator.of(context).pushNamed(Routes.createSurveyEntry,
                         arguments: {"surveyDetail": _survey.details[index]}).then((surveyDetail) {
                       setState(() {
-                        if (surveyDetail != null) _survey.details[index] = surveyDetail;
+                        if (surveyDetail != null) 
+                          _survey.details[index] = surveyDetail;
                         FocusScope.of(context).requestFocus(FocusNode());
                       });
                     });
