@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
@@ -51,6 +52,8 @@ class _SignInPageState extends State<SignInPage> {
                         validator: (s) {
                           if (_incorrectLogin) return "Please enter a valid username";
                           if (s.trim().isEmpty) return "Please enter your username";
+                          if (s.trim().length > SurveysConstants.usernameLimit)
+                            return "Username limit is ${SurveysConstants.usernameLimit} characters";
 
                           return null;
                         },
@@ -67,6 +70,9 @@ class _SignInPageState extends State<SignInPage> {
                         validator: (s) {
                           if (_incorrectLogin) return "Please enter a valid password";
                           if (s.trim().isEmpty) return "Please enter your password";
+                          if (s.length < SurveysConstants.minimumPasswordLength ||
+                              s.length > SurveysConstants.passwordLimit)
+                            return "Password lenght should be between ${SurveysConstants.minimumPasswordLength} and ${SurveysConstants.passwordLimit} characters";
 
                           return null;
                         },
@@ -88,6 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                             "Sign in",
                           ),
                           onPressed: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
                             if (!_formKey.currentState.validate()) return;
 
                             String username = _usernameController.text;

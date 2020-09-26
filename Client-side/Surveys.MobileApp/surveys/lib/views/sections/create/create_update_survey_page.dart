@@ -243,7 +243,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         _descriptionController.text = "";
         _survey.details = [];
       });
-      
+
       await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
     } else
       MenuUtils.showErrorDialog(context: context, title: "Couldn't create the survey");
