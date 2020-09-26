@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/logic/services/survey_service.dart';
-import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/vote_amount_model.dart';
@@ -30,7 +29,6 @@ class CollectionProvider extends BaseProvider {
   Future<bool> logout({bool resetUserDataOnly = false}) async {
     try {
       if (!resetUserDataOnly) await userProvider.logout();
-      await HttpUtils.invalidateTokens();
       _userSurveys = null;
       _othersSurveys = null;
       _alreadySubmittedSurveysIds = null;
