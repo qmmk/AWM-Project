@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/vote_amount_model.dart';

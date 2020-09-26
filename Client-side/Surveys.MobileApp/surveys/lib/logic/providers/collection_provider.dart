@@ -27,9 +27,9 @@ class CollectionProvider extends BaseProvider {
     GetIt.instance.registerSingleton(this, instanceName: "userAndCollectionProvider");
   }
 
-  Future<bool> logout({bool onlyResetUserData = false}) async {
+  Future<bool> logout({bool resetUserDataOnly = false}) async {
     try {
-      if (!onlyResetUserData) await userProvider.logout();
+      if (!resetUserDataOnly) await userProvider.logout();
       await HttpUtils.invalidateTokens();
       _userSurveys = null;
       _othersSurveys = null;
