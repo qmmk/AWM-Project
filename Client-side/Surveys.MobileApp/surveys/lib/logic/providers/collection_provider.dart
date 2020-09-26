@@ -23,19 +23,23 @@ class CollectionProvider extends BaseProvider {
   List<Survey> get othersSurveys => _othersSurveys;
 
   CollectionProvider() {
-    GetIt.instance.registerSingleton(this, instanceName: "userAndCollectionProvider");
+    GetIt.instance.registerSingleton(this, instanceName: "collectionProvider");
   }
 
-  Future<bool> logout({bool resetUserDataOnly = false}) async {
+  Future<bool> logout() async {
     try {
-      if (!resetUserDataOnly) await userProvider.logout();
-      _userSurveys = null;
-      _othersSurveys = null;
-      _alreadySubmittedSurveysIds = null;
+      await userProvider.logout();
+      resetUserData();
       return true;
     } on DioError {
       return false;
     }
+  }
+
+  void resetUserData() {
+    _userSurveys = null;
+    _othersSurveys = null;
+    _alreadySubmittedSurveysIds = null;
   }
 
   Future<bool> loadPersonalSurveys() async {
@@ -134,7 +138,8 @@ class CollectionProvider extends BaseProvider {
   Future<bool> registerVote({@required int index, @required detailsIndex}) async {
     try {
       loading();
-      await _surveyService.registerVote(sdid: _othersSurveys[index].details[detailsIndex].id, pid: userProvider.user.id);
+      await _surveyService.registerVote(
+          sdid: _othersSurveys[index].details[detailsIndex].id, pid: userProvider.user.id);
       _alreadySubmittedSurveysIds.add(_othersSurveys[index].id);
       done();
       notifyListeners();

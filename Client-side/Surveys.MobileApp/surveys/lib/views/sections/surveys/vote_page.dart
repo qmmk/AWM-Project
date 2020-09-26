@@ -67,14 +67,14 @@ class _VotePageState extends State<VotePage> {
               : GestureDetector(
                   onTap: () async {
                     if (_chosenIndex >= 0) {
-                      CollectionProvider userAndCollectionProvider =
+                      CollectionProvider collectionProvider =
                           Provider.of<CollectionProvider>(context, listen: false);
 
-                      int surveyIndex = userAndCollectionProvider.othersSurveys
+                      int surveyIndex = collectionProvider.othersSurveys
                           .indexWhere((element) => element.id == widget.survey.id);
 
                       bool success =
-                          await userAndCollectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
+                          await collectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
                       if (success) Navigator.of(context).pop();
                     } else
                       Navigator.of(context).pop();
