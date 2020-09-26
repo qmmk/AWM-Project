@@ -235,7 +235,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       return;
     }
 
-    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider userProvider = Provider.of<CollectionProvider>(context, listen: false);
     bool success = await userProvider.createSurvey(survey: _survey);
     if (success) {
       setState(() {

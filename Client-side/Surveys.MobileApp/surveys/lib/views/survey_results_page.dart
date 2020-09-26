@@ -109,7 +109,7 @@ class _SurveyResultsPageState extends State<SurveyResultsPage> with SingleTicker
   Future<void> _refreshVotes() async {
     if (context == null) return;
 
-    UserAndCollectionProvider provider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider provider = Provider.of<CollectionProvider>(context, listen: false);
     int index = (widget.isPersonal ? provider.userSurveys : provider.othersSurveys)
         .indexWhere((element) => element.id == widget.survey.id);
     List<VoteAmount> newVotes = await provider.getSurveyVotes(index: index, isPersonal: widget.isPersonal);

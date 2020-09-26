@@ -6,6 +6,7 @@ import 'package:survey_client/model/login_response.dart';
 import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/user_model.dart';
@@ -108,7 +109,7 @@ class _SignInPageState extends State<SignInPage> {
                                   await _accessService.login(username: username, password: password);
                               HttpUtils.registerToken(response.accessToken);
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
-                              Provider.of<UserAndCollectionProvider>(context, listen: false)
+                              Provider.of<UserProvider>(context, listen: false)
                                   .setUser(User(id: response.pid, username: response.userName));
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),

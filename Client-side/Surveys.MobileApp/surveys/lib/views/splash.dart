@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_client/model/login_response.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/logic/providers/user_and_collection_provider.dart';
@@ -39,7 +40,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
               Navigator.of(context).pushReplacementNamed(Routes.accessHub);
             });
           } else {
-            Provider.of<UserAndCollectionProvider>(context, listen: false)
+            Provider.of<UserProvider>(context, listen: false)
                 .setUser(User(id: response.pid, username: response.userName));
 
             HttpUtils.registerToken(response.accessToken);

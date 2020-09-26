@@ -36,7 +36,7 @@ class HttpUtils {
             surveyClient.dio.interceptors.requestLock.lock();
             surveyClient.dio.interceptors.responseLock.lock();
             
-            UserAndCollectionProvider provider = GetIt.instance.get(instanceName: "userAndCollectionProvider");
+            CollectionProvider provider = GetIt.instance.get(instanceName: "userAndCollectionProvider");
             await provider.logout(onlyResetUserData: true); //Kick out the user, whatever the logout does
             globalAppNavigator.currentState.pushNamedAndRemoveUntil(Routes.accessHub, (Route<dynamic> route) => false);
             surveyClient.dio.interceptors.requestLock.unlock();
