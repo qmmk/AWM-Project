@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:surveys/logic/providers/base_provider.dart';
 import 'package:surveys/logic/providers/user_provider.dart';
-import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/services/survey_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/survey_detail_model.dart';
@@ -15,7 +14,6 @@ import 'package:surveys/models/vote_amount_model.dart';
 class CollectionProvider extends BaseProvider {
   UserProvider userProvider;
 
-  AccessService _accessService = AccessService();
   SurveyService _surveyService = SurveyService();
 
   List<Survey> _userSurveys;

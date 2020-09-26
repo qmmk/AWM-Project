@@ -11,7 +11,6 @@ import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/survey_vote_model.dart';
 import 'package:surveys/models/vote_amount_model.dart';
-import 'package:surveys/models/vote_model.dart';
 
 class SurveyService extends BaseService {
   Survey _convertOpenapiSurveyToSurvey(OpenapiSurvey openapiSurvey) => Survey(
@@ -32,14 +31,14 @@ class SurveyService extends BaseService {
     return openapiSurveyDetailBuilder.build();
   }
 
-  OpenapiVote _convertVoteToOpenapiVote(Vote vote) {
+  /*OpenapiVote _convertVoteToOpenapiVote(Vote vote) {
     OpenapiVoteBuilder openapiVoteBuilder = OpenapiVoteBuilder();
     openapiVoteBuilder
       ..avid = vote.id
       ..sdid = vote.surveyDetailId
       ..pid = vote.userId;
     return openapiVoteBuilder.build();
-  }
+  }*/
 
   SurveyDetail _convertOpenapiSurveyDetailToSurveyDetail(OpenapiSurveyDetail openapiSurveyDetail) => SurveyDetail(
         id: openapiSurveyDetail.sdid,
@@ -110,7 +109,7 @@ class SurveyService extends BaseService {
     try {
       Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
       return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
-    } on Exception catch (e) {
+    } on Exception {
       return null;
     }
   }
