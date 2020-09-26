@@ -24,9 +24,9 @@ class UserProvider extends BaseProvider {
     notifyListeners();
   }
 
-  Future<bool> logout({bool onlyResetUserData = false}) async {
+  Future<bool> logout() async {
     try {
-      if (!onlyResetUserData) await _accessService.logout(pid: _user.id);
+      await _accessService.logout(pid: _user.id);
       await HttpUtils.invalidateTokens();
       _user = null;
       return true;
