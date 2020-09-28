@@ -182,6 +182,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                                 surveyId: widget.survey == null ? -1 : widget.survey.id,
                                 description: (surveyDetail as SurveyDetail).description));
                           });
+                        FocusScope.of(context).requestFocus(FocusNode());
                       });
                     }),
                 Row(

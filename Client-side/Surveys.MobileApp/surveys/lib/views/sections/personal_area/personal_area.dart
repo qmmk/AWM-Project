@@ -62,6 +62,8 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
                               .then((value) {
                             Navigator.of(context).pop();
                           });
+                        else
+                          Navigator.of(context).pop();
                       }
                     });
                   },
@@ -93,8 +95,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
             Navigator.of(context).pushNamed(Routes.surveyResults,
                 arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
         } else
-          MenuUtils.showErrorDialog(
-              context: context, title: "Details loading failed");
+          MenuUtils.showErrorDialog(context: context, title: "Details loading failed");
       },
       onLongPress: () async {
         _loadMenu(index);
@@ -151,9 +152,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
   @override
   void afterFirstLayout(BuildContext context) {
     Provider.of<CollectionProvider>(context, listen: false).loadPersonalSurveys().then((success) {
-      if (!success)
-        MenuUtils.showErrorDialog(
-            context: context, title: "Couldn't load your surveys");
+      if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load your surveys");
     });
   }
 }
