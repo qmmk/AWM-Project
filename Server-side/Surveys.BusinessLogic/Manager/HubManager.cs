@@ -35,7 +35,6 @@ namespace Surveys.BusinessLogic.Manager
             Console.WriteLine($"{Context.UserIdentifier} left.");
             await base.OnDisconnectedAsync(exception);
         }
-
         #endregion
 
         public ChannelReader<int> RealTimeDataChart()

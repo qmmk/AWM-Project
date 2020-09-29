@@ -9,6 +9,7 @@ export class NotificationService {
   constructor(private toastr: ToastrService) { }
 
   showSuccess(message, title) {
+    console.log("Notify send");
     this.toastr.success(message, title)
   }
 

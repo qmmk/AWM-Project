@@ -3,6 +3,7 @@ import { ConfigurationService } from './configuration.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SurveyEntity } from '../models/SurveyEntity';
 import { SurveyDetail } from '../models/SurveyDetail';
+import { Principal } from '../models/Principal';
 
 @Injectable()
 export class SurveyService {
@@ -27,6 +28,6 @@ export class SurveyService {
   }
 
   public async FastIn(t: string) {
-    return await this.http.post<any>(`${this.serviceUrl}/FastLogin`, { token: t }).toPromise<any>();
+    return await this.http.post<Principal>(`${this.serviceUrl}/FastLogin`, { token: t }).toPromise<Principal>();
   }
 }

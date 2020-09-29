@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SurveyService } from '../../services/survey.service';
 import { SignalRService } from '../../services/signalr.service';
 import { NotificationService } from '../../services/notification.service';
 
@@ -17,6 +16,7 @@ export class SettingsComponent implements OnInit {
     private signalr: SignalRService) {
     this.formGroup = formBuilder.group({
       acceptTerms: '',
+      enableNotify:'',
       enableRTD: ''
     });
   }
@@ -24,9 +24,16 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     var sysConfig = JSON.parse(localStorage.getItem('sysConfig'));
 
-    if (typeof sysConfig !== 'undefined') {
+    this.formGroup.patchValue({
+      acceptTerms: false,
+      enableNotify: false,
+      enableRTD: false
+    });
+
+    if (sysConfig !== null) {
       this.formGroup.patchValue({
         acceptTerms: sysConfig.acceptTerms,
+        enableNotify: sysConfig.enableNotify,
         enableRTD: sysConfig.enableRTD
       });
     }
@@ -38,11 +45,13 @@ export class SettingsComponent implements OnInit {
     console.log("Form submit", this.formGroup.value);
 
     localStorage.setItem('sysConfig', JSON.stringify(this.formGroup.value));
-    this.notifyService.showSuccess("Impostazioni salvate.", "Successo!")
+    this.notifyService.showSuccess("Impostazioni salvate.", "Successo!");
 
     if (this.f.enableRTD.value) {
       console.log("START RTD");
       this.signalr.realTimeDataChart();
+    } else {
+      this.signalr.delTransferChartDataListener();
     }
   }
 }

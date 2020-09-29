@@ -26,13 +26,17 @@ namespace Surveys.WebAPIService.Controllers
 
         private readonly IServiceManager _manager;
         private readonly AppSettings _opt;
+        private readonly IHubContext<HubManager> _hub;
 
         #endregion
 
-        public ServiceController(IServiceManager manager, IOptions<AppSettings> opt)
+        public ServiceController(IServiceManager manager, 
+            IOptions<AppSettings> opt,
+            IHubContext<HubManager> hub)
         {
             _manager = manager;
             _opt = opt.Value;
+            _hub = hub;
         }
 
         #region Login
@@ -171,9 +175,13 @@ namespace Surveys.WebAPIService.Controllers
         {
             var res = _manager.InsertOrUpdateSurveyEntity(lse);
             if (res.Success)
+            {
+                _hub.Clients.All.SendAsync("ServerMessage", "InsertOrUpdateSurveyEntity");
                 return Ok(res.Data);
-            else
+            } else
+            {
                 return BadRequest(res.Message);
+            }                
         }
 
         [HttpPost]

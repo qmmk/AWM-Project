@@ -58,6 +58,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {   
     this.signalRService.startConnection();
+
+    this.signalRService.serverNotification().subscribe((res) => {
+      if (typeof res !== 'undefined' && res) {
+        this.load();
+      }
+    })
   }
 
   ngOnDestroy(): void {

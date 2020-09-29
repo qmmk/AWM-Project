@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IdentityService } from '../../services/identity.service';
 import { AuthService } from '../../services/auth.service';
 import { SurveyService } from '../../services/survey.service';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-nav-menu',
@@ -30,7 +31,13 @@ export class NavMenuComponent {
 
   onClick() {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.surveyService.Logout(currentUser.pid);
+
+    this.surveyService.Logout(currentUser.pid)
+      .catch(err => {
+        console.log("Logout");
+        return throwError (err);
+      });
+
     return this.authService.logOut();    
   }
 }

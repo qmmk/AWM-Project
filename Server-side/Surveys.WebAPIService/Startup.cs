@@ -87,7 +87,7 @@ namespace Surveys.WebAPIService
                 options.AddDefaultPolicy(builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 
                 options.AddPolicy("hubPolicy", builder => {
-                        builder.WithOrigins("https://surveyswebapplication20200921103451.azurewebsites.net").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                        builder.WithOrigins("https://surveyswebapplication20200921103451.azurewebsites.net", "https://localhost:44301/").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                 });
             });
 

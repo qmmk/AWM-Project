@@ -16,6 +16,7 @@
 <form class="example-form" [formGroup]="formGroup" (ngSubmit)="onFormSubmit()" ngNativeValidate>
 
   <mat-slide-toggle formControlName="acceptTerms" color="primary">Accept Terms of Service</mat-slide-toggle><br />
+  <mat-slide-toggle formControlName="enableNotify" color="primary">Enable server notification</mat-slide-toggle><br />
   <mat-slide-toggle formControlName="enableRTD" color="primary">Enable real-time data details on open surveys</mat-slide-toggle>
   <br /><br /><br /><br />
   <button mat-raised-button type="submit">Save Settings</button>

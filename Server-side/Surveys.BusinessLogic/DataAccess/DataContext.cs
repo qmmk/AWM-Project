@@ -520,7 +520,7 @@ namespace Surveys.BusinessLogic.DataAccess
                             default:
                                 sr.Data = (int)DbErrorCode.TRANSACTION_ABORTED;
                                 sr.Error = DbErrorCode.TRANSACTION_ABORTED.ToString();
-                                sr.Message = string.Format("Error occur during get all survey.");
+                                sr.Message = string.Format("Error occur during logout operation.");
                                 sr.Success = false;
                                 break;
                         }
@@ -645,6 +645,12 @@ namespace Surveys.BusinessLogic.DataAccess
                                         crse.surveyDetails = output.Data;
                                         sr.Data.Add(crse);
                                     }
+                                    break;
+                                case (int)DbErrorCode.USER_NOT_EXISTS:
+                                    sr.Data = null;
+                                    sr.Error = DbErrorCode.USER_NOT_EXISTS.ToString();
+                                    sr.Message = string.Format("User {0} not exists ", se.CreatedBy);
+                                    sr.Success = false;
                                     break;
                                 case (int)DbErrorCode.TRANSACTION_ABORTED:
                                 default:

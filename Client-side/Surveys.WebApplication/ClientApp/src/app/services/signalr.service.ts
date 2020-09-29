@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import * as signalR from "@aspnet/signalr";
 import { ChartModel } from '../models/ChartModel';
 import { ConfigurationService } from './configuration.service';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
   public data: any[] = [];
+  public reloadSurvey: boolean;
   public bradcastedData: ChartModel[];
   private hubConnection: signalR.HubConnection
 
@@ -56,8 +58,9 @@ export class SignalRService {
   public addTransferChartDataListener = (seid: number, i: number) => {
     this.hubConnection.on("RealTimeDataChart", (data) => {
       var r: any[] = [];
-      
-      if (typeof data !== "undefined") {
+
+      console.log(data);
+      if (typeof data[i] !== "undefined") {
         r.push(data[i]);
         this.data[seid] = r;
       }
@@ -66,5 +69,16 @@ export class SignalRService {
 
   public delTransferChartDataListener = () => {
     this.hubConnection.off("RealTimeDataChart");
+  }
+
+  public serverNotification(): (Observable<boolean>) {
+    var subject = new Subject<boolean>();
+    this.hubConnection.on("ServerMessage", (data) => {
+      console.log(data);
+      subject.next(true);
+    });
+
+    return subject.asObservable();
+    
   }
 }

@@ -5,6 +5,8 @@ import { map } from 'rxjs/operators';
 import { ConfigurationService } from './configuration.service'
 import { IdentityService } from './identity.service';
 import { SurveyService } from './survey.service';
+import { Principal } from '../models/Principal';
+import { SignalRService } from './signalr.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +16,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private configService: ConfigurationService,
+    private signalrService: SignalRService,
     private identityService: IdentityService) {
     this.configService.OnSettingsLoaded.subscribe(() => {
       this.serviceUrl = this.configService.serverSettings.webApiServiceUrl;
@@ -35,6 +38,7 @@ export class AuthService {
 
   logOut() {
     this.identityService.removeUser();
+    this.signalrService.stopConnection();
     this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
   }
 }
@@ -49,7 +53,14 @@ export class AuthGuardService implements CanActivate {
     if (this.identityService.isLoggedIn) {
       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
       if (Date.parse(currentUser.refreshToken.expires) >= new Date().getTime()) {
-        this.surveyService.FastIn(currentUser.refreshToken.rToken)
+        this.surveyService.FastIn(currentUser.refreshToken.rToken).then(user => {
+
+          // re-login
+          if (user && user.AccessToken) {
+            this.identityService.removeUser();
+            this.identityService.setUser(user);
+          }
+        });
         // logged in so return true
         return true;
       }
