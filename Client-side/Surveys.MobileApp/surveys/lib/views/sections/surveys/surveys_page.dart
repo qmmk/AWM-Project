@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/vote_amount_model.dart';
@@ -18,7 +18,7 @@ class SurveysPage extends StatefulWidget {
 
 class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
   Widget _surveyElement(int index) {
-    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider userProvider = Provider.of<CollectionProvider>(context, listen: false);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -51,7 +51,7 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
   Widget _content() => ListView.separated(
       itemBuilder: (context, index) => _surveyElement(index),
       separatorBuilder: (context, index) => Divider(),
-      itemCount: Provider.of<UserAndCollectionProvider>(context).othersSurveys?.length ?? 0);
+      itemCount: Provider.of<CollectionProvider>(context).othersSurveys?.length ?? 0);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
           border: null,
           trailing: GestureDetector(
             onTap: () async {
-              bool success = await Provider.of<UserAndCollectionProvider>(context, listen: false)
+              bool success = await Provider.of<CollectionProvider>(context, listen: false)
                   .loadOthersAndAlreadySubmittedSurveys();
               if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load the surveys");
             },
@@ -71,7 +71,7 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
           ),
         ),
         child: StreamBuilder(
-          stream: Provider.of<UserAndCollectionProvider>(context).clientEventsStream.stream,
+          stream: Provider.of<CollectionProvider>(context).clientEventsStream.stream,
           builder: (context, snapshot) {
             if (snapshot.data != ConnectionEvents.done)
               return Stack(
@@ -93,7 +93,7 @@ class _SurveysPageState extends State<SurveysPage> with AfterLayoutMixin {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Provider.of<UserAndCollectionProvider>(context, listen: false)
+    Provider.of<CollectionProvider>(context, listen: false)
         .loadOthersAndAlreadySubmittedSurveys()
         .then((success) {
       if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load the surveys");

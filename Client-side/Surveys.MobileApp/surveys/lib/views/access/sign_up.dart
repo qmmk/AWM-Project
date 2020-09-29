@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:survey_client/model/login_response.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/logic/services/access_service.dart';
 import 'package:surveys/logic/utils/http_utils.dart';
 import 'package:surveys/models/user_model.dart';
@@ -45,11 +46,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Material(
+                      color: Colors.transparent,
                       child: TextFormField(
                         controller: _usernameController,
                         validator: (s) {
                           if (_incorrectSignUp) return "Please enter a valid username";
                           if (s.trim().isEmpty) return "Please enter your username";
+                          if (s.trim().length > SurveysConstants.usernameLimit)
+                            return "Username limit is ${SurveysConstants.usernameLimit} characters";
 
                           return null;
                         },
@@ -60,11 +64,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Material(
+                      color: Colors.transparent,
                       child: TextFormField(
                         controller: _passwordController,
                         validator: (s) {
                           if (_incorrectSignUp) return "Please enter a valid password";
-                          if (s.trim().isEmpty) return "Please enter your password";
+                          if (s.isEmpty) return "Please enter your password";
+                          if (s.length < SurveysConstants.minimumPasswordLength ||
+                              s.length > SurveysConstants.passwordLimit)
+                            return "Password lenght should be between ${SurveysConstants.minimumPasswordLength} and ${SurveysConstants.passwordLimit} characters";
 
                           return null;
                         },
@@ -86,6 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             "Sign up",
                           ),
                           onPressed: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
                             if (!_formKey.currentState.validate()) return;
 
                             String username = _usernameController.text;
@@ -101,13 +110,13 @@ class _SignUpPageState extends State<SignUpPage> {
                               HttpUtils.registerToken(response.accessToken);
                               await HttpUtils.storeRefreshToken(response.refreshToken.rToken);
 
-                              Provider.of<UserAndCollectionProvider>(context, listen: false)
+                              Provider.of<UserProvider>(context, listen: false)
                                   .setUser(User(id: response.pid, username: username));
 
                               Navigator.of(context).pushAndRemoveUntil(
                                   CupertinoPageRoute(builder: (context) => HomePage()),
                                   ModalRoute.withName(Routes.root));
-                            } on DioError catch (e) {
+                            } on DioError {
                               _incorrectSignUp = true;
                               _formKey.currentState.validate();
                               _incorrectSignUp = false;

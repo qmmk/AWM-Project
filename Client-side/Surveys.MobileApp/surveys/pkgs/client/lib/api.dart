@@ -15,7 +15,7 @@ class SurveyClient {
 
     Dio dio;
     Serializers serializers;
-    String basePath = "https://192.168.1.206:45455";
+    String basePath = "https://surveyswebapiservice20200924114545.azurewebsites.net";
 
     SurveyClient({this.dio, Serializers serializers, String basePathOverride, List<Interceptor> interceptors}) {
         if (dio == null) {

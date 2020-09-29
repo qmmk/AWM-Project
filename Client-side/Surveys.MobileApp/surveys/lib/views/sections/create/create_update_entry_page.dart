@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 
 class CreateEntryPage extends StatefulWidget {
@@ -19,7 +20,11 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
   @override
   void initState() {
     super.initState();
-    _surveyDetail = widget.surveyDetail ?? SurveyDetail(id: null, surveyId: null);
+    _surveyDetail = SurveyDetail(
+            id: widget.surveyDetail?.id,
+            surveyId: widget.surveyDetail?.surveyId,
+            description: widget.surveyDetail?.description ?? "") ??
+        SurveyDetail(id: null, surveyId: null);
     _descriptionController = widget.surveyDetail == null
         ? TextEditingController()
         : TextEditingController(text: widget.surveyDetail.description);
@@ -53,9 +58,12 @@ class _CreateEntryPageState extends State<CreateEntryPage> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 10),
               child: Material(
+                color: Colors.transparent,
                 child: TextFormField(
                   validator: (s) {
                     if (s.trim().isEmpty) return "Please give a description to the entry";
+                    if (s.trim().length > SurveysConstants.entryDescriptionLimit)
+                      return "Entries' description limit is ${SurveysConstants.entryDescriptionLimit} characters";
                     return null;
                   },
                   controller: _descriptionController,

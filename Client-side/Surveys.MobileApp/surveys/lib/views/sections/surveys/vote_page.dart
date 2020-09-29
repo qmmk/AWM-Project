@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 import 'package:surveys/models/survey_model.dart';
 
 class VotePage extends StatefulWidget {
@@ -32,6 +32,7 @@ class _VotePageState extends State<VotePage> {
           return Row(
             children: [
               Material(
+                color: Colors.transparent,
                 child: Checkbox(
                   value: _chosenIndex == index,
                   onChanged: (active) {
@@ -65,15 +66,18 @@ class _VotePageState extends State<VotePage> {
               ? Container()
               : GestureDetector(
                   onTap: () async {
-                    UserAndCollectionProvider userAndCollectionProvider =
-                        Provider.of<UserAndCollectionProvider>(context, listen: false);
+                    if (_chosenIndex >= 0) {
+                      CollectionProvider collectionProvider =
+                          Provider.of<CollectionProvider>(context, listen: false);
 
-                    int surveyIndex =
-                        userAndCollectionProvider.othersSurveys.indexWhere((element) => element.id == widget.survey.id);
+                      int surveyIndex = collectionProvider.othersSurveys
+                          .indexWhere((element) => element.id == widget.survey.id);
 
-                    bool success =
-                        await userAndCollectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
-                    if (success) Navigator.of(context).pop();
+                      bool success =
+                          await collectionProvider.registerVote(index: surveyIndex, detailsIndex: _chosenIndex);
+                      if (success) Navigator.of(context).pop();
+                    } else
+                      Navigator.of(context).pop();
                   },
                   child: Icon(
                     CupertinoIcons.check_mark,

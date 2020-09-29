@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
@@ -28,6 +29,8 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
   TextEditingController _titleController = TextEditingController(text: "title");
   TextEditingController _descriptionController = TextEditingController(text: "description");
   GlobalKey<FormState> _formKey = GlobalKey();
+
+  bool _isWaitingForServer = false;
 
   @override
   void initState() {
@@ -66,7 +69,9 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                     Navigator.of(context).pushNamed(Routes.createSurveyEntry,
                         arguments: {"surveyDetail": _survey.details[index]}).then((surveyDetail) {
                       setState(() {
-                        if (surveyDetail != null) _survey.details[index] = surveyDetail;
+                        if (surveyDetail != null) 
+                          _survey.details[index] = surveyDetail;
+                        FocusScope.of(context).requestFocus(FocusNode());
                       });
                     });
                   },
@@ -98,10 +103,13 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: Material(
+                    color: Colors.transparent,
                     child: TextFormField(
                       controller: _titleController,
                       validator: (s) {
-                        if (s.trim().isEmpty) return "Please enter the survey's name";
+                        if (s.trim().isEmpty) return "Please enter the survey's title";
+                        if (s.trim().length > SurveysConstants.surveyTitleLimit)
+                          return "Surveys' title limit is ${SurveysConstants.surveyTitleLimit} characters";
 
                         return null;
                       },
@@ -110,22 +118,48 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                   ),
                 ),
                 Material(
+                  color: Colors.transparent,
                   child: TextFormField(
+                    validator: (s) {
+                      if (s.trim().length > SurveysConstants.surveyDescriptionLimit)
+                        return "Surveys' description limit is ${SurveysConstants.surveyDescriptionLimit} characters";
+
+                      return null;
+                    },
                     minLines: 3,
                     maxLines: 3,
                     controller: _descriptionController,
                     decoration: InputDecoration(hintText: "Enter the survey's description"),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    "Preferences",
+                    style: TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
+                  ),
+                ),
                 if (_survey?.details != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 4),
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(7),
-                            border: Border.all(color: CupertinoColors.systemBlue)),
+                            border: Border.all(
+                                color:
+                                    _atLeastTwoEntriesError ? CupertinoColors.systemRed : CupertinoColors.systemBlue)),
                         child: _entryList()),
                   ),
+                Visibility(
+                  visible: _atLeastTwoEntriesError,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      "Please enter at least 2 preferences",
+                      style: TextStyle(color: CupertinoColors.systemRed, fontSize: 13),
+                    ),
+                  ),
+                ),
                 CupertinoButton(
                     child: Text(
                       "Add entry",
@@ -148,6 +182,7 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                                 surveyId: widget.survey == null ? -1 : widget.survey.id,
                                 description: (surveyDetail as SurveyDetail).description));
                           });
+                        FocusScope.of(context).requestFocus(FocusNode());
                       });
                     }),
                 Row(
@@ -168,8 +203,26 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         ],
       );
 
+  bool _atLeastTwoEntriesError = false;
+
   void _submit() async {
-    if (!_formKey.currentState.validate()) return;
+    FocusScope.of(context).requestFocus(FocusNode());
+    bool error = false;
+
+    if (!_formKey.currentState.validate()) error = true;
+    if (_survey.details.length < 2) {
+      setState(() {
+        _atLeastTwoEntriesError = true;
+      });
+      error = true;
+    }
+
+    if (error) return;
+
+    setState(() {
+      _atLeastTwoEntriesError = false;
+      _isWaitingForServer = true;
+    });
 
     _survey
       ..title = _titleController.text
@@ -177,12 +230,14 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
       ..isOpen = _open;
 
     if (_isModifying) {
-      //await MenuUtils.showAlertDialog(context: context, title: "Survey successfully updated!");
       Navigator.of(context).pop(_survey);
+      setState(() {
+        _isWaitingForServer = false;
+      });
       return;
     }
 
-    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider userProvider = Provider.of<CollectionProvider>(context, listen: false);
     bool success = await userProvider.createSurvey(survey: _survey);
     if (success) {
       setState(() {
@@ -190,11 +245,24 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
         _descriptionController.text = "";
         _survey.details = [];
       });
-      FocusScope.of(context).requestFocus(FocusNode());
+
       await MenuUtils.showAlertDialog(context: context, title: "Survey successfully created!");
     } else
       MenuUtils.showErrorDialog(context: context, title: "Couldn't create the survey");
+
+    setState(() {
+      _isWaitingForServer = false;
+    });
   }
+
+  Widget _contentDueToBug() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: widget.survey != null
+            ? _content()
+            : SingleChildScrollView(
+                child: Container(height: MediaQuery.of(context).size.height, child: _content()),
+              ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -225,13 +293,18 @@ class _CreateSurveyPageState extends State<CreateSurveyPage> {
                 size: 43,
               )),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: widget.survey != null
-              ? _content()
-              : SingleChildScrollView(
-                  child: Container(height: MediaQuery.of(context).size.height, child: _content()),
-                ),
-        ));
+        child: _isWaitingForServer
+            ? Stack(
+                children: [
+                  Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  Opacity(
+                    opacity: 0.25,
+                    child: _contentDueToBug(),
+                  )
+                ],
+              )
+            : _contentDueToBug());
   }
 }

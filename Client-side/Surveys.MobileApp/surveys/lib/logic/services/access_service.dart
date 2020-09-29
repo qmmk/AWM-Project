@@ -29,7 +29,7 @@ class AccessService extends BaseService {
     try {
       Response<LoginResponse> response = await client.getDefaultApi().fastLogin(fastLoginRequestBody);
       return response.data;
-    } on Exception catch (e) {
+    } on Exception {
       return null;
     }
   }

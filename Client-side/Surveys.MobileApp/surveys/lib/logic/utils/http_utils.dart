@@ -8,7 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:survey_client/api.dart';
 import 'package:surveys/application.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 
 class HttpUtils {
   static final String _refreshTokenKey = "refreshToken";
@@ -36,8 +36,8 @@ class HttpUtils {
             surveyClient.dio.interceptors.requestLock.lock();
             surveyClient.dio.interceptors.responseLock.lock();
             
-            UserAndCollectionProvider provider = GetIt.instance.get(instanceName: "userAndCollectionProvider");
-            await provider.logout(onlyResetUserData: true); //Kick out the user, whatever the logout does
+            CollectionProvider provider = GetIt.instance.get(instanceName: "collectionProvider");
+            provider.resetUserData();
             globalAppNavigator.currentState.pushNamedAndRemoveUntil(Routes.accessHub, (Route<dynamic> route) => false);
             surveyClient.dio.interceptors.requestLock.unlock();
             surveyClient.dio.interceptors.responseLock.unlock();

@@ -2,8 +2,10 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:surveys/logic/configs/constants/surveys_constants.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
+import 'package:surveys/logic/providers/user_provider.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/user_model.dart';
 
@@ -64,10 +66,13 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _usernameController,
                               validator: (s) {
                                 if (s.trim().isEmpty) return "Please enter your username";
+                                if (s.trim().length > SurveysConstants.usernameLimit)
+                                  return "Username limit is ${SurveysConstants.usernameLimit} characters";
 
                                 return null;
                               },
@@ -78,10 +83,15 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _passwordController,
                               validator: (s) {
                                 if (s.trim().isEmpty) return "Please enter your new password";
+                                if (s.length < SurveysConstants.minimumPasswordLength ||
+                                    s.length > SurveysConstants.passwordLimit)
+                                  return "Password lenght should be between ${SurveysConstants.minimumPasswordLength} and ${SurveysConstants.passwordLimit} characters";
+
                                 if (s != _confirmPasswordController.text) return "Passwords don't match";
 
                                 return null;
@@ -95,10 +105,15 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
+                            color: Colors.transparent,
                             child: TextFormField(
                               controller: _confirmPasswordController,
                               validator: (s) {
                                 if (s.trim().isEmpty) return "Please confirm your new password";
+                                if (s.length < SurveysConstants.minimumPasswordLength ||
+                                    s.length > SurveysConstants.passwordLimit)
+                                  return "Password lenght should be between ${SurveysConstants.minimumPasswordLength} and ${SurveysConstants.passwordLimit} characters";
+
                                 if (s != _passwordController.text) return "Passwords don't match";
 
                                 return null;
@@ -126,8 +141,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                                   String username = _usernameController.text;
                                   String password = _passwordController.text;
 
-                                  UserAndCollectionProvider provider =
-                                      Provider.of<UserAndCollectionProvider>(context, listen: false);
+                                  UserProvider provider = Provider.of<UserProvider>(context, listen: false);
 
                                   setState(() {
                                     _isWaitingForServer = true;
@@ -147,7 +161,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
                   ),
                   CupertinoButton(
                       onPressed: () async {
-                        bool success = await Provider.of<UserAndCollectionProvider>(context, listen: false).logout();
+                        bool success = await Provider.of<CollectionProvider>(context, listen: false).logout();
                         if (success)
                           Navigator.of(context)
                               .pushNamedAndRemoveUntil(Routes.accessHub, ModalRoute.withName(Routes.root));
@@ -168,7 +182,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> with AfterLay
   @override
   void afterFirstLayout(BuildContext context) {
     setState(() {
-      _usernameController.text = Provider.of<UserAndCollectionProvider>(context, listen: false).user.username;
+      _usernameController.text = Provider.of<UserProvider>(context, listen: false).user.username;
     });
   }
 }

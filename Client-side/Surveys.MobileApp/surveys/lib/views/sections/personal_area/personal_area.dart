@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surveys/logic/configs/routing/routes.dart';
-import 'package:surveys/logic/providers/user_and_collection_provider.dart';
+import 'package:surveys/logic/providers/collection_provider.dart';
 import 'package:surveys/logic/utils/client_events_stream.dart';
 import 'package:surveys/logic/utils/menu_utils.dart';
 import 'package:surveys/models/vote_amount_model.dart';
@@ -23,7 +23,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
   }
 
   void _loadMenu(int index) {
-    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider userProvider = Provider.of<CollectionProvider>(context, listen: false);
     showCupertinoModalPopup(
         context: context,
         builder: (context) => CupertinoActionSheet(
@@ -62,6 +62,8 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
                               .then((value) {
                             Navigator.of(context).pop();
                           });
+                        else
+                          Navigator.of(context).pop();
                       }
                     });
                   },
@@ -79,7 +81,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
   }
 
   Widget _surveyElement(int index) {
-    UserAndCollectionProvider userProvider = Provider.of<UserAndCollectionProvider>(context, listen: false);
+    CollectionProvider userProvider = Provider.of<CollectionProvider>(context, listen: false);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -93,8 +95,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
             Navigator.of(context).pushNamed(Routes.surveyResults,
                 arguments: {"survey": userProvider.userSurveys[index], "isPersonal": true, "votes": amounts});
         } else
-          MenuUtils.showErrorDialog(
-              context: context, title: "Details loading failed");
+          MenuUtils.showErrorDialog(context: context, title: "Details loading failed");
       },
       onLongPress: () async {
         _loadMenu(index);
@@ -109,7 +110,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
   Widget _content() => ListView.separated(
       itemBuilder: (context, index) => _surveyElement(index),
       separatorBuilder: (context, index) => Divider(),
-      itemCount: Provider.of<UserAndCollectionProvider>(context).userSurveys?.length ?? 0);
+      itemCount: Provider.of<CollectionProvider>(context).userSurveys?.length ?? 0);
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +129,7 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
           ),
         ),
         child: StreamBuilder(
-          stream: Provider.of<UserAndCollectionProvider>(context).clientEventsStream.stream,
+          stream: Provider.of<CollectionProvider>(context).clientEventsStream.stream,
           builder: (context, snapshot) {
             if (snapshot.data != ConnectionEvents.done)
               return Stack(
@@ -150,10 +151,8 @@ class _PersonalAreaPageState extends State<PersonalAreaPage> with AfterLayoutMix
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Provider.of<UserAndCollectionProvider>(context, listen: false).loadPersonalSurveys().then((success) {
-      if (!success)
-        MenuUtils.showErrorDialog(
-            context: context, title: "Couldn't load your surveys");
+    Provider.of<CollectionProvider>(context, listen: false).loadPersonalSurveys().then((success) {
+      if (!success) MenuUtils.showErrorDialog(context: context, title: "Couldn't load your surveys");
     });
   }
 }

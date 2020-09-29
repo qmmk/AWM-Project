@@ -5,12 +5,12 @@ import 'package:survey_client/model/openapi_survey.dart';
 import 'package:survey_client/model/openapi_survey_detail.dart';
 import 'package:survey_client/model/openapi_vote.dart';
 import 'package:survey_client/model/openapi_vote_amount.dart';
+import 'package:survey_client/model/openapi_vote_user.dart';
 import 'package:surveys/logic/services/base_service.dart';
 import 'package:surveys/models/survey_detail_model.dart';
 import 'package:surveys/models/survey_model.dart';
 import 'package:surveys/models/survey_vote_model.dart';
 import 'package:surveys/models/vote_amount_model.dart';
-import 'package:surveys/models/vote_model.dart';
 
 class SurveyService extends BaseService {
   Survey _convertOpenapiSurveyToSurvey(OpenapiSurvey openapiSurvey) => Survey(
@@ -31,14 +31,14 @@ class SurveyService extends BaseService {
     return openapiSurveyDetailBuilder.build();
   }
 
-  OpenapiVote _convertVoteToOpenapiVote(Vote vote) {
+  /*OpenapiVote _convertVoteToOpenapiVote(Vote vote) {
     OpenapiVoteBuilder openapiVoteBuilder = OpenapiVoteBuilder();
     openapiVoteBuilder
       ..avid = vote.id
       ..sdid = vote.surveyDetailId
       ..pid = vote.userId;
     return openapiVoteBuilder.build();
-  }
+  }*/
 
   SurveyDetail _convertOpenapiSurveyDetailToSurveyDetail(OpenapiSurveyDetail openapiSurveyDetail) => SurveyDetail(
         id: openapiSurveyDetail.sdid,
@@ -56,12 +56,17 @@ class SurveyService extends BaseService {
     return response.data.map(_convertOpenapiSurveyToSurvey).toList();
   }
 
-  Future<Survey> createSurvey({@required Survey survey}) async {
+  Future<Survey> createSurvey({@required Survey survey, @required creating}) async {
     OpenapiSurvey openapiSurvey = OpenapiSurvey();
     OpenapiSurveyBuilder openapiSurveyBuilder = openapiSurvey.toBuilder();
 
     ListBuilder<OpenapiSurveyDetail> listBuilder = ListBuilder<OpenapiSurveyDetail>([]);
     listBuilder.addAll(survey.details.map(_convertSurveyDetailToOpenapiSurveyDetail).toList());
+    if (creating)
+    {
+      for (int i = 0; i < survey.details.length; i++)
+        survey.details[i].id = null;
+    }
 
     openapiSurveyBuilder
       ..seid = survey.id
@@ -106,12 +111,16 @@ class SurveyService extends BaseService {
       vote: SurveyVote(id: null, surveyDetailId: openapiVoteAmount.sdid, surveyId: null));
 
   Future<List<VoteAmount>> getSurveyVotes({@required int seid}) async {
-    
     try {
       Response<List<OpenapiVoteAmount>> response = await client.getDefaultApi().getActualVotes(seid: seid);
       return response.data.map(_convertOpenapiVoteAmountToVoteAmount).toList();
-    } on Exception catch (e) {
-         return null;
+    } on Exception {
+      return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getUserPreferences({@required int seid}) async {
+    Response<List<OpenapiVoteUser>> response = await client.getDefaultApi().getActualPrincipalForVotes(seid: seid);
+    return response.data.map((e) => {"user": e.user, "vote": e.sdid}).toList();
   }
 }

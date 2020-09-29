@@ -9,8 +9,8 @@ import 'package:surveys/views/sections/create/create_update_survey_page.dart';
 import 'package:surveys/views/sections/personal_area/account_settings.dart';
 import 'package:surveys/views/sections/surveys/vote_page.dart';
 import 'package:surveys/views/splash.dart';
-import 'package:surveys/views/survey_results_page.dart';
-import 'package:surveys/views/survey_results_page_votes.dart';
+import 'package:surveys/views/results/survey_results_page.dart';
+import 'package:surveys/views/results/survey_results_page_votes.dart';
 
 class Handlers {
   static Function(RouteSettings) mainHandler = (RouteSettings settings) {
@@ -52,7 +52,11 @@ class Handlers {
                   isPersonal: arguments["isPersonal"],
                 ));
       case Routes.surveyResultsVotes:
-        return CupertinoPageRoute(builder: (context) => SurveyResultsVotePage());
+        return CupertinoPageRoute(
+            builder: (context) => SurveyResultsVotePage(
+                  preferences: arguments["preferences"],
+                  survey: arguments["survey"],
+                ));
 
       case Routes.vote:
         return CupertinoPageRoute(builder: (context) => VotePage(survey: arguments["survey"]));
